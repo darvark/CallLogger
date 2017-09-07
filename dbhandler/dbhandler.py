@@ -17,7 +17,7 @@ class DataBaseHandler:
         self.dbfile = dbfile
 
 
-    def open_DB(self, dbfile=None):
+    def open_db(self, dbfile=None):
         '''
         Open connection to DB. If file name to DB
         is not given then use default test.db name
@@ -45,7 +45,7 @@ class DataBaseHandler:
             data = cursor.fetchall()
 
             return data
-            
+
         except:
             raise sqlite3.Error("Can't execute query")
 
@@ -60,15 +60,13 @@ class DataBaseHandler:
         id integer PRIMARY KEY,
         station_name text,
         frequency text,
-        band text,
         modulation text,
         qso_date text,
-        start_time text,
         end_time text,
         rst_send integer,
         rst_recv integer,
-        locator text,
-        operator text,
+        power text,
+        qsl text,
         details text
         );"""
 
