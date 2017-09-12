@@ -3,6 +3,7 @@ Created on 10 wrz 2017
 @author: iwaniuk
 '''
 import sqlite3
+from idlelib.replace import replace
 
 class DBHandler():
     '''
@@ -32,7 +33,6 @@ class DBHandler():
         '''
 
         dbconnection = self.open_DB(self.dbName)
-        
         with dbconnection:
             cursor = dbconnection.cursor()
             cursor.execute(query)
@@ -48,19 +48,18 @@ class DBHandler():
         Create table in database.
         '''
 
-        query = """
-        CREATE TABLE qso (
-        id integer PRIMARY KEY,
-        station_name text,
-        frequency text,
-        modulation text,
-        qso_date text,
-        end_time text,
-        rst_send integer,
-        rst_recv integer,
-        power text,
-        qsl text,
-        details text
+        query = """CREATE TABLE `qso` 
+        (`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+        `callsign` TEXT NOT NULL,
+        `freq` NUMERIC NOT NULL,
+        `mode` TEXT NOT NULL,
+        `power` INTEGER NOT NULL,
+        `date` TEXT,
+        `time` TEXT,
+        `qsl` TEXT,
+        `rst_s` NUMERIC NOT NULL,
+        `rst_r` NUMERIC NOT NULL,
+        `details` TEXT
         );"""
 
         dbconnection = self.open_DB(self.dbfile)

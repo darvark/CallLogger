@@ -10,19 +10,20 @@ from DBHandler.dbhandler import DBHandler
 class QSOManager():
     '''
     '''
-
-    qso = {'station_name':'',
-            'frequency':'',
-            'modulation':'',
-            'qso_date':'0000-00-00',
-            'end_time':'00:00',
-            'rst_send':'599',
-            'rst_recv':'599',
-            'power':'',
+    
+    qso = {'callsign':'',
+            'freq':0,
+            'mode':'',
+            'date':'0000-00-00',
+            'time':'00:00',
+            'rst_s':599,
+            'rst_r':599,
+            'power':0,
             'qsl':'N',
             'details':''}
+    database = 'qso'
 
-    db = DBHandler()
+    db = DBHandler(database)
 
     def __init__(self):
         '''
@@ -37,13 +38,13 @@ class QSOManager():
         Add new qso entry to db
         '''
         
-        self.qso['station_name'] = station_name
-        self.qso['frequency'] = freq
-        self.qso['modulation'] = modulation
-        self.qso['qso_date'] = qso_date
-        self.qso['end_time'] = end_time
-        self.qso['rst_send'] = rst_s
-        self.qso['rst_recv'] = rst_r
+        self.qso['callsign'] = station_name
+        self.qso['freq'] = freq
+        self.qso['mode'] = modulation
+        self.qso['date'] = qso_date
+        self.qso['time'] = end_time
+        self.qso['rst_s'] = rst_s
+        self.qso['rst_r'] = rst_r
         self.qso['power'] = power
         self.qso['qsl'] = qsl
         self.qso['details'] = details
@@ -51,8 +52,12 @@ class QSOManager():
         return self.qso
     
     
-    def add_qso_to_db(self, qso):
-        q = """INSERT """
+    def add_qso_to_db(self, qso, dbname):
+        database = self.database
+        param = (qso['callsign'], qso['freq'], qso['mode'], qso['date'], qso['time'], qso['rst_s'], qso['rst_r'], qso['power'], qso['qsl'], qso['details'])
+        query = """INSERT INTO {dbname} VALUES (callsign, freq, mode, power, date, time,
+        qsl, rst_s, rst_r, details),{param}""".format(**locals())
+         
         self.db.execute_query(query)
 
 
