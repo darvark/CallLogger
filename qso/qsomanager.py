@@ -21,16 +21,14 @@ class QSOManager():
             'power':0,
             'qsl':'N',
             'details':''}
-    database = 'qso'
+    table = 'qso'
 
-    db = DBHandler(database)
-
-    def __init__(self):
+    def __init__(self, dbFile):
         '''
         Constructor
         '''
-        pass
-    
+        self.dbFile = dbFile
+        self.db = DBHandler(self.dbFile)
     
     def fill_qso_data(self, station_name, freq, modulation, qso_date,
                 end_time, rst_s, rst_r, power, qsl, details):
@@ -52,13 +50,10 @@ class QSOManager():
         return self.qso
     
     
-    def add_qso_to_db(self, qso, dbname):
-        database = self.database
-        param = (qso['callsign'], qso['freq'], qso['mode'], qso['date'], qso['time'], qso['rst_s'], qso['rst_r'], qso['power'], qso['qsl'], qso['details'])
-        query = """INSERT INTO {dbname} VALUES (callsign, freq, mode, power, date, time,
-        qsl, rst_s, rst_r, details),{param}""".format(**locals())
-         
-        self.db.execute_query(query)
+    def add_qso_to_db(self, qso):
+        param = (qso['callsign'], qso['freq'], qso['mode'], qso['date'], qso['time'],
+                 qso['rst_s'], qso['rst_r'], qso['power'], qso['qsl'], qso['details'])
+        self.db.execute_insert(param)
 
 
     def edit_qso(self, qso_id, new_value):
@@ -69,7 +64,7 @@ class QSOManager():
         pass
 
 
-    def search_qso(self, **):
+    def search_qso(self):
         '''
         Search qso
         '''

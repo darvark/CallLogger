@@ -3,7 +3,6 @@ Created on 10 wrz 2017
 @author: iwaniuk
 '''
 import sqlite3
-from idlelib.replace import replace
 
 class DBHandler():
     '''
@@ -21,23 +20,40 @@ class DBHandler():
         
     def createDB(self):
         
-        conection = sqlite3.connect(self.dbName)
+        sqlite3.connect(self.dbName)
         
         print("Connection to DB {} established.".format(self.dbName))
 
 
-    def execute_query(self, query):
+#     def checkIfTableExist(self, dbName):
+#         con = sqlite3.connect(dbName)
+#         with con:
+#             cr = con.cursor()
+#             cr.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='qso';")
+#             r = cr.fetchall()
+#             print("RESULT: {r}". format(**locals()))
+#             if len(r) != 0:
+#                 return True
+#             else:
+#                 return False
+                    
+    def execute_insert(self, params):
         '''
         Executing query in DB. Both DB and query are params
         to this method
         '''
-
-        dbconnection = self.open_DB(self.dbName)
+        
+        query = """INSERT  INTO qso (callsign, freq, mode, power, date, time, qsl, rst_s,
+                rst_r, details) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+        
+        dbconnection = sqlite3.connect(self.dbName)
         with dbconnection:
             cursor = dbconnection.cursor()
-            cursor.execute(query)
+            
+#             print("Execute query")
+            cursor.execute(query, params)
             data = cursor.fetchall()
-
+ 
             if data is not None:
                 for row in data:
                     print("Fetched result: {row}".format(**locals()))
@@ -51,18 +67,18 @@ class DBHandler():
         query = """CREATE TABLE `qso` 
         (`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
         `callsign` TEXT NOT NULL,
-        `freq` NUMERIC NOT NULL,
+        `freq` INTEGER NOT NULL,
         `mode` TEXT NOT NULL,
         `power` INTEGER NOT NULL,
         `date` TEXT,
         `time` TEXT,
         `qsl` TEXT,
-        `rst_s` NUMERIC NOT NULL,
-        `rst_r` NUMERIC NOT NULL,
+        `rst_s` INTEGER NOT NULL,
+        `rst_r` INTEGER NOT NULL,
         `details` TEXT
         );"""
 
-        dbconnection = self.open_DB(self.dbfile)
+        dbconnection = sqlite3.connect(self.dbName)
         
         with dbconnection:
             cursor = dbconnection.cursor()
