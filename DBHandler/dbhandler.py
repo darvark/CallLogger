@@ -59,6 +59,10 @@ class DBHandler():
                     print("Fetched result: {row}".format(**locals()))
 
 
+    def search_in_db(self, field, value):
+        pass
+    
+    
     def create_table(self):
         '''
         Create table in database.
