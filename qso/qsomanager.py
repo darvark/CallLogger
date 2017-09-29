@@ -64,13 +64,23 @@ class QSOManager():
         pass
 
 
-    def search_qso(self):
+    def search_qso(self, what):
         '''
         Search qso
         '''
 
-        pass
+        result = []
+        find_result = {}
+        result = self.db.search_in_db()
 
+        for items in result:
+            if what in items.values():
+                find_result = items
+                break
+            else:
+                find_result = None
+
+        return find_result
 
     def remove_qso(self, qso_id):
         '''
