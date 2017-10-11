@@ -1,3 +1,4 @@
+import sqlite3
 
 class DBHandler():
     '''
@@ -33,6 +34,8 @@ class DBHandler():
         with dbconnection:
             cursor = dbconnection.cursor()
 
+            print(query)
+            print(params)
             cursor.execute(query, params)
             data = cursor.fetchall()
 
@@ -42,25 +45,22 @@ class DBHandler():
 
 
     def search_in_db(self):
-    '''
-    Returns list of dictionaries, each dict is a one record in db
-    '''
+        '''
+        Returns list of dictionaries, each dict is a one record in db
+        '''
 
         dbcontent = []
         dbconnection = sqlite3.connect(self.dbName)
         with dbconnection:
             dbconnection.row_factory = sqlite3.Row
 
-            cursor = dbconnecion.cursor()
+            cursor = dbconnection.cursor()
             cursor.execute("SELECT * FROM qso")
 
-            rows = cur.fetchall()
+            rows = cursor.fetchall()
 
             for row in rows:
                 dbcontent.append(row)
-#                dbcontent.append("%s %s %s %s %s %s %s %s %s %s %s" % (row["id"], row["callsign"], row["freq"],
-#                                                                       row['mode'], row['power'], row['date'], row['time'],
-#                                                                       row['qsl'], row['rst_s'], row['rst_r'], row['details']))
 
         return dbcontent
 
@@ -70,7 +70,7 @@ class DBHandler():
         Create table in database.
         '''
 
-        query = """CREATE TABLE `qso`
+        query = """CREATE TABLE IF NOT EXISTS `qso`
         (`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
         `callsign` TEXT NOT NULL,
         `freq` INTEGER NOT NULL,
@@ -93,4 +93,5 @@ class DBHandler():
             for row in result:
                 print("Fetched result: {row}".format(**locals()))
 
-
+    def edit_record(self, recordid, new_value):
+        pass

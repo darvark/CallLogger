@@ -10,7 +10,7 @@ from DBHandler.dbhandler import DBHandler
 class QSOManager():
     '''
     '''
-    
+
     qso = {'callsign':'',
             'freq':0,
             'mode':'',
@@ -29,13 +29,13 @@ class QSOManager():
         '''
         self.dbFile = dbFile
         self.db = DBHandler(self.dbFile)
-    
+
     def fill_qso_data(self, station_name, freq, modulation, qso_date,
                 end_time, rst_s, rst_r, power, qsl, details):
         '''
         Add new qso entry to db
         '''
-        
+
         self.qso['callsign'] = station_name
         self.qso['freq'] = freq
         self.qso['mode'] = modulation
@@ -47,9 +47,9 @@ class QSOManager():
         self.qso['qsl'] = qsl
         self.qso['details'] = details
 
-        return self.qso
-    
-    
+        self.add_qso_to_db(self.qso)
+
+
     def add_qso_to_db(self, qso):
         param = (qso['callsign'], qso['freq'], qso['mode'], qso['date'], qso['time'],
                  qso['rst_s'], qso['rst_r'], qso['power'], qso['qsl'], qso['details'])
@@ -61,7 +61,9 @@ class QSOManager():
         Edit existing qso
         '''
 
-        pass
+        recid = 0
+        self.db.edit(recid, new_value)
+
 
 
     def search_qso(self, what):
@@ -74,7 +76,7 @@ class QSOManager():
         result = self.db.search_in_db()
 
         for items in result:
-            if what in items.values():
+            if what in items:
                 find_result = items
                 break
             else:
@@ -86,5 +88,5 @@ class QSOManager():
         '''
         Deleting qso from db
         '''
-        
+
         pass
