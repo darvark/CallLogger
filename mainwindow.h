@@ -7,6 +7,8 @@
 #include <QDate>
 #include <QTimer>
 
+#include "logwindow.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -35,15 +37,20 @@ private slots:
     void on_searchandwork_stateChanged(int arg1);
 
     void showTime();
+
     void showDate();
 
-//    void on_frequency_overflow();
+    void toUpper(const QString &text);
 
 private:
     Ui::MainWindow *ui;
+    logwindow * logw;
     QLabel *data;
     QLabel *godzina;
     QDateTime *datetime;
+
+    bool run_mode = true; // default mode is run
+    bool sandp_mode = false; // default mode is run
 };
 
 #endif // MAINWINDOW_H

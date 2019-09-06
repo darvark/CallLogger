@@ -10,7 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
     connect(timer, SIGNAL(timeout()), this, SLOT(showDate()));
-    timer->start(1000);
+    timer->start(100);
+
+    connect(ui->callsign, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
 }
 
 MainWindow::~MainWindow()
@@ -40,6 +42,8 @@ void MainWindow::on_savebutton_clicked()
 void MainWindow::on_logbutton_clicked()
 {
     //show log
+    logw = new logwindow();
+    logw->show();
 }
 
 void MainWindow::on_quitbutton_clicked()
@@ -49,16 +53,45 @@ void MainWindow::on_quitbutton_clicked()
 
 void MainWindow::on_run_stateChanged(int arg1)
 {
-    //set as run mode
-    //zaznaczyc to w logu
-    //odznaczyc S&P
+    if (arg1)
+    {
+        if (sandp_mode && !run_mode)
+        {
+            sandp_mode = false;
+            run_mode = true;
+            ui->run->setCheckState(Qt::Checked);
+            ui->searchandwork->setCheckState(Qt::Unchecked);
+        }
+    }
+    else
+    {
+        sandp_mode = true;
+        run_mode = false;
+        ui->run->setCheckState(Qt::Unchecked);
+        ui->searchandwork->setCheckState(Qt::Checked);
+    }
 }
 
 void MainWindow::on_searchandwork_stateChanged(int arg1)
 {
-    //set as S&P mode
-    //zaznaczyc to w logu
-    //odznaczyc RUN
+    if (arg1)
+    {
+        if (!sandp_mode && run_mode)
+        {
+            sandp_mode = true;
+            run_mode = false;
+            ui->run->setCheckState(Qt::Unchecked);
+            ui->searchandwork->setCheckState(Qt::Checked);
+        }
+    }
+    else
+    {
+        sandp_mode = false;
+        run_mode = true;
+        ui->run->setCheckState(Qt::Checked);
+        ui->searchandwork->setCheckState(Qt::Unchecked);
+    }
+
 }
 
 //ui->frequency->display("987");
@@ -71,4 +104,12 @@ void MainWindow::showTime()
 void MainWindow::showDate()
 {
     ui->data->setText(QDate::currentDate().toString("yyyy/MM/dd"));
+}
+
+void MainWindow::toUpper(const QString &text)
+{
+    QLineEdit *le = qobject_cast<QLineEdit *>(sender());
+    if (!le)
+        return;
+    le->setText(text.toUpper());
 }
