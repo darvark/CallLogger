@@ -4,6 +4,7 @@
 
 #include <sqlite3.h>
 #include <QString>
+#include <QFile>
 
 
 class database
@@ -29,6 +30,8 @@ private:
             "rst_s INTEGER NOT NULL, " \
             "rst_r INTEGER NOT NULL, " \
             "exchange TEXT);";
+
+    const char* qstrTocstr(QString* s);
 };
 
 #endif // DATABASE_H

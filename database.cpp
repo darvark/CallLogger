@@ -5,6 +5,10 @@ database::database()
 
 }
 
+const char* database::qstrTocstr(QString* s)
+{
+    return s->toStdString().c_str();
+}
 static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
    int i;
@@ -25,7 +29,7 @@ sqlite3* database::db_open_connection(QString& dbname)
     int rc;
 
     (void) zErrMsg;
-    rc = sqlite3_open(dbname, &db);
+    rc = sqlite3_open(qstrTocstr(&dbname), &db);
 
     if(rc)
         fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
@@ -41,17 +45,17 @@ void database::close_db(sqlite3* db)
 int database::create_database(QString& dbname)
 {
     sqlite3 *db;
-    char *zErrMsg = 0;
+    char *zErrMsg = nullptr;
     int rc;
 
     (void) zErrMsg;
 
-    if (access(dbname, F_OK) != -1)
+    if (QFile::exists(dbname))
         printf("Database file already exist\n");
 
     else
     {
-        rc = sqlite3_open(dbname, &db);
+        rc = sqlite3_open(qstrTocstr(&dbname), &db);
 
         if(rc)
         {
@@ -85,14 +89,14 @@ int database::insert_data(QString& dbname, QString& callsign, float freq, QStrin
 
     if(rc == SQLITE_OK)
     {
-        sqlite3_bind_text(stmt, 1, callsign, callsign.length(), 0);
+        sqlite3_bind_text(stmt, 1, qstrTocstr(&callsign), callsign.length(), nullptr);
         sqlite3_bind_double(stmt, 2, freq);
-        sqlite3_bind_text(stmt, 3, mode, mode.length(), 0);
-        sqlite3_bind_text(stmt, 4, date, date.length(), 0);
-        sqlite3_bind_text(stmt, 5, time, time.length(), 0);
+        sqlite3_bind_text(stmt, 3, qstrTocstr(&mode), mode.length(), nullptr);
+        sqlite3_bind_text(stmt, 4, qstrTocstr(&date), date.length(), nullptr);
+        sqlite3_bind_text(stmt, 5, qstrTocstr(&time), time.length(), nullptr);
         sqlite3_bind_int(stmt, 6, rst_s);
         sqlite3_bind_int(stmt, 7, rst_r);
-        sqlite3_bind_text(stmt, 8, exchange, exchange.length(), 0);
+        sqlite3_bind_text(stmt, 8, qstrTocstr(&exchange), exchange.length(), nullptr);
 
         rc = sqlite3_step(stmt);
         sqlite3_reset(stmt);
@@ -116,7 +120,7 @@ int database::execute_query(QString& sql, sqlite3 *db)
     char *zErrMsg = 0;
     int rc;
 
-    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, qstrTocstr(&sql), callback, nullptr, &zErrMsg);
 
     if(rc != SQLITE_OK)
     {

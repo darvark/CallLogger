@@ -29,16 +29,14 @@ SOURCES += \
         database.cpp \
         logwindow.cpp \
         main.cpp \
-        mainwindow.cpp \ #
+        mainwindow.cpp \
         rig.cpp
-        #rig.cpp
 
 HEADERS += \
         database.h \
         logwindow.h \
-        mainwindow.h \ #\
+        mainwindow.h \
         rig.h
-        #rig.h
 
 FORMS += \
         logwindow.ui \
@@ -49,5 +47,5 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-#unix: CONFIG += link_pkgconfig
-#unix: PKGCONFIG += hamlib
+unix: CONFIG += link_pkgconfig
+unix: PKGCONFIG += hamlib sqlite3
