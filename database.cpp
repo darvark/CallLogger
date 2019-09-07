@@ -1,20 +1,18 @@
 #include "database.h"
 
-database::database()
-{
-
-}
+database::database() {}
 
 const char* database::qstrTocstr(QString* s)
 {
     return s->toStdString().c_str();
 }
+
 static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
    int i;
    (void) NotUsed;
 
-   for(i = 0; i<argc; i++)
+   for (i = 0; i<argc; i++)
       printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
 
    printf("\n");
@@ -25,14 +23,16 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 sqlite3* database::db_open_connection(QString& dbname)
 {
     sqlite3 *db;
-    char *zErrMsg = 0;
+    char *zErrMsg = nullptr;
     int rc;
 
     (void) zErrMsg;
     rc = sqlite3_open(qstrTocstr(&dbname), &db);
 
-    if(rc)
-        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+    if (rc)
+    {
+        qDebug() << "Can't open database: " + QString(sqlite3_errmsg(db));
+    }
 
     return db;
 }
@@ -51,22 +51,21 @@ int database::create_database(QString& dbname)
     (void) zErrMsg;
 
     if (QFile::exists(dbname))
-        printf("Database file already exist\n");
-
+        qDebug() << "Database file already exist";
     else
     {
         rc = sqlite3_open(qstrTocstr(&dbname), &db);
 
-        if(rc)
+        if (rc)
         {
-            fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+            qDebug() << "Can't open database: " + QString(sqlite3_errmsg(db));
             return EXIT_FAILURE;
         }
         else
         {
-            fprintf(stderr, "Database created successfully\n");
+//            fprintf(stderr, "Database created successfully\n");
             execute_query(table, db);
-            fprintf(stderr, "Table structure created successfully\n");
+//            fprintf(stderr, "Table structure created successfully\n");
         }
         sqlite3_close(db);
     }
@@ -74,7 +73,7 @@ int database::create_database(QString& dbname)
     return EXIT_SUCCESS;
 }
 
-int database::insert_data(QString& dbname, QString& callsign, float freq, QString& mode,
+int database::insert_data(QString& dbname, QString& callsign, double freq, QString& mode,
                 QString& date, QString& time, int rst_s, int rst_r, QString& exchange)
 {
     int rc;
@@ -87,7 +86,7 @@ int database::insert_data(QString& dbname, QString& callsign, float freq, QStrin
 
     rc = sqlite3_prepare(db, query, strlen(query), &stmt, &pzTest);
 
-    if(rc == SQLITE_OK)
+    if (rc == SQLITE_OK)
     {
         sqlite3_bind_text(stmt, 1, qstrTocstr(&callsign), callsign.length(), nullptr);
         sqlite3_bind_double(stmt, 2, freq);
@@ -103,8 +102,8 @@ int database::insert_data(QString& dbname, QString& callsign, float freq, QStrin
     }
     else
     {
-        printf("Failed to bind parameter: %s\n\r", sqlite3_errstr(rc));
-        printf("Failed to bind parameter: %s\n\r", sqlite3_errmsg(db));
+        qDebug() << "Failed to bind parameter: " + QString(sqlite3_errstr(rc));
+        qDebug() << "Failed to bind parameter: " + QString(sqlite3_errmsg(db));
         sqlite3_close(db);
         return EXIT_FAILURE;
     }
@@ -117,14 +116,15 @@ int database::insert_data(QString& dbname, QString& callsign, float freq, QStrin
 
 int database::execute_query(QString& sql, sqlite3 *db)
 {
-    char *zErrMsg = 0;
+    char *zErrMsg = nullptr;
     int rc;
 
     rc = sqlite3_exec(db, qstrTocstr(&sql), callback, nullptr, &zErrMsg);
 
-    if(rc != SQLITE_OK)
+    if (rc != SQLITE_OK)
     {
-        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        qDebug() <<  "SQL error: " + QString(zErrMsg);
+
         sqlite3_free(zErrMsg);
     }
     else

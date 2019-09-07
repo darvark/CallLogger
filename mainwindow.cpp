@@ -22,7 +22,24 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_addbutton_clicked()
 {
-    //add new record to database
+    QString call = ui->callsign->text();
+    int rst_s = ui->rstsend->text().toInt();
+    int rst_r = ui->rstrecv->text().toInt();
+    QString exch = ui->exchange->text();
+
+    QString godz = QDateTime::currentDateTime().toUTC().toString("h:mm:ss ");
+    QString dzis = QDate::currentDate().toString("yyyy/MM/dd");
+
+    database* d = new database();
+    const char* serial = "/dev/ttyuSB0";
+
+    rg = r->init_rig(220, serial);
+
+    r->fetch_vfo(rg, serial);
+    double czestotliwosc = r->fetch_freq(rg, serial);
+    QString tryb = r->fetch_mode(rg, serial);
+
+    d->insert_data(log_dbname, call, czestotliwosc, tryb, dzis, godz, rst_s, rst_r, exch);
 }
 
 void MainWindow::on_clearbutton_clicked()
@@ -94,8 +111,6 @@ void MainWindow::on_searchandwork_stateChanged(int arg1)
 
 }
 
-//ui->frequency->display("987");
-// this is how to display something.
 void MainWindow::showTime()
 {
     ui->godzina->setText(QDateTime::currentDateTime().toUTC().toString("h:mm:ss "));
@@ -112,4 +127,27 @@ void MainWindow::toUpper(const QString &text)
     if (!le)
         return;
     le->setText(text.toUpper());
+}
+
+void MainWindow::on_actionZako_cz_triggered()
+{
+    QWidget::close();
+}
+
+void MainWindow::on_actionNowy_2_triggered()
+{
+    //create new log and new database
+}
+
+void MainWindow::on_actionZapisz_triggered()
+{
+    //zapisz log do pliku
+    QFileDialog::getSaveFileName(this, tr("Save file"), QDir::currentPath(), tr("DB files (*.db, *.*)"));
+}
+
+void MainWindow::on_actionOtw_rz_triggered()
+{
+    //optworz baze danych
+    QString dbfile = QFileDialog::getOpenFileName(this, tr("Open database file"), QDir::currentPath(), tr("DB files (*.db, *.*)"));
+    //przekazac dbfile do handlera bazy danych
 }

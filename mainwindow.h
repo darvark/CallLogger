@@ -6,8 +6,11 @@
 #include <QLabel>
 #include <QDate>
 #include <QTimer>
-
+#include <QDir>
+#include <QFileDialog>
 #include "logwindow.h"
+#include "database.h"
+#include "rig.h"
 
 namespace Ui {
 class MainWindow;
@@ -42,6 +45,14 @@ private slots:
 
     void toUpper(const QString &text);
 
+    void on_actionZako_cz_triggered();
+
+    void on_actionNowy_2_triggered();
+
+    void on_actionZapisz_triggered();
+
+    void on_actionOtw_rz_triggered();
+
 private:
     Ui::MainWindow *ui;
     logwindow * logw;
@@ -51,6 +62,9 @@ private:
 
     bool run_mode = true; // default mode is run
     bool sandp_mode = false; // default mode is run
+    QString log_dbname;
+    rig_query *r = new rig_query();
+    RIG *rg;
 };
 
 #endif // MAINWINDOW_H

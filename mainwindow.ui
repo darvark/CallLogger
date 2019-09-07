@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>567</width>
-    <height>255</height>
+    <width>565</width>
+    <height>253</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -389,9 +389,9 @@
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>100</x>
       <y>0</y>
-      <width>71</width>
+      <width>81</width>
       <height>20</height>
      </rect>
     </property>
@@ -418,7 +418,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>567</width>
+     <width>565</width>
      <height>25</height>
     </rect>
    </property>
@@ -426,7 +426,7 @@
     <property name="title">
      <string>Pl&amp;ik</string>
     </property>
-    <addaction name="actionNowy"/>
+    <addaction name="actionNowy_2"/>
     <addaction name="actionOtw_rz"/>
     <addaction name="actionZapisz"/>
     <addaction name="actionZako_cz"/>
@@ -460,6 +460,11 @@
   <action name="actionZako_cz">
    <property name="text">
     <string>Z&amp;akończ</string>
+   </property>
+  </action>
+  <action name="actionNowy_2">
+   <property name="text">
+    <string>Nowy</string>
    </property>
   </action>
  </widget>
