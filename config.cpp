@@ -1,0 +1,99 @@
+#include "config.h"
+
+config::config() {}
+
+params &config::load_settings()
+{
+    libconfig::Config cfg;
+    params s;
+
+    try
+    {
+        cfg.readFile("app.cfg");
+    }
+    catch(const libconfig::FileIOException &fioex)
+    {
+        qDebug() << "I/O error while reading file.";
+        exit(1);
+    }
+    catch(const libconfig::ParseException &pex)
+    {
+        qDebug() << "Parse error at " << pex.getFile() << ":" << pex.getLine()
+              << " - " << pex.getError();
+        exit(1);
+    }
+
+    const libconfig::Setting& root = cfg.getRoot();
+
+    const libconfig::Setting &params = root["logger"];
+    std::string call, file, cat;
+    int rig;
+
+    params.lookupValue("callsign", call);
+    params.lookupValue("dbfile", file);
+    params.lookupValue("category", cat);
+    params.lookupValue("rig", rig);
+
+    qDebug() << "callsign" << QString::fromUtf8(call.c_str())
+         <<  left << "dbfile" << QString::fromUtf8(file.c_str())
+         <<  left << "category" << QString::fromUtf8(cat.c_str())
+         <<  left << "rig" << rig
+         << endl;
+
+    s.callsign = QString::fromUtf8(call.c_str());
+    s.dbfile = QString::fromUtf8(file.c_str());
+    s.category = QString::fromUtf8(cat.c_str());
+    s.rig = rig;
+
+    return s;
+}
+
+int config::save_settings(QString callsign, QString dbfile, QString category, int rig)
+{
+    static const char *output_file = "app.cfg";
+    libconfig::Config cfg;
+
+    libconfig::Setting &root = cfg.getRoot();
+
+    // Add some settings to the configuration.
+    libconfig::Setting &name = root.add("logger", libconfig::Setting::TypeGroup);
+
+    name.add("callsign", libconfig::Setting::TypeString) = callsign.toStdString().c_str();
+    name.add("dbfile", libconfig::Setting::TypeString) = dbfile.toStdString().c_str();
+    name.add("category", libconfig::Setting::TypeString) = category.toStdString().c_str();
+    name.add("rig", libconfig::Setting::TypeInt) = rig;
+
+    // Write out the new configuration.
+    try
+    {
+        cfg.writeFile(output_file);
+        qDebug() << "New configuration successfully written to: " << output_file;
+    }
+    catch(const libconfig::FileIOException &fioex)
+    {
+        qDebug() << "I/O error while writing file: " << output_file << endl;
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+QString config::get_callsign(params &s)
+{
+    return s.callsign;
+}
+
+QString config::get_dbfile(params &s)
+{
+    return s.dbfile;
+}
+
+QString config::get_category(params &s)
+{
+    return s.category;
+}
+
+int config::get_rig(params &s)
+{
+    return s.rig;
+}

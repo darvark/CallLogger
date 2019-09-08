@@ -7,10 +7,14 @@
 #include <QDate>
 #include <QTimer>
 #include <QDir>
+#include <QFile>
 #include <QFileDialog>
+#include <QMessageBox>
+
 #include "logwindow.h"
 #include "database.h"
 #include "rig.h"
+#include "config.h"
 
 namespace Ui {
 class MainWindow;
@@ -53,6 +57,7 @@ private slots:
 
     void on_actionOtw_rz_triggered();
 
+    bool checkDBselected();
 private:
     Ui::MainWindow *ui;
     logwindow * logw;
@@ -62,9 +67,13 @@ private:
 
     bool run_mode = true; // default mode is run
     bool sandp_mode = false; // default mode is run
-    QString log_dbname;
+    QString *log_dbname = nullptr;
     rig_query *r = new rig_query();
     RIG *rg;
+    QFile *f;
+    config cfg;
+    params p;
+    int rig_model;
 };
 
 #endif // MAINWINDOW_H

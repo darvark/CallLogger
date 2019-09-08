@@ -30,13 +30,15 @@ SOURCES += \
         logwindow.cpp \
         main.cpp \
         mainwindow.cpp \
-        rig.cpp
+        rig.cpp \
+        config.cpp
 
 HEADERS += \
         database.h \
         logwindow.h \
         mainwindow.h \
-        rig.h
+        rig.h \
+        config.h
 
 FORMS += \
         logwindow.ui \
@@ -48,4 +50,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 unix: CONFIG += link_pkgconfig
-unix: PKGCONFIG += hamlib sqlite3
+unix: PKGCONFIG += hamlib sqlite3 libconfig++

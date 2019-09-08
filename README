@@ -1,0 +1,6 @@
+TODO:
+1. obsluga konfiguracji w ktorej bedzie przechowywana nazwa pliku bazy danych,
+znak wywolawczy, oraz radio wg listy rig.h
+1a. dodac okno konfiguracji
+2. dokonczyc obsluge przyciskow
+3. napisac wyswietlanie zawartosci bazy danych w logwindow
