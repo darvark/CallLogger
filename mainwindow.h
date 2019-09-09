@@ -23,11 +23,9 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
 private slots:
     void on_addbutton_clicked();
 
@@ -47,6 +45,8 @@ private slots:
 
     void showDate();
 
+    void showFreq();
+
     void toUpper(const QString &text);
 
     void on_actionZako_cz_triggered();
@@ -57,23 +57,27 @@ private slots:
 
     void on_actionOtw_rz_triggered();
 
-    bool checkDBselected();
+//    bool checkDBselected();
 private:
     Ui::MainWindow *ui;
     logwindow * logw;
     QLabel *data;
     QLabel *godzina;
+    QLabel *czestotliwosc;
+    QLabel *tryb;
     QDateTime *datetime;
+
+    QString log_dbname;
+    QFile *file_pointer;
+    config cfg;
+    params cfg_params;
+    int rig_model;
+
+    rig_params rig;
+    RIG* r = init_rig(228, "/dev/ttyUSB0");
 
     bool run_mode = true; // default mode is run
     bool sandp_mode = false; // default mode is run
-    QString *log_dbname = nullptr;
-    rig_query *r = new rig_query();
-    RIG *rg;
-    QFile *f;
-    config cfg;
-    params p;
-    int rig_model;
 };
 
 #endif // MAINWINDOW_H

@@ -5,26 +5,22 @@
 #include <QString>
 #include <QDebug>
 
-typedef struct params {
+typedef struct {
    QString callsign;
    QString dbfile;
    QString category;
    int rig;
+   QString serial;
 } params;
 
 class config
 {
 public:
     config();
-    params &load_settings();
-    int save_settings(QString callsign, QString dbfile, QString category, int rig);
-
-    QString get_callsign(params &s);
-    QString get_dbfile(params &s);
-    QString get_category(params &s);
-    int get_rig(params &s);
+    void load_settings(params *);
+    int save_settings(QString callsign, QString dbfile, QString category, int rig, QString serial);
 private:
-
+    libconfig::Config cfg;
 };
 
 #endif // CONFIG_H

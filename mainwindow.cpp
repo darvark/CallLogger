@@ -7,69 +7,52 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    open_rig(r, "/dev/ttyUSB0");
+//    odczekanie 0.1s od uruchomienia palikacji do pokazania aktualnej daty, oswiezanie na biezaco
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
     connect(timer, SIGNAL(timeout()), this, SLOT(showDate()));
+
     timer->start(100);
 
-    checkDBselected();
-//    cfg.save_settings("sp6mi", "test.db", "MOBA");
 
+//  aktualna czestotliwosc
+    connect(timer, SIGNAL(timeout()), this, SLOT(showFreq()));
+//  aktualne vfo
+//  connect(timer, SIGNAL(timeout()), this, SLOT(showVFO()));
+
+//    sprawdzenie czy jest dostepna i wybrana baza danych
+//    checkDBselected();
+
+//    p = cfg.load_settings();
+    log_dbname = "test.db";
+
+//    upewnienie sie ze znak bedzie zawsze duzymi literami
     connect(ui->callsign, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
-}
-
-// check if db is selected, and pop-up if not
-bool MainWindow::checkDBselected()
-{
-    const char* msg = "Plik bazy danych nie został wybrany.";
-    const char* msg2 = "\nProszę utworzyć nową bazę lub wybrać istniejącą";
-    if (!log_dbname)
-    {
-        //pop up message
-        QMessageBox::warning(this,tr(msg), tr(msg2));
-        cfg.save_settings("SP6MI", "test.db", "MOAB", 220); //220 is Kenwood TS-480
-        QMessageBox::information(this,tr("Nowa konfiguracja"), tr("Domyślna konfiguracja została wczytana"));
-    }
-    else
-    {
-        p = cfg.load_settings();
-        log_dbname = &p.dbfile;
-        rig_model = p.rig;
-    }
 }
 
 MainWindow::~MainWindow()
 {
+    close_rig(r);
     delete ui;
 }
 
 void MainWindow::on_addbutton_clicked()
 {
-    if (checkDBselected())
-    {
-        QString call = ui->callsign->text();
-        int rst_s = ui->rstsend->text().toInt();
-        int rst_r = ui->rstrecv->text().toInt();
-        QString exch = ui->exchange->text();
+    QString call = ui->callsign->text();
+    int rst_s = ui->rstsend->text().toInt();
+    int rst_r = ui->rstrecv->text().toInt();
+    QString exch = ui->exchange->text();
 
-        QString godz = QDateTime::currentDateTime().toUTC().toString("h:mm:ss ");
-        QString dzis = QDate::currentDate().toString("yyyy/MM/dd");
+    QString godz = QDateTime::currentDateTime().toUTC().toString("h:mm:ss ");
+    QString dzis = QDate::currentDate().toString("yyyy/MM/dd");
 
-        database* d = new database();
-        const char* serial = "/dev/ttyuSB0";
+    database* d = new database();
 
-        rg = r->init_rig(rig_model, serial);
-
-        r->fetch_vfo(rg, serial);
-        double czestotliwosc = r->fetch_freq(rg, serial);
-        QString tryb = r->fetch_mode(rg, serial);
-
-        d->insert_data(*log_dbname, call, czestotliwosc, tryb, dzis, godz, rst_s, rst_r, exch);
-    }
-    else
-    {
-//        connect(this, SIGNAL(), this, SLOT(on_actionNowy_2_triggered()));
-    }
+    double czestotliwosc = rig.freq;
+    qDebug() << czestotliwosc;
+    QString tryb = rig.mode;
+    d->insert_data(log_dbname, call, czestotliwosc, tryb, dzis, godz, rst_s, rst_r, exch);
 }
 
 void MainWindow::on_clearbutton_clicked()
@@ -138,7 +121,6 @@ void MainWindow::on_searchandwork_stateChanged(int arg1)
         ui->run->setCheckState(Qt::Checked);
         ui->searchandwork->setCheckState(Qt::Unchecked);
     }
-
 }
 
 void MainWindow::showTime()
@@ -184,4 +166,14 @@ void MainWindow::on_actionOtw_rz_triggered()
     //optworz baze danych
     QString dbfile = QFileDialog::getOpenFileName(this, tr("Otwórz plik bazy"), QDir::currentPath(), tr("DB files (*.db, *.*)"));
     //przekazac dbfile do handlera bazy danych
+}
+
+void MainWindow::showFreq()
+{
+    fetch_rig_params(r, "/dev/ttyUSB0", &rig);
+    QString cz = QString().setNum(int(rig.freq));
+    QString cz2 = cz.chopped(3) + "." + cz.right(2);
+    ui->czestotliwosc->setText(cz2);
+    ui->tryb->setText(rig.mode);
+   // ui->tryb->setText(rig.vfo);
 }

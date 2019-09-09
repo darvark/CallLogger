@@ -19,7 +19,6 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
    return EXIT_SUCCESS;
 }
 
-
 sqlite3* database::db_open_connection(QString& dbname)
 {
     sqlite3 *db;
@@ -63,9 +62,7 @@ int database::create_database(QString& dbname)
         }
         else
         {
-//            fprintf(stderr, "Database created successfully\n");
             execute_query(table, db);
-//            fprintf(stderr, "Table structure created successfully\n");
         }
         sqlite3_close(db);
     }

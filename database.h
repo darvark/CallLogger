@@ -6,7 +6,6 @@
 #include <QFile>
 #include <QDebug>
 
-
 class database
 {
 public:
@@ -30,7 +29,6 @@ private:
             "rst_s INTEGER NOT NULL, " \
             "rst_r INTEGER NOT NULL, " \
             "exchange TEXT);";
-
     const char* qstrTocstr(QString* s);
 };
 

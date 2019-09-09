@@ -2,11 +2,8 @@
 
 config::config() {}
 
-params &config::load_settings()
+void config::load_settings(params *s)
 {
-    libconfig::Config cfg;
-    params s;
-
     try
     {
         cfg.readFile("app.cfg");
@@ -26,29 +23,30 @@ params &config::load_settings()
     const libconfig::Setting& root = cfg.getRoot();
 
     const libconfig::Setting &params = root["logger"];
-    std::string call, file, cat;
+    std::string call, file, cat, serial;
     int rig;
 
     params.lookupValue("callsign", call);
     params.lookupValue("dbfile", file);
     params.lookupValue("category", cat);
     params.lookupValue("rig", rig);
+    params.lookupValue("serial", serial);
 
     qDebug() << "callsign" << QString::fromUtf8(call.c_str())
          <<  left << "dbfile" << QString::fromUtf8(file.c_str())
          <<  left << "category" << QString::fromUtf8(cat.c_str())
          <<  left << "rig" << rig
+         <<  left << "serial" << QString::fromUtf8(serial.c_str())
          << endl;
 
-    s.callsign = QString::fromUtf8(call.c_str());
-    s.dbfile = QString::fromUtf8(file.c_str());
-    s.category = QString::fromUtf8(cat.c_str());
-    s.rig = rig;
-
-    return s;
+    s->callsign = QString::fromUtf8(call.c_str());
+    s->dbfile = QString::fromUtf8(file.c_str());
+    s->category = QString::fromUtf8(cat.c_str());
+    s->rig = rig;
+    s->serial = QString::fromUtf8(serial.c_str());
 }
 
-int config::save_settings(QString callsign, QString dbfile, QString category, int rig)
+int config::save_settings(QString callsign, QString dbfile, QString category, int rig, QString serial)
 {
     static const char *output_file = "app.cfg";
     libconfig::Config cfg;
@@ -62,6 +60,7 @@ int config::save_settings(QString callsign, QString dbfile, QString category, in
     name.add("dbfile", libconfig::Setting::TypeString) = dbfile.toStdString().c_str();
     name.add("category", libconfig::Setting::TypeString) = category.toStdString().c_str();
     name.add("rig", libconfig::Setting::TypeInt) = rig;
+    name.add("serial", libconfig::Setting::TypeString) = serial.toStdString().c_str();
 
     // Write out the new configuration.
     try
@@ -76,24 +75,4 @@ int config::save_settings(QString callsign, QString dbfile, QString category, in
     }
 
     return EXIT_SUCCESS;
-}
-
-QString config::get_callsign(params &s)
-{
-    return s.callsign;
-}
-
-QString config::get_dbfile(params &s)
-{
-    return s.dbfile;
-}
-
-QString config::get_category(params &s)
-{
-    return s.category;
-}
-
-int config::get_rig(params &s)
-{
-    return s.rig;
 }

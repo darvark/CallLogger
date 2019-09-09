@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>565</width>
-    <height>253</height>
+    <width>561</width>
+    <height>249</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -169,16 +169,6 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLCDNumber" name="frequency">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>40</y>
-      <width>161</width>
-      <height>23</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
@@ -203,16 +193,6 @@
     </property>
     <property name="text">
      <string>VFO</string>
-    </property>
-   </widget>
-   <widget class="QLCDNumber" name="vfo">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>40</y>
-      <width>64</width>
-      <height>23</height>
-     </rect>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
@@ -412,13 +392,39 @@
      <string>Data:</string>
     </property>
    </widget>
+   <widget class="QLabel" name="tryb">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>40</y>
+      <width>81</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="czestotliwosc">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>40</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>565</width>
+     <width>561</width>
      <height>25</height>
     </rect>
    </property>
@@ -464,7 +470,7 @@
   </action>
   <action name="actionNowy_2">
    <property name="text">
-    <string>Nowy</string>
+    <string>&amp;Nowy</string>
    </property>
   </action>
  </widget>
