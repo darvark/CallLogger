@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,19 +26,19 @@ CONFIG += c++11
 
 
 SOURCES += \
-        database.cpp \
         logwindow.cpp \
         main.cpp \
         mainwindow.cpp \
         rig.cpp \
-        config.cpp
+        config.cpp \
+    dbmanager.cpp
 
 HEADERS += \
-        database.h \
         logwindow.h \
         mainwindow.h \
         rig.h \
-        config.h
+        config.h \
+    dbmanager.h
 
 FORMS += \
         logwindow.ui \

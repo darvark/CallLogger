@@ -72,16 +72,17 @@ void close_rig(RIG* my_rig)
     rig_cleanup(my_rig);
 }
 
-void open_rig(RIG* my_rig, const char* serial_port)
+bool open_rig(RIG* my_rig, const char* serial_port)
 {
     int retcode;
     strncpy(my_rig->state.rigport.pathname, serial_port, FILPATHLEN - 1);
     retcode = rig_open(my_rig);
     if (retcode != RIG_OK) {
         printf("rig_open: error = %s\n", rigerror(retcode));
-        exit(2);
+        return false;
     }
     printf("Port %s opened ok\n", serial_port);
+    return true;
 }
 
 void fetch_rig_params (RIG* my_rig, const char* serial_port, rig_params* r)

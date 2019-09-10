@@ -12,7 +12,7 @@
 #include <QMessageBox>
 
 #include "logwindow.h"
-#include "database.h"
+#include "dbmanager.h"
 #include "rig.h"
 #include "config.h"
 
@@ -74,11 +74,15 @@ private:
     params cfg_params;
     int rig_model;
 
+    dbmanager *db;
+
     rig_params rig;
     RIG* r = init_rig(228, "/dev/ttyUSB0");
 
     bool run_mode = true; // default mode is run
     bool sandp_mode = false; // default mode is run
+
+    bool polaczenie = true;
 };
 
 #endif // MAINWINDOW_H

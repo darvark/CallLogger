@@ -7,21 +7,57 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-//    cfg.save_settings("SP6MI", "test.db", "MOAB", 220, "/dev/ttyUSB0");
-
+//    wczytanie konfiguracji z pliku
     cfg.load_settings(&cfg_params);
     log_dbname = cfg_params.dbfile;
     serial_port = cfg_params.serial;
-    open_rig(r, serial_port.toStdString().c_str());
 
-    //    odczekanie 0.1s od uruchomienia palikacji do pokazania aktualnej daty, oswiezanie na biezaco
+//    tworzy obiekt bazy danych
+    static const QString path = log_dbname;
+    db = new dbmanager(path);
+    if (db->isOpen())
+    {
+// Creates a table if it doens't exist. Otherwise,
+// it will use existing table.
+        db->createTable();
+    }
+
+//    ustanowienie polaczenia z radiem
+//    jak sie  nie uda to okno infomacji i flaga ustawiona na false
+//    bedzie zapisywac domyslne wartosci
+//    TODO: przerobic zeby mozna bylo recznie wpisywac??
+    if (open_rig(r, serial_port.toStdString().c_str()))
+    {
+        polaczenie = true;
+        if (rig.mode != "CW")
+        {
+            // ustawienie domyslnej wartosci raportu
+            ui->rstrecv->setText("59");
+            ui->rstsend->setText("59");
+        }
+        else {
+            // ustawienie domyslnej wartosci raportu
+            ui->rstrecv->setText("599");
+            ui->rstsend->setText("599");
+        }
+    }
+    else
+    {
+        QMessageBox::warning(this, "Błąd komunikacji z radiem","Nie udało się ustanowić połączenia z radiem");
+        polaczenie = false;
+        // ustawienie domyslnej wartosci raportu
+        ui->rstrecv->setText("599");
+        ui->rstsend->setText("599");
+    }
+
+//    odczekanie 0.1s od uruchomienia palikacji do pokazania aktualnej daty, oswiezanie na biezaco
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
     connect(timer, SIGNAL(timeout()), this, SLOT(showDate()));
 
     timer->start(100);
 
-//  aktualna czestotliwosc
+//  pokazywanie aktualnej czestotliwosci, modulacji i VFO
     connect(timer, SIGNAL(timeout()), this, SLOT(showFreq()));
 
 //  upewnienie sie ze znak bedzie zawsze duzymi literami
@@ -30,12 +66,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    close_rig(r);
+    close_rig(r); //zamykanie polaczenia z radiem
     delete ui;
 }
 
 void MainWindow::on_addbutton_clicked()
 {
+    QString tryb;
+    double czestotliwosc;
+
     QString call = ui->callsign->text();
     int rst_s = ui->rstsend->text().toInt();
     int rst_r = ui->rstrecv->text().toInt();
@@ -44,12 +83,18 @@ void MainWindow::on_addbutton_clicked()
     QString godz = QDateTime::currentDateTime().toUTC().toString("h:mm:ss ");
     QString dzis = QDate::currentDate().toString("yyyy/MM/dd");
 
-    database* d = new database();
 
-    double czestotliwosc = rig.freq;
-    qDebug() << czestotliwosc;
-    QString tryb = rig.mode;
-    d->insert_data(log_dbname, call, czestotliwosc, tryb, dzis, godz, rst_s, rst_r, exch);
+    if (polaczenie)
+    {
+        czestotliwosc = rig.freq;
+        tryb = rig.mode;
+    }
+    else
+    {
+        czestotliwosc = 14200.00;
+        tryb = "SSB";
+    }
+    db->addrecord(call, czestotliwosc, tryb, dzis, godz, rst_s, rst_r, exch);
 }
 
 void MainWindow::on_clearbutton_clicked()
@@ -167,10 +212,20 @@ void MainWindow::on_actionOtw_rz_triggered()
 
 void MainWindow::showFreq()
 {
-    fetch_rig_params(r, serial_port.toStdString().c_str(), &rig);
-    QString cz = QString().setNum(int(rig.freq));
-    QString cz2 = cz.chopped(3) + "." + cz.right(3);
-    ui->czestotliwosc->setText(cz2);
-    ui->tryb->setText(rig.mode);
-    ui->vfo_show->setText(rig.vfo);
+    if (polaczenie)
+    {
+        fetch_rig_params(r, serial_port.toStdString().c_str(), &rig);
+        QString cz = QString().setNum(int(rig.freq));
+        QString cz2 = cz.chopped(3) + "." + cz.right(3);
+        ui->czestotliwosc->setText(cz2);
+        ui->tryb->setText(rig.mode);
+        ui->vfo_show->setText(rig.vfo);
+    }
+    else {
+        {
+            ui->czestotliwosc->setText("14000.00");
+            ui->tryb->setText("SSB");
+            ui->vfo_show->setText("A");
+        }
+    }
 }
