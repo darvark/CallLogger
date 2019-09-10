@@ -68,6 +68,7 @@ private:
     QDateTime *datetime;
 
     QString log_dbname;
+    QString serial_port;
     QFile *file_pointer;
     config cfg;
     params cfg_params;

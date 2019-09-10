@@ -89,17 +89,13 @@ void fetch_rig_params (RIG* my_rig, const char* serial_port, rig_params* r)
     freq_t freq; /* frequency */
     rmode_t rmode; /* radio mode of operation */
     pbwidth_t width;
+    vfo_t vfo;
     int retcode; /* generic return code from functions */
-
-    //Open rig connection
-
-
-    printf("\nGet various raw rig values:\n");
 
     //get freg of selected vfo
     retcode = rig_get_freq(my_rig, RIG_VFO_CURR, &freq);
     if (retcode == RIG_OK ) {
-        printf("rig_get_freq: freq = %.2" PRIfreq"\n", freq);
+        r->freq = freq;
     } else {
         printf("rig_get_freq: error = %s \n", rigerror(retcode));
     }
@@ -107,14 +103,16 @@ void fetch_rig_params (RIG* my_rig, const char* serial_port, rig_params* r)
     //get current modulation
     retcode = rig_get_mode(my_rig, RIG_VFO_CURR, &rmode, &width);
     if (retcode == RIG_OK ) {
-        printf("rig_get_mode: mode = %s \n", map_enum_to_str(rmode));
+        r->mode = QString(map_enum_to_str(rmode));
     } else {
         printf("rig_get_mode: error = %s \n", rigerror(retcode));
     }
 
-    r->vfo = QString("A");
-    r->freq = freq;
-    r->mode = QString(map_enum_to_str(rmode));
-
-    printf("port %s closed ok \n", serial_port);
+    //get current modulation
+    retcode = rig_get_vfo(my_rig, &vfo);
+    if (retcode == RIG_OK ) {
+        r->vfo = vfo == 1 ? QString("A") : QString("B");
+    } else {
+        printf("rig_get_vfo: error = %s \n", rigerror(retcode));
+    }
 }

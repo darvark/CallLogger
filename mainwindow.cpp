@@ -7,27 +7,24 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    open_rig(r, "/dev/ttyUSB0");
-//    odczekanie 0.1s od uruchomienia palikacji do pokazania aktualnej daty, oswiezanie na biezaco
+//    cfg.save_settings("SP6MI", "test.db", "MOAB", 220, "/dev/ttyUSB0");
+
+    cfg.load_settings(&cfg_params);
+    log_dbname = cfg_params.dbfile;
+    serial_port = cfg_params.serial;
+    open_rig(r, serial_port.toStdString().c_str());
+
+    //    odczekanie 0.1s od uruchomienia palikacji do pokazania aktualnej daty, oswiezanie na biezaco
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
     connect(timer, SIGNAL(timeout()), this, SLOT(showDate()));
 
     timer->start(100);
 
-
 //  aktualna czestotliwosc
     connect(timer, SIGNAL(timeout()), this, SLOT(showFreq()));
-//  aktualne vfo
-//  connect(timer, SIGNAL(timeout()), this, SLOT(showVFO()));
 
-//    sprawdzenie czy jest dostepna i wybrana baza danych
-//    checkDBselected();
-
-//    p = cfg.load_settings();
-    log_dbname = "test.db";
-
-//    upewnienie sie ze znak bedzie zawsze duzymi literami
+//  upewnienie sie ze znak bedzie zawsze duzymi literami
     connect(ui->callsign, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
 }
 
@@ -170,10 +167,10 @@ void MainWindow::on_actionOtw_rz_triggered()
 
 void MainWindow::showFreq()
 {
-    fetch_rig_params(r, "/dev/ttyUSB0", &rig);
+    fetch_rig_params(r, serial_port.toStdString().c_str(), &rig);
     QString cz = QString().setNum(int(rig.freq));
-    QString cz2 = cz.chopped(3) + "." + cz.right(2);
+    QString cz2 = cz.chopped(3) + "." + cz.right(3);
     ui->czestotliwosc->setText(cz2);
     ui->tryb->setText(rig.mode);
-   // ui->tryb->setText(rig.vfo);
+    ui->vfo_show->setText(rig.vfo);
 }

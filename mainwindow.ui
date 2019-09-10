@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>561</width>
-    <height>249</height>
+    <width>572</width>
+    <height>259</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -179,20 +179,20 @@
      </rect>
     </property>
     <property name="text">
-     <string>Częstotliwość</string>
+     <string>Częstotliwość:</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>217</x>
       <y>40</y>
-      <width>58</width>
-      <height>18</height>
+      <width>71</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>VFO</string>
+     <string>Modulacja:</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
@@ -395,10 +395,10 @@
    <widget class="QLabel" name="tryb">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>300</x>
       <y>40</y>
       <width>81</width>
-      <height>18</height>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
@@ -418,13 +418,52 @@
      <string>TextLabel</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>40</y>
+      <width>58</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>VFO:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="vfo_show">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>40</y>
+      <width>58</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line_3">
+    <property name="geometry">
+     <rect>
+      <x>7</x>
+      <y>60</y>
+      <width>561</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>561</width>
+     <width>572</width>
      <height>25</height>
     </rect>
    </property>
