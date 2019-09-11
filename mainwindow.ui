@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>572</width>
-    <height>259</height>
+    <width>570</width>
+    <height>257</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -463,7 +463,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>572</width>
+     <width>570</width>
      <height>25</height>
     </rect>
    </property>
@@ -475,6 +475,7 @@
     <addaction name="actionOtw_rz"/>
     <addaction name="actionZapisz"/>
     <addaction name="actionZako_cz"/>
+    <addaction name="actionUstawienia"/>
    </widget>
    <addaction name="menuPlik"/>
   </widget>
@@ -510,6 +511,11 @@
   <action name="actionNowy_2">
    <property name="text">
     <string>&amp;Nowy</string>
+   </property>
+  </action>
+  <action name="actionUstawienia">
+   <property name="text">
+    <string>Ustawienia</string>
    </property>
   </action>
  </widget>

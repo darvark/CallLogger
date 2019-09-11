@@ -24,37 +24,30 @@ MainWindow::MainWindow(QWidget *parent) :
         db->createTable();
     }
 
+//    domyslna wartosc raportu zaleznie od modulacji
+    if (QString().compare(cfg_params.mode, QString("SSB"), Qt::CaseInsensitive))
+    {
+        // ustawienie domyslnej wartosci raportu
+        ui->rstrecv->setText("59");
+        ui->rstsend->setText("59");
+    }
+    else {
+        // ustawienie domyslnej wartosci raportu
+        ui->rstrecv->setText("599");
+        ui->rstsend->setText("599");
+    }
 
 //    ustanowienie polaczenia z radiem
 //    jak sie  nie uda to okno infomacji i flaga ustawiona na false
 //    bedzie zapisywac domyslne wartosci
-//    TODO: przerobic zeby mozna bylo recznie wpisywac??
     if (open_rig(r, serial_port.toStdString().c_str()))
     {
         polaczenie = true;
-
-        rmode_t rmode; /* radio mode of operation */
-        pbwidth_t width;
-        qDebug() << ">>>>>>" << rig_get_mode(r, RIG_VFO_CURR, &rmode, &width);
-        if (rig_get_mode(r, RIG_VFO_CURR, &rmode, &width) == 2)
-        {
-            // ustawienie domyslnej wartosci raportu
-            ui->rstrecv->setText("599");
-            ui->rstsend->setText("599");
-        }
-        else {
-            // ustawienie domyslnej wartosci raportu
-            ui->rstrecv->setText("59");
-            ui->rstsend->setText("59");
-        }
     }
     else
     {
         QMessageBox::warning(this, "Błąd komunikacji z radiem","Nie udało się ustanowić połączenia z radiem");
         polaczenie = false;
-        // ustawienie domyslnej wartosci raportu
-        ui->rstrecv->setText("599");
-        ui->rstsend->setText("599");
     }
 
 //    odczekanie 0.1s od uruchomienia palikacji do pokazania aktualnej daty, oswiezanie na biezaco
@@ -67,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //  pokazywanie aktualnej czestotliwosci, modulacji i VFO
     connect(timer, SIGNAL(timeout()), this, SLOT(showFreq()));
 
-//  upewnienie sie ze znak bedzie zawsze duzymi literami
+//  upewnienie sie ze znak i wymiana bedzie zawsze duzymi literami
     connect(ui->callsign, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
     connect(ui->exchange, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
 }
@@ -128,6 +121,7 @@ void MainWindow::on_logbutton_clicked()
     //show log
     logw = new logwindow(db);
     logw->show();
+    qDebug() << db->printAllRecords();
 }
 
 void MainWindow::on_quitbutton_clicked()
@@ -240,4 +234,10 @@ void MainWindow::showFreq()
             ui->vfo_show->setText("A");
         }
     }
+}
+
+void MainWindow::on_actionUstawienia_triggered()
+{
+    konf = new konfiguracja();
+    konf->show();
 }

@@ -31,18 +31,21 @@ SOURCES += \
         mainwindow.cpp \
         rig.cpp \
         config.cpp \
-    dbmanager.cpp
+    dbmanager.cpp \
+    konfiguracja.cpp
 
 HEADERS += \
         logwindow.h \
         mainwindow.h \
         rig.h \
         config.h \
-    dbmanager.h
+    dbmanager.h \
+    konfiguracja.h
 
 FORMS += \
         logwindow.ui \
-        mainwindow.ui
+        mainwindow.ui \
+    konfiguracja.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

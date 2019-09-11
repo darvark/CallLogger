@@ -9,6 +9,7 @@ typedef struct {
    QString callsign;
    QString dbfile;
    QString category;
+   QString mode;
    int rig;
    QString serial;
 } params;
@@ -18,7 +19,7 @@ class config
 public:
     config();
     void load_settings(params *);
-    int save_settings(QString callsign, QString dbfile, QString category, int rig, QString serial);
+    int save_settings(QString callsign, QString dbfile, QString category, QString mode, int rig, QString serial);
 private:
     libconfig::Config cfg;
 };

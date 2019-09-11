@@ -13,6 +13,7 @@
 
 #include "logwindow.h"
 #include "dbmanager.h"
+#include "konfiguracja.h"
 #include "rig.h"
 #include "config.h"
 
@@ -58,9 +59,12 @@ private slots:
     void on_actionOtw_rz_triggered();
 
 //    bool checkDBselected();
+    void on_actionUstawienia_triggered();
+
 private:
     Ui::MainWindow *ui;
     logwindow * logw;
+    konfiguracja *konf;
     QLabel *data;
     QLabel *godzina;
     QLabel *czestotliwosc;

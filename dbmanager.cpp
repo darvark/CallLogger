@@ -91,8 +91,10 @@ void dbmanager::selectall()
 
 QString dbmanager::printAllRecords() const
 {
-    QSqlQuery query("SELECT * FROM qso");
-    QString log;
+    QSqlQuery query("SELECT * FROM qso", m_db);
+    //query.prepare("SELECT * FROM qso");
+
+    //query.exec();
     int idqso = query.record().indexOf("callsign");
     while (query.next())
     {
