@@ -18,7 +18,7 @@ public:
     void selectall();
     bool createTable();
     bool isOpen() const;
-    void printAllPersons() const;
+    QString printAllRecords() const;
     bool callsignExists(const QString& callsign) const;
 private:
     QSqlDatabase m_db;

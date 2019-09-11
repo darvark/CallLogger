@@ -77,8 +77,7 @@ private:
     dbmanager *db;
 
     rig_params rig;
-    RIG* r = init_rig(228, "/dev/ttyUSB0");
-
+    RIG* r;
     bool run_mode = true; // default mode is run
     bool sandp_mode = false; // default mode is run
 

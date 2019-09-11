@@ -1,15 +1,16 @@
 #include "logwindow.h"
 #include "ui_logwindow.h"
 
-logwindow::logwindow(QWidget *parent) :
+logwindow::logwindow(dbmanager *db, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::logwindow)
 {
     ui->setupUi(this);
 
     QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(readFile()));
-    timer->start(100);
+    connect(timer, SIGNAL(timeout()), this, SLOT(show_records()));
+    timer->start(1000);
+
 }
 
 logwindow::~logwindow()
@@ -17,7 +18,8 @@ logwindow::~logwindow()
     delete ui;
 }
 
-void logwindow::readFile()
+void logwindow::show_records()
 {
-    ui->logbrowser->setText("Abrakadabra");
+//    if(db->isOpen())
+//        ui->logbrowser->setText(db->printAllRecords());
 }

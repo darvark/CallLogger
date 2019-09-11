@@ -12,8 +12,10 @@ MainWindow::MainWindow(QWidget *parent) :
     log_dbname = cfg_params.dbfile;
     serial_port = cfg_params.serial;
 
+    r = init_rig(cfg_params.rig, serial_port.toStdString().c_str());
 //    tworzy obiekt bazy danych
     static const QString path = log_dbname;
+
     db = new dbmanager(path);
     if (db->isOpen())
     {
@@ -22,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
         db->createTable();
     }
 
+
 //    ustanowienie polaczenia z radiem
 //    jak sie  nie uda to okno infomacji i flaga ustawiona na false
 //    bedzie zapisywac domyslne wartosci
@@ -29,16 +32,20 @@ MainWindow::MainWindow(QWidget *parent) :
     if (open_rig(r, serial_port.toStdString().c_str()))
     {
         polaczenie = true;
-        if (rig.mode != "CW")
+
+        rmode_t rmode; /* radio mode of operation */
+        pbwidth_t width;
+        qDebug() << ">>>>>>" << rig_get_mode(r, RIG_VFO_CURR, &rmode, &width);
+        if (rig_get_mode(r, RIG_VFO_CURR, &rmode, &width) == 2)
         {
-            // ustawienie domyslnej wartosci raportu
-            ui->rstrecv->setText("59");
-            ui->rstsend->setText("59");
-        }
-        else {
             // ustawienie domyslnej wartosci raportu
             ui->rstrecv->setText("599");
             ui->rstsend->setText("599");
+        }
+        else {
+            // ustawienie domyslnej wartosci raportu
+            ui->rstrecv->setText("59");
+            ui->rstsend->setText("59");
         }
     }
     else
@@ -62,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //  upewnienie sie ze znak bedzie zawsze duzymi literami
     connect(ui->callsign, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
+    connect(ui->exchange, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
 }
 
 MainWindow::~MainWindow()
@@ -70,6 +78,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+// implementacja nacisniecia przycisku dodaj wpis
+// jesli nie ma podanego znaku nie wykona dodania do bazy
 void MainWindow::on_addbutton_clicked()
 {
     QString tryb;
@@ -94,7 +104,8 @@ void MainWindow::on_addbutton_clicked()
         czestotliwosc = 14200.00;
         tryb = "SSB";
     }
-    db->addrecord(call, czestotliwosc, tryb, dzis, godz, rst_s, rst_r, exch);
+    if (call.length() != 0)
+        db->addrecord(call, czestotliwosc, tryb, dzis, godz, rst_s, rst_r, exch);
 }
 
 void MainWindow::on_clearbutton_clicked()
@@ -111,10 +122,11 @@ void MainWindow::on_savebutton_clicked()
     //save to logfile, not to db
 }
 
+// pokazuje okno z logiem z bazy danych
 void MainWindow::on_logbutton_clicked()
 {
     //show log
-    logw = new logwindow();
+    logw = new logwindow(db);
     logw->show();
 }
 

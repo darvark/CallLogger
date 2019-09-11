@@ -89,15 +89,18 @@ void dbmanager::selectall()
     }
 }
 
-void dbmanager::printAllPersons() const
+QString dbmanager::printAllRecords() const
 {
     QSqlQuery query("SELECT * FROM qso");
+    QString log;
     int idqso = query.record().indexOf("callsign");
     while (query.next())
     {
         QString qso = query.value(idqso).toString();
         qDebug() << "===" << qso;
+        return qso;
     }
+    return "";
 }
 
 bool dbmanager::callsignExists(const QString& callsign) const
