@@ -2,22 +2,22 @@
 
 config::config() {}
 
-void config::load_settings(params *s)
+void config::load_settings(params *s, QString& plik_konf)
 {
     try
     {
-        cfg.readFile("app.cfg");
+        cfg.readFile(plik_konf.toStdString().c_str());
     }
     catch(const libconfig::FileIOException &fioex)
     {
-        qDebug() << "I/O error while reading file.";
-        exit(1);
+        qDebug() << "Nie mogę znaleźć pliku konfiguracji";
+//        exit(1);
     }
     catch(const libconfig::ParseException &pex)
     {
         qDebug() << "Parse error at " << pex.getFile() << ":" << pex.getLine()
               << " - " << pex.getError();
-        exit(1);
+//        exit(1);
     }
 
     const libconfig::Setting& root = cfg.getRoot();
@@ -49,9 +49,10 @@ void config::load_settings(params *s)
     s->serial = QString::fromUtf8(serial.c_str());
 }
 
-int config::save_settings(QString callsign, QString dbfile, QString category, QString mode, int rig, QString serial)
+int config::save_settings(QString callsign, QString dbfile, QString category,
+                          QString mode, int rig, QString serial)
 {
-    static const char *output_file = "app.cfg";
+    static const char *output_file = "contest_logger.conf";
     libconfig::Config cfg;
 
     libconfig::Setting &root = cfg.getRoot();
@@ -62,7 +63,7 @@ int config::save_settings(QString callsign, QString dbfile, QString category, QS
     name.add("callsign", libconfig::Setting::TypeString) = callsign.toStdString().c_str();
     name.add("dbfile", libconfig::Setting::TypeString) = dbfile.toStdString().c_str();
     name.add("category", libconfig::Setting::TypeString) = category.toStdString().c_str();
-    name.add("mode", libconfig::Setting::TypeString) = mode.toStdString().c_str();
+    name.add("mode", libconfig::Setting::TypeString) = "SSB"; // TYMCZASOWE ROZWIAZANIE mode.toStdString().c_str();
     name.add("rig", libconfig::Setting::TypeInt) = rig;
     name.add("serial", libconfig::Setting::TypeString) = serial.toStdString().c_str();
 

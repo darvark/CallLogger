@@ -9,6 +9,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QMessageBox>
 
 #include "logwindow.h"
@@ -27,6 +28,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
 private slots:
     void on_addbutton_clicked();
 
@@ -58,8 +60,9 @@ private slots:
 
     void on_actionOtw_rz_triggered();
 
-//    bool checkDBselected();
     void on_actionUstawienia_triggered();
+
+    void on_actionPo_cz_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -84,8 +87,8 @@ private:
     RIG* r;
     bool run_mode = true; // default mode is run
     bool sandp_mode = false; // default mode is run
-
     bool polaczenie = true;
+    QString configFile = "contest_logger.conf";
 };
 
 #endif // MAINWINDOW_H

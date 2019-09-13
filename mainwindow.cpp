@@ -7,20 +7,32 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-//    wczytanie konfiguracji z pliku
-    cfg.load_settings(&cfg_params);
+//    pobranie konfiguracji z menu konfiguracja jesli nie istnieje w pliku
+    if (QFileInfo::exists(configFile))
+    {
+//    wczytanie pliku
+        cfg.load_settings(&cfg_params, configFile);
+    }
+    else
+    {
+//    pokazuje okno konfiguracji
+        konf = new konfiguracja();
+        konf->exec();
+
+        cfg.load_settings(&cfg_params, configFile);
+    }
+
+//    konfiguracja.(&cfg_params);
     log_dbname = cfg_params.dbfile;
     serial_port = cfg_params.serial;
 
-    r = init_rig(cfg_params.rig, serial_port.toStdString().c_str());
-//    tworzy obiekt bazy danych
+        qDebug() << log_dbname;
+ //   tworzy obiekt bazy danych
     static const QString path = log_dbname;
 
     db = new dbmanager(path);
     if (db->isOpen())
     {
-// Creates a table if it doens't exist. Otherwise,
-// it will use existing table.
         db->createTable();
     }
 
@@ -35,19 +47,6 @@ MainWindow::MainWindow(QWidget *parent) :
         // ustawienie domyslnej wartosci raportu
         ui->rstrecv->setText("599");
         ui->rstsend->setText("599");
-    }
-
-//    ustanowienie polaczenia z radiem
-//    jak sie  nie uda to okno infomacji i flaga ustawiona na false
-//    bedzie zapisywac domyslne wartosci
-    if (open_rig(r, serial_port.toStdString().c_str()))
-    {
-        polaczenie = true;
-    }
-    else
-    {
-        QMessageBox::warning(this, "Błąd komunikacji z radiem","Nie udało się ustanowić połączenia z radiem");
-        polaczenie = false;
     }
 
 //    odczekanie 0.1s od uruchomienia palikacji do pokazania aktualnej daty, oswiezanie na biezaco
@@ -240,4 +239,28 @@ void MainWindow::on_actionUstawienia_triggered()
 {
     konf = new konfiguracja();
     konf->show();
+}
+
+void MainWindow::on_actionPo_cz_triggered()
+{
+    //polacz z radiem wykonaj rig_init
+//    sutaw flage
+
+    if (cfg_params.serial.isEmpty() && cfg_params.rig != 0)
+    {
+        r = init_rig(cfg_params.rig, serial_port.toStdString().c_str());
+
+    //    ustanowienie polaczenia z radiem
+    //    jak sie  nie uda to okno infomacji i flaga ustawiona na false
+    //    bedzie zapisywac domyslne wartosci
+        if (open_rig(r, serial_port.toStdString().c_str()))
+        {
+            polaczenie = true;
+        }
+        else
+        {
+            QMessageBox::warning(this, "Błąd komunikacji z radiem","Nie udało się ustanowić połączenia z radiem");
+            polaczenie = false;
+        }
+    }
 }

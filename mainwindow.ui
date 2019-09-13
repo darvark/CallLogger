@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>570</width>
-    <height>257</height>
+    <width>568</width>
+    <height>255</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -463,7 +463,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>570</width>
+     <width>568</width>
      <height>25</height>
     </rect>
    </property>
@@ -477,7 +477,15 @@
     <addaction name="actionZako_cz"/>
     <addaction name="actionUstawienia"/>
    </widget>
+   <widget class="QMenu" name="menuPo_cz">
+    <property name="title">
+     <string>&amp;Radio</string>
+    </property>
+    <addaction name="actionPo_cz"/>
+    <addaction name="actionRoz_cz"/>
+   </widget>
    <addaction name="menuPlik"/>
+   <addaction name="menuPo_cz"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -515,7 +523,17 @@
   </action>
   <action name="actionUstawienia">
    <property name="text">
-    <string>Ustawienia</string>
+    <string>&amp;Ustawienia</string>
+   </property>
+  </action>
+  <action name="actionPo_cz">
+   <property name="text">
+    <string>Połącz</string>
+   </property>
+  </action>
+  <action name="actionRoz_cz">
+   <property name="text">
+    <string>Rozłącz</string>
    </property>
   </action>
  </widget>

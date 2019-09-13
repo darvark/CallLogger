@@ -18,7 +18,7 @@ class config
 {
 public:
     config();
-    void load_settings(params *);
+    void load_settings(params *, QString& confFIle);
     int save_settings(QString callsign, QString dbfile, QString category, QString mode, int rig, QString serial);
 private:
     libconfig::Config cfg;
