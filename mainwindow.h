@@ -87,7 +87,7 @@ private:
     RIG* r;
     bool run_mode = true; // default mode is run
     bool sandp_mode = false; // default mode is run
-    bool polaczenie = true;
+    bool polaczenie = false;
     QString configFile = "contest_logger.conf";
 };
 

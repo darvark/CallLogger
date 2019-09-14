@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>568</width>
-    <height>255</height>
+    <width>736</width>
+    <height>306</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -237,9 +237,9 @@
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>460</x>
       <y>80</y>
-      <width>58</width>
+      <width>81</width>
       <height>18</height>
      </rect>
     </property>
@@ -317,9 +317,9 @@
    <widget class="QLabel" name="godzina">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>210</x>
       <y>0</y>
-      <width>71</width>
+      <width>81</width>
       <height>20</height>
      </rect>
     </property>
@@ -330,9 +330,9 @@
    <widget class="QLabel" name="data">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>360</x>
       <y>0</y>
-      <width>71</width>
+      <width>91</width>
       <height>20</height>
      </rect>
     </property>
@@ -343,7 +343,7 @@
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>-3</x>
+      <x>0</x>
       <y>10</y>
       <width>571</width>
       <height>20</height>
@@ -371,7 +371,7 @@
      <rect>
       <x>100</x>
       <y>0</y>
-      <width>81</width>
+      <width>101</width>
       <height>20</height>
      </rect>
     </property>
@@ -382,7 +382,7 @@
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>310</x>
       <y>0</y>
       <width>41</width>
       <height>20</height>
@@ -436,7 +436,7 @@
      <rect>
       <x>440</x>
       <y>40</y>
-      <width>58</width>
+      <width>91</width>
       <height>20</height>
      </rect>
     </property>
@@ -463,8 +463,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>568</width>
-     <height>25</height>
+     <width>736</width>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPlik">
@@ -528,12 +528,12 @@
   </action>
   <action name="actionPo_cz">
    <property name="text">
-    <string>Połącz</string>
+    <string>&amp;Połącz</string>
    </property>
   </action>
   <action name="actionRoz_cz">
    <property name="text">
-    <string>Rozłącz</string>
+    <string>&amp;Rozłącz</string>
    </property>
   </action>
  </widget>
