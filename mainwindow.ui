@@ -6,9 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>736</width>
-    <height>306</height>
+    <width>572</width>
+    <height>268</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>572</width>
+    <height>268</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>572</width>
+    <height>268</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -463,8 +481,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>736</width>
-     <height>24</height>
+     <width>572</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPlik">
@@ -484,8 +502,16 @@
     <addaction name="actionPo_cz"/>
     <addaction name="actionRoz_cz"/>
    </widget>
+   <widget class="QMenu" name="menuO_prgramie">
+    <property name="title">
+     <string>O pr&amp;gramie</string>
+    </property>
+    <addaction name="actionInformacja"/>
+    <addaction name="actionAutor"/>
+   </widget>
    <addaction name="menuPlik"/>
    <addaction name="menuPo_cz"/>
+   <addaction name="menuO_prgramie"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -534,6 +560,16 @@
   <action name="actionRoz_cz">
    <property name="text">
     <string>&amp;Rozłącz</string>
+   </property>
+  </action>
+  <action name="actionInformacja">
+   <property name="text">
+    <string>Informacja</string>
+   </property>
+  </action>
+  <action name="actionAutor">
+   <property name="text">
+    <string>Autor</string>
    </property>
   </action>
  </widget>

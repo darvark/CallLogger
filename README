@@ -1,11 +1,10 @@
 TODO:
-Naprawic wspolprace z radiem
-
-obsluga konfiguracji w ktorej bedzie przechowywana nazwa pliku bazy danych,
-znak wywolawczy, oraz radio wg listy rig.h
-
-dodac okno konfiguracji
-
-dokonczyc obsluge przyciskow
+naprawic zestawienie polaczenia z radiem po wybraniu takiej opcji
 
 napisac wyswietlanie zawartosci bazy danych w logwindow
+
+export logu do pliku adif
+
+------
+pomyslec nad podpowiedziami, ze dany znak byl juz zrobiony na pasmie
+jak zdobyc dane z dx cluster'a

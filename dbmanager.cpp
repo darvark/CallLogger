@@ -80,7 +80,7 @@ bool dbmanager::addrecord(QString& callsign, double freq, QString& mode,
 
 void dbmanager::selectall()
 {
-    QSqlQuery query("SELECT * FROM qso");
+    QSqlQuery query("SELECT * FROM qso", m_db);
     int idcallsign = query.record().indexOf("callsign");
     while (query.next())
     {

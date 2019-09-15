@@ -33,13 +33,20 @@ void konfiguracja::on_zapisz_clicked()
 {
     // zapisz konfiguracje
     cfg.save_settings(ui->znak->text(), ui->plikbazy->text(),
-                      ui->kategoria->text(), ui->kategoria->text(), radio(ui->wyborRadia->currentItem()->text()),
+                      ui->kategoria->text(), ui->kategoria->text(),
+                      radio(ui->wyborRadia->currentItem()->text()),
                       ui->portpolaczenia->text());
 }
 
 void konfiguracja::on_kasuj_clicked()
 {
     //wyczysc selekcje
+    ui->znak->clear();
+    ui->plikbazy->clear();
+    ui->kategoria->clear();
+    ui->kategoria->clear();
+    ui->wyborRadia->clear();
+    ui->portpolaczenia->clear();
 }
 
 void konfiguracja::dodaj_radia_do_listy(Ui::konfiguracja* ui)

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>359</height>
+    <height>411</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -162,6 +162,29 @@
    </property>
    <property name="text">
     <string>Anuluj</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>330</y>
+     <width>84</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Modulacja</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="modulacja">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>360</y>
+     <width>141</width>
+     <height>25</height>
+    </rect>
    </property>
   </widget>
  </widget>

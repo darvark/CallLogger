@@ -11,6 +11,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QtSerialPort/QSerialPortInfo>
 
 #include "logwindow.h"
 #include "dbmanager.h"
@@ -29,6 +30,10 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void set_default_rst();
+    bool check_serial_port();
+    QString find_serial_port();
+    
 private slots:
     void on_addbutton_clicked();
 
@@ -63,6 +68,10 @@ private slots:
     void on_actionUstawienia_triggered();
 
     void on_actionPo_cz_triggered();
+
+    void on_actionAutor_triggered();
+
+    void on_actionInformacja_triggered();
 
 private:
     Ui::MainWindow *ui;

@@ -63,11 +63,11 @@ int config::save_settings(QString callsign, QString dbfile, QString category,
     name.add("callsign", libconfig::Setting::TypeString) = callsign.toStdString().c_str();
     name.add("dbfile", libconfig::Setting::TypeString) = dbfile.toStdString().c_str();
     name.add("category", libconfig::Setting::TypeString) = category.toStdString().c_str();
-    name.add("mode", libconfig::Setting::TypeString) = "SSB"; // TYMCZASOWE ROZWIAZANIE mode.toStdString().c_str();
+    name.add("mode", libconfig::Setting::TypeString) = mode.toStdString().c_str();
     name.add("rig", libconfig::Setting::TypeInt) = rig;
     name.add("serial", libconfig::Setting::TypeString) = serial.toStdString().c_str();
 
-    // Write out the new configuration.
+    // Write new configuration.
     try
     {
         cfg.writeFile(output_file);

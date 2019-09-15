@@ -1,6 +1,21 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+void MainWindow::set_default_rst()
+{
+    if (QString().compare(cfg_params.mode, QString("SSB"), Qt::CaseInsensitive))
+    {
+        // ustawienie domyslnej wartosci raportu
+        ui->rstrecv->setText("59");
+        ui->rstsend->setText("59");
+    }
+    else {
+        // ustawienie domyslnej wartosci raportu
+        ui->rstrecv->setText("599");
+        ui->rstsend->setText("599");
+    }
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -37,17 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
 //    domyslna wartosc raportu zaleznie od modulacji
-    if (QString().compare(cfg_params.mode, QString("SSB"), Qt::CaseInsensitive))
-    {
-        // ustawienie domyslnej wartosci raportu
-        ui->rstrecv->setText("59");
-        ui->rstsend->setText("59");
-    }
-    else {
-        // ustawienie domyslnej wartosci raportu
-        ui->rstrecv->setText("599");
-        ui->rstsend->setText("599");
-    }
+    set_default_rst();
 
 //    odczekanie 0.1s od uruchomienia palikacji do pokazania aktualnej daty, oswiezanie na biezaco
     QTimer *timer = new QTimer(this);
@@ -66,7 +71,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    close_rig(r); //zamykanie polaczenia z radiem
+    if (polaczenie)
+        close_rig(r); //zamykanie polaczenia z radiem
     delete ui;
 }
 
@@ -98,6 +104,11 @@ void MainWindow::on_addbutton_clicked()
     }
     if (call.length() != 0)
         db->addrecord(call, czestotliwosc, tryb, dzis, godz, rst_s, rst_r, exch);
+
+//    czyszczenie okien po dodaniu
+    ui->callsign->clear();
+    set_default_rst();
+    ui->exchange->clear();
 }
 
 void MainWindow::on_clearbutton_clicked()
@@ -226,7 +237,8 @@ void MainWindow::showFreq()
         ui->tryb->setText(rig.mode);
         ui->vfo_show->setText(rig.vfo);
     }
-    else {
+    else
+    {
         {
             ui->czestotliwosc->setText("14000.00");
             ui->tryb->setText("SSB");
@@ -245,22 +257,55 @@ void MainWindow::on_actionPo_cz_triggered()
 {
     //polacz z radiem wykonaj rig_init
 //    sutaw flage
-
-    if (cfg_params.serial.isEmpty() && cfg_params.rig != 0)
+    qDebug() << "poczatek funkcji";
+    qDebug() << cfg_params.serial.isEmpty() << " " << cfg_params.rig;
+    if (!cfg_params.serial.isEmpty() && cfg_params.rig != 0)
     {
-        r = init_rig(cfg_params.rig, serial_port.toStdString().c_str());
+        qDebug() << "init rig" << cfg_params.rig << " " << cfg_params.serial;
+        r = init_rig(cfg_params.rig, cfg_params.serial.toStdString().c_str());
 
     //    ustanowienie polaczenia z radiem
     //    jak sie  nie uda to okno infomacji i flaga ustawiona na false
     //    bedzie zapisywac domyslne wartosci
-        if (open_rig(r, serial_port.toStdString().c_str()))
+        if (open_rig(r, cfg_params.serial.toStdString().c_str()))
         {
             polaczenie = true;
         }
         else
         {
-            QMessageBox::warning(this, "Błąd komunikacji z radiem","Nie udało się ustanowić połączenia z radiem");
+            QMessageBox::warning(this, "Błąd komunikacji z radiem","Nie udało się ustanowić połączenia z radiem."
+                                                                   "Sprawdz port oraz typ radia w pliku konfiguracyjnym");
             polaczenie = false;
         }
     }
+}
+
+void MainWindow::on_actionAutor_triggered()
+{
+    QString mnie = "Marcin SP6MI Iwaniuk\n"
+                   "sp6mi@protonmail.com";
+    QMessageBox::about(this, "O mnie", mnie);
+}
+
+void MainWindow::on_actionInformacja_triggered()
+{
+    QString program = "Prosty program do logowania łączności w zawodach.\n"
+                        "Komunikacja z TRX oparta na bibliotece hamlib.";
+    QMessageBox::about(this, "O programie", program);
+}
+
+bool MainWindow::check_serial_port()
+{
+    QString currentPortName;
+    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts())
+    {
+        currentPortName = info.systemLocation();
+    }
+
+    return true;
+}
+
+QString MainWindow::find_serial_port()
+{
+    return "";
 }
