@@ -73,6 +73,8 @@ private slots:
 
     void on_actionInformacja_triggered();
 
+    void on_actionRoz_cz_triggered();
+
 private:
     Ui::MainWindow *ui;
     logwindow * logw;

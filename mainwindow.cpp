@@ -309,3 +309,11 @@ QString MainWindow::find_serial_port()
 {
     return "";
 }
+
+void MainWindow::on_actionRoz_cz_triggered()
+{
+    if (polaczenie)
+    {
+        rig_close(r);
+    }
+}
