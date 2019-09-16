@@ -7,6 +7,7 @@
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlRecord>
+#include <QtSql/QSqlField>
 
 class dbmanager
 {

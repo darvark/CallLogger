@@ -91,18 +91,36 @@ void dbmanager::selectall()
 
 QString dbmanager::printAllRecords() const
 {
+    QString result = "CALL \t FREQ \t MODE \t DATE \t TIME \t RST_S \t RST_R \t EXCHANGE\n";
     QSqlQuery query("SELECT * FROM qso", m_db);
     //query.prepare("SELECT * FROM qso");
 
-    //query.exec();
-    int idqso = query.record().indexOf("callsign");
+    query.exec();
+//    callsign, freq, mode, date, time, rst_s, rst_r, exchange
     while (query.next())
     {
-        QString qso = query.value(idqso).toString();
-        qDebug() << "===" << qso;
-        return qso;
+        int idcall = query.record().indexOf("callsign");
+        int idfreq = query.record().indexOf("freq");
+        int idmode = query.record().indexOf("mode");
+        int iddate = query.record().indexOf("date");
+        int idtime = query.record().indexOf("time");
+        int idrst_s = query.record().indexOf("rst_s");
+        int idrst_r = query.record().indexOf("rst_r");
+        int idech = query.record().indexOf("exchange");
+        QString qso = query.value(idcall).toString();
+        double freq = query.value(idfreq).toDouble();
+        QString mode = query.value(idmode).toString();
+        QString date = query.value(iddate).toString();
+        QString time = query.value(idtime).toString();
+        QString rst_s = query.value(idrst_s).toString();
+        QString rst_r = query.value(idrst_r).toString();
+        QString exch = query.value(idech).toString();
+        result += qso + "\t" + QString::number(freq) + "\t " + mode + "\t" + date + "\t" +
+                                time + "\t" + rst_s + "\t" + rst_r + "\t" + exch + "\n";
+        qDebug() << "===" << result;
     }
-    return "";
+    return result;
+//    return "";
 }
 
 bool dbmanager::callsignExists(const QString& callsign) const

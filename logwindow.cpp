@@ -3,7 +3,8 @@
 
 logwindow::logwindow(dbmanager *db, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::logwindow)
+    ui(new Ui::logwindow),
+    baza(db)
 {
     ui->setupUi(this);
 
@@ -20,6 +21,6 @@ logwindow::~logwindow()
 
 void logwindow::show_records()
 {
-//    if(db->isOpen())
-//        ui->logbrowser->setText(db->printAllRecords());
+    if(baza->isOpen())
+        ui->logbrowser->setText(baza->printAllRecords());
 }
