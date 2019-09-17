@@ -91,7 +91,9 @@ void dbmanager::selectall()
 
 QString dbmanager::printAllRecords() const
 {
-    QString result = "CALL \t FREQ \t MODE \t DATE \t TIME \t RST_S \t RST_R \t EXCHANGE\n";
+    QString result = "<table width=100%><tbody><tr><td>Call</td>"
+                     "<td>FREQ</td><td>MODE</td><td>DATE</td><td>TIME</td>"
+                     "<td>RST_S</td><td>RST_R</td><td>EXCHANGE</td></tr>";
     QSqlQuery query("SELECT * FROM qso", m_db);
     //query.prepare("SELECT * FROM qso");
 
@@ -115,11 +117,12 @@ QString dbmanager::printAllRecords() const
         QString rst_s = query.value(idrst_s).toString();
         QString rst_r = query.value(idrst_r).toString();
         QString exch = query.value(idech).toString();
-        result += qso + "\t" + QString::number(freq) + "\t " + mode + "\t" + date + "\t" +
-                                time + "\t" + rst_s + "\t" + rst_r + "\t" + exch + "\n";
+        result += "<tr><td>" + qso + "</td><td>" + QString::number(freq) +
+                "</td><td>" + mode + "</td><td>" + date + "</td><td>" +
+                time + "</td><td>" + rst_s + "</td><td>" + rst_r + "</td><td>" + exch + "</td></tr>";
         qDebug() << "===" << result;
     }
-    return result;
+    return result + "</tbody><table>";
 //    return "";
 }
 

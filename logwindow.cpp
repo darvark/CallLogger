@@ -22,5 +22,5 @@ logwindow::~logwindow()
 void logwindow::show_records()
 {
     if(baza->isOpen())
-        ui->logbrowser->setText(baza->printAllRecords());
+        ui->logbrowser->setHtml(baza->printAllRecords());
 }
