@@ -33,7 +33,8 @@ class config
 {
 public:
     config();
-    void load_settings(params *, QString &confFIle);
+    ~config();
+    void load_settings(params *p, QString &confFIle);
     int save_settings(QString callsign, QString dbfile, int rig,
                       QString serial, QString cat_station, QString cat_power,
                       QString cat_mode, QString contest, QString cat_assisted,

@@ -85,26 +85,26 @@ private:
     QLabel *czestotliwosc;
     QLabel *tryb;
     QDateTime *datetime;
+    QFile *file_pointer;
+    dbmanager *db;
+    cbr *cabrillo;
+    RIG* r;
 
     QString log_dbname;
     QString serial_port;
-    QFile *file_pointer;
     config cfg;
     params cfg_params;
-    int rig_model;
-    int moja_wymiana = 1;
-
-    dbmanager *db;
-    cbr *cabrillo;
-
     rig_params rig;
-    RIG* r;
+
+    int rig_model;
+
+    int moja_wymiana = 1;
     bool run_mode = true; // default mode is run
     bool sandp_mode = false; // default mode is run
     bool polaczenie = false;
     QString configFile = "contest_logger.conf";
 
-    void oblicz_moja_wymiane(bool wymiana, QString wymiana_wzor);
+    void oblicz_moja_wymiane(bool wymiana, int wymiana_wzor);
 };
 
 #endif // MAINWINDOW_H

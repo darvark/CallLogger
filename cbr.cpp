@@ -1,14 +1,10 @@
 #include "cbr.h"
 
-cbr::cbr(dbmanager *db):
-    db(db)
-{
-    cfg->load_settings(p, conf_file);
-}
+cbr::cbr() { }
 
 cbr::~cbr()
 {
-    delete db;
+    delete p;
 }
 
 QString cbr::prepareHeader()
@@ -38,15 +34,6 @@ QString cbr::prepareHeader()
     "SOAPBOX: " + p->cat_soapbox + "\n"
     "SOAPBOX: \n";
 
-    //    --------info sent------- -------info rcvd--------
-    //QSO:  freq mo date       time call          rst exch   call          rst exch   t
-    //QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
-    //QSO:  3799 PH 2000-10-26 0711 AA1ZZZ          59  05     K9QZO         59  04     0
-    //QSO: 14256 PH 2000-10-26 0711 AA1ZZZ          59  05     P29AS         59  28     0
-    //QSO: 21250 PH 2000-10-26 0711 AA1ZZZ          59  05     4S7TWG        59  22     0
-    //QSO: 28530 PH 2000-10-26 0711 AA1ZZZ          59  05     JT1FAX        59  23     0
-    //QSO:  7250 PH 2000-10-26 0711 AA1ZZZ          59  05     WA6MIC        59  03     0
-    //END-OF-LOG:
     return h1;
 }
 
@@ -59,28 +46,30 @@ QString cbr::log_start()
     return start;
 }
 
-QString cbr::create_log()
+QString cbr::create_log(dbmanager *database)
 {
     QString log;
     log + prepareHeader();
     log + log_start();
 
-    if(db->isOpen())
-         log = db->printToADIF();
+    if(database->isOpen())
+         log = database->printToADIF();
 
-    qDebug() << log;
+    log + "END-OF-LOG:";
+
     return log;
 }
 
-void cbr::saveFile(QString cbrFile)
+void cbr::saveFile(dbmanager *db, QString conf_file, QString cbrFile)
 {
+    cfg.load_settings(p, conf_file);
+
     QFile file(cbrFile);
           if(file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
-          {
-              // We're going to streaming text to the file
+          {// We're going to streaming text to the file
               QTextStream stream(&file);
 
-              stream << create_log();
+              stream << create_log(db);
 
               file.close();
               qDebug() << "Writing finished";

@@ -17,6 +17,7 @@ logwindow::logwindow(dbmanager *db, QWidget *parent) :
 logwindow::~logwindow()
 {
     delete ui;
+    delete baza;
 }
 
 void logwindow::show_records()

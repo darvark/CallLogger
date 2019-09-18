@@ -11,7 +11,7 @@ dbmanager::dbmanager(const QString& path)
    }
    else
    {
-      qDebug() << "Database: connection ok";
+      qDebug() << "Database: connection established";
    }
 }
 
@@ -36,12 +36,10 @@ bool dbmanager::createTable()
     bool result = query.exec();
     if (!result)
     {
-        qDebug() << "Couldn't create the table 'qso': one might already exist.";
         success = false;
     }
     else
     {
-        qDebug() << "Created the table 'qso'";
         success = true;
     }
 
@@ -55,7 +53,7 @@ bool dbmanager::addrecord(QString& callsign, double freq, QString& mode,
    bool success = false;
    // you should check if args are ok first...
    QSqlQuery query(m_db);
-   query.prepare("INSERT INTO qso (callsign, freq, mode, date, time, rst_s, rst_r, exchange) " \
+   query.prepare("INSERT INTO qso (callsign, freq, mode, date, time, rst_s, rst_r, exchange, moja_exchange) " \
                  "VALUES (:callsign, :freq, :mode, :date, :time, :rst_s, :rst_r, :exchange, :moja_exchange);");
    query.bindValue(":callsign", callsign);
    query.bindValue(":freq", freq);
@@ -73,8 +71,7 @@ bool dbmanager::addrecord(QString& callsign, double freq, QString& mode,
    }
    else
    {
-        qDebug() << "add new record error:  "
-                 << query.lastError();
+        qDebug() << "add new record error:  " << query.lastError();
    }
 
    return success;
@@ -84,6 +81,7 @@ void dbmanager::selectall()
 {
     QSqlQuery query("SELECT * FROM qso", m_db);
     int idcallsign = query.record().indexOf("callsign");
+
     while (query.next())
     {
        QString callsign = query.value(idcallsign).toString();
@@ -95,6 +93,7 @@ QString dbmanager::printAllRecords() const
     QString result = "<table width=100%><tbody><tr><td>Call</td>"
                      "<td>FREQ</td><td>MODE</td><td>DATE</td><td>TIME</td>"
                      "<td>RST_S</td><td>RST_R</td><td>EXCHANGE</td></tr>";
+
     QSqlQuery query("SELECT * FROM qso", m_db);
 
     query.exec();
@@ -187,28 +186,3 @@ bool dbmanager::callsignExists(const QString& callsign) const
 
     return exists;
 }
-// //////////////////////////////////////////////////
-// IMPLEMENT: https://github.com/katecpp/sql_with_qt/blob/master/main.cpp
-// //////////////////////////////////////////
-
-// w MAINWINDOW
-// Change to any path you wish
-//static const QString path = "example.db";
-//DbManager db(path);
-
-//    if (db.isOpen())
-//    {
-//        db.createTable();   // Creates a table if it doens't exist. Otherwise, it will use existing table.
-//        db.addPerson("A");
-//        db.addPerson("B");
-//        db.addPerson("C");
-//        db.printAllPersons();
-//        db.removePerson("C");
-//        db.printAllPersons();
-//        db.removeAllPersons();
-//        qDebug() << "End";
-//    }
-//    else
-//    {
-//        qDebug() << "Database is not open!";
-//}

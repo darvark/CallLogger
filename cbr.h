@@ -45,17 +45,15 @@ class cbr
 private:
     QString prepareHeader();
     QString log_start();
-    QString create_log();
+    QString create_log(dbmanager *database);
 public:
-    cbr(dbmanager *db);
+    cbr();
     ~cbr();
-    void saveFile(QString cbrFile);
+    void saveFile(dbmanager *db, QString conf_file, QString cbrFile);
 
 private:
-    config *cfg;
+    config cfg;
     params *p;
-    dbmanager *db;
-    QString conf_file = "contest_logger.conf";
 };
 
 #endif // ADIF_H

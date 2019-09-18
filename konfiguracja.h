@@ -22,6 +22,7 @@ class konfiguracja : public QDialog
 public:
     explicit konfiguracja(QWidget *parent = nullptr);
     ~konfiguracja();
+
     int radio(QString radio);
     bool wymiana(bool stala);
 
@@ -53,6 +54,7 @@ private:
     void ustaw_nadajnik(Ui::konfiguracja* ui);
     void ustaw_overlay(Ui::konfiguracja* ui);
     void dodaj_porty(Ui::konfiguracja* ui);
+    void toUpper(const QString &text);
 
     std::map<QString, int> mapowanieradia{
         {"Hamlib Dummy", 1},

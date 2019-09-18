@@ -2,27 +2,29 @@
 
 config::config() {}
 
+config::~config() {}
+
 void config::load_settings(params *s, QString& plik_konf)
 {
     try
     {
         cfg.readFile(plik_konf.toStdString().c_str());
+        qDebug() << "Wczytano";
     }
     catch(const libconfig::FileIOException &fioex)
     {
         qDebug() << "Nie mogę znaleźć pliku konfiguracji";
-//        exit(1);
     }
     catch(const libconfig::ParseException &pex)
     {
         qDebug() << "Parse error at " << pex.getFile() << ":" << pex.getLine()
               << " - " << pex.getError();
-//        exit(1);
     }
 
     const libconfig::Setting& root = cfg.getRoot();
 
     const libconfig::Setting &params = root["logger"];
+
     std::string call, file, serial, mode;
     int rig;
 
@@ -31,13 +33,6 @@ void config::load_settings(params *s, QString& plik_konf)
     params.lookupValue("category-mode", mode);
     params.lookupValue("rig", rig);
     params.lookupValue("serial", serial);
-
-    qDebug() << "callsign" << QString::fromUtf8(call.c_str())
-         <<  left << "dbfile" << QString::fromUtf8(file.c_str())
-         <<  left << "category-mode" << QString::fromUtf8(mode.c_str())
-         <<  left << "rig" << rig
-         <<  left << "serial" << QString::fromUtf8(serial.c_str())
-         << endl;
 
     s->callsign = QString::fromUtf8(call.c_str());
     s->dbfile = QString::fromUtf8(file.c_str());
@@ -68,7 +63,7 @@ int config::save_settings(QString callsign, QString dbfile, int rig,
     name.add("serial", libconfig::Setting::TypeString) = serial.toStdString().c_str();
 
     name.add("category-station", libconfig::Setting::TypeString) = cat_station.toStdString().c_str();
-    name.add("categot-mode", libconfig::Setting::TypeString) = cat_mode.toStdString().c_str();
+    name.add("category-mode", libconfig::Setting::TypeString) = cat_mode.toStdString().c_str();
     name.add("category-power", libconfig::Setting::TypeString) = cat_power.toStdString().c_str();
     name.add("contest", libconfig::Setting::TypeString) = contest.toStdString().c_str();
     name.add("category-assisted", libconfig::Setting::TypeString) = cat_assisted.toStdString().c_str();
@@ -81,8 +76,6 @@ int config::save_settings(QString callsign, QString dbfile, int rig,
     name.add("address", libconfig::Setting::TypeString) = adress.toStdString().c_str();
     name.add("email", libconfig::Setting::TypeString) = email.toStdString().c_str();
     name.add("klub", libconfig::Setting::TypeString) = klub.toStdString().c_str();
-    qDebug() << wymiana;
-    qDebug() << wzor;
     name.add("wymiana", libconfig::Setting::TypeBoolean) = wymiana;
     name.add("wzor", libconfig::Setting::TypeString) = wzor.toStdString().c_str();
 

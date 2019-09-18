@@ -3,7 +3,7 @@
 
 void MainWindow::set_default_rst()
 {
-    if (QString().compare(cfg_params.cat_mode, QString("SSB"), Qt::CaseInsensitive))
+    if(QString().compare(cfg_params.cat_mode, QString("SSB"), Qt::CaseInsensitive) != 1)
     {
         // ustawienie domyslnej wartosci raportu
         ui->rstrecv->setText("59");
@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
         db->createTable();
     }
 
-    cabrillo = new cbr(db);
+    cabrillo = new cbr();
 //    domyslna wartosc raportu zaleznie od modulacji
     set_default_rst();
 
@@ -71,22 +71,34 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    if (polaczenie)
+    if(polaczenie)
         close_rig(r); //zamykanie polaczenia z radiem
+    delete logw;
+    delete konf;
+    delete data;
+    delete godzina;
+    delete czestotliwosc;
+    delete tryb;
+    delete datetime;
+    delete file_pointer;
+
+    delete db;
+    delete cabrillo;
+    delete r;
     delete ui;
 }
 
 
-void MainWindow::oblicz_moja_wymiane(bool wymiana, QString wymiana_wzor)
+void MainWindow::oblicz_moja_wymiane(bool wymiana, int wymiana_wzor)
 {
     if (wymiana)
     {
         //stala wymiana
-        ui->exchange->setText(wymiana_wzor);
+        ui->exchange->setText(QString::number(wymiana_wzor));
     }
     else
     {
-        moja_wymiana += wymiana_wzor.toInt();
+        moja_wymiana++;
         ui->exchange->setText(QString::number(moja_wymiana));
     }
 }
@@ -97,7 +109,7 @@ void MainWindow::on_addbutton_clicked()
 {
     QString tryb;
     double czestotliwosc;
-    oblicz_moja_wymiane(cfg_params.wymiana, cfg_params.wzor);
+    oblicz_moja_wymiane(cfg_params.wymiana, cfg_params.wzor.toInt());
 
     QString call = ui->callsign->text();
     int rst_s = ui->rstsend->text().toInt();
@@ -119,6 +131,7 @@ void MainWindow::on_addbutton_clicked()
         czestotliwosc = 14200.00;
         tryb = "SSB";
     }
+
     if (call.length() != 0)
         db->addrecord(call, czestotliwosc, tryb, dzis, godz,
                       rst_s, rst_r, exch, myech);
@@ -141,7 +154,7 @@ void MainWindow::on_clearbutton_clicked()
 void MainWindow::on_savebutton_clicked()
 {
     //save to logfile, not to db
-    cabrillo->saveFile(cfg_params.callsign + ".cbr");
+    cabrillo->saveFile(db, configFile, cfg_params.callsign + ".cbr");
 }
 
 // pokazuje okno z logiem z bazy danych
@@ -150,7 +163,6 @@ void MainWindow::on_logbutton_clicked()
     //show log
     logw = new logwindow(db);
     logw->show();
-    qDebug() << db->printAllRecords();
 }
 
 void MainWindow::on_quitbutton_clicked()

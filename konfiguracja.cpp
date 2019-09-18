@@ -1,6 +1,14 @@
 #include "konfiguracja.h"
 #include "ui_konfiguracja.h"
 
+void konfiguracja::toUpper(const QString &text)
+{
+    QLineEdit *le = qobject_cast<QLineEdit *>(sender());
+    if (!le)
+        return;
+    le->setText(text.toUpper());
+}
+
 konfiguracja::konfiguracja(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::konfiguracja)
@@ -57,7 +65,6 @@ void konfiguracja::on_kasuj_clicked()
     //wyczysc selekcje
     ui->znak->clear();
     ui->plikbazy->clear();
-//    ui->portpolaczenia->clear();
     this->close();
 }
 

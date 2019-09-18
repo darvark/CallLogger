@@ -1,9 +1,7 @@
 TODO:
-naprawic zestawienie polaczenia z radiem po wybraniu takiej opcji
+naprawic dodawanie wymiany do wpisu w bazie danych oraz inkrementacje exch wyslanego przeze mnie
 
-napisac wyswietlanie zawartosci bazy danych w logwindow
-
-export logu do pliku adif
+export logu do pliku cbr
 
 ------
 pomyslec nad podpowiedziami, ze dany znak byl juz zrobiony na pasmie
