@@ -3,7 +3,7 @@
 
 void MainWindow::set_default_rst()
 {
-    if (QString().compare(cfg_params.mode, QString("SSB"), Qt::CaseInsensitive))
+    if (QString().compare(cfg_params.cat_mode, QString("SSB"), Qt::CaseInsensitive))
     {
         // ustawienie domyslnej wartosci raportu
         ui->rstrecv->setText("59");
@@ -76,17 +76,34 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::oblicz_moja_wymiane(bool wymiana, QString wymiana_wzor)
+{
+    if (wymiana)
+    {
+        //stala wymiana
+        ui->exchange->setText(wymiana_wzor);
+    }
+    else
+    {
+        moja_wymiana += wymiana_wzor.toInt();
+        ui->exchange->setText(QString::number(moja_wymiana));
+    }
+}
+
 // implementacja nacisniecia przycisku dodaj wpis
 // jesli nie ma podanego znaku nie wykona dodania do bazy
 void MainWindow::on_addbutton_clicked()
 {
     QString tryb;
     double czestotliwosc;
+    oblicz_moja_wymiane(cfg_params.wymiana, cfg_params.wzor);
 
     QString call = ui->callsign->text();
     int rst_s = ui->rstsend->text().toInt();
     int rst_r = ui->rstrecv->text().toInt();
     QString exch = ui->exchange->text();
+    QString myech = QString::number(moja_wymiana);
 
     QString godz = QDateTime::currentDateTime().toUTC().toString("h:mm:ss ");
     QString dzis = QDate::currentDate().toString("yyyy/MM/dd");
@@ -103,7 +120,8 @@ void MainWindow::on_addbutton_clicked()
         tryb = "SSB";
     }
     if (call.length() != 0)
-        db->addrecord(call, czestotliwosc, tryb, dzis, godz, rst_s, rst_r, exch);
+        db->addrecord(call, czestotliwosc, tryb, dzis, godz,
+                      rst_s, rst_r, exch, myech);
 
 //    czyszczenie okien po dodaniu
     ui->callsign->clear();

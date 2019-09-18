@@ -15,11 +15,13 @@ public:
     dbmanager(const QString& path);
     ~dbmanager();
     bool addrecord(QString& callsign, double freq, QString& mode,
-                   QString& date, QString& time, int rst_s, int rst_r, QString& exchange);
+                   QString& date, QString& time, int rst_s, int rst_r,
+                   QString& exchange, QString &moja_exchange);
     void selectall();
     bool createTable();
     bool isOpen() const;
     QString printAllRecords() const;
+    QString printToADIF() const;
     bool callsignExists(const QString& callsign) const;
 private:
     QSqlDatabase m_db;
@@ -31,7 +33,8 @@ private:
             "time TEXT, " \
             "rst_s INTEGER NOT NULL, " \
             "rst_r INTEGER NOT NULL, " \
-            "exchange TEXT);";
+            "exchange TEXT, " \
+            "moja_exchange TEXT);";
 };
 
 #endif // DBMANAGER_H

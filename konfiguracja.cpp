@@ -10,18 +10,22 @@ konfiguracja::konfiguracja(QWidget *parent) :
     if (ui->wyborRadia->count() == 0)
     {
         dodaj_radia_do_listy(ui);
+        ustaw_moc(ui);
+        ustaw_mode(ui);
+        ustaw_zawody(ui);
+        ustaw_pasmo(ui);
+        ustaw_operator(ui);
+        ustaw_stacja(ui);
+        ustaw_czas(ui);
+        ustaw_nadajnik(ui);
+        ustaw_overlay(ui);
     }
+    connect(ui->znak, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
 }
 
 konfiguracja::~konfiguracja()
 {
     delete ui;
-}
-
-void konfiguracja::on_wyborRadia_itemSelectionChanged()
-{
-    qDebug() << ui->wyborRadia->currentItem()->text();
-    qDebug() << mapowanieradia[ui->wyborRadia->currentItem()->text()];
 }
 
 int konfiguracja::radio(QString radio)
@@ -31,11 +35,21 @@ int konfiguracja::radio(QString radio)
 
 void konfiguracja::on_zapisz_clicked()
 {
-    // zapisz konfiguracje
+    //mapowanie Qt::Checked status na bool'a
+    bool exch = ui->wymianaBOx->checkState() == Qt::Checked ? true : false;
+    QString assisted = ui->assisted->checkState() == Qt::Checked ? "ASSISTED" : "NON-ASSISTED";
+
     cfg.save_settings(ui->znak->text(), ui->plikbazy->text(),
-                      ui->kategoria->text(), ui->kategoria->text(),
-                      radio(ui->wyborRadia->currentItem()->text()),
-                      ui->portpolaczenia->text());
+                      radio(ui->wyborRadia->currentText()),
+                      ui->portpolaczenia->text(),
+                      ui->listaStacja->currentText(), ui->listaMoc->currentText(),
+                      ui->listaMode->currentText(), ui->listaZawody->currentText(),
+                      assisted, ui->listaPasmo->currentText(), ui->listaOperator->currentText(),
+                      ui->listaSygnal->currentText(),
+                      ui->soapbox->text(), ui->listaCzas->currentText(), ui->listaOverlay->currentText(),
+                      ui->poleAdresu->text(), ui->email->text(), ui->klub->text(), exch,
+                      ui->wzorWymiany->text());
+    this->close();
 }
 
 void konfiguracja::on_kasuj_clicked()
@@ -43,10 +57,8 @@ void konfiguracja::on_kasuj_clicked()
     //wyczysc selekcje
     ui->znak->clear();
     ui->plikbazy->clear();
-    ui->kategoria->clear();
-    ui->kategoria->clear();
-    ui->wyborRadia->clear();
     ui->portpolaczenia->clear();
+    this->close();
 }
 
 void konfiguracja::dodaj_radia_do_listy(Ui::konfiguracja* ui)
@@ -266,4 +278,182 @@ void konfiguracja::dodaj_radia_do_listy(Ui::konfiguracja* ui)
     ui->wyborRadia->addItem("Icom IC-M802");
     ui->wyborRadia->addItem("Icom IC-M710");
 }
+//cateogry power
+void konfiguracja::ustaw_moc(Ui::konfiguracja* ui)
+{
+    ui->listaMoc->addItem("HIGH");
+    ui->listaMoc->addItem("LOW");
+    ui->listaMoc->addItem("QRP");
+}
+//category mode
+void konfiguracja::ustaw_mode(Ui::konfiguracja* ui)
+{
+    ui->listaMode->addItem("CW");
+    ui->listaMode->addItem("DIGI");
+    ui->listaMode->addItem("FM");
+    ui->listaMode->addItem("RTTY");
+    ui->listaMode->addItem("SSB");
+    ui->listaMode->addItem("MIXED");
+}
+//category contest
+void konfiguracja::ustaw_zawody(Ui::konfiguracja* ui)
+{
+    ui->listaZawody->addItem("AP-SPRINT");
+    ui->listaZawody->addItem("ARRL-10");
+    ui->listaZawody->addItem("ARRL-10-GHZ");
+    ui->listaZawody->addItem("ARRL-160");
+    ui->listaZawody->addItem("ARRL-222");
+    ui->listaZawody->addItem("ARRL-DX-CW");
+    ui->listaZawody->addItem("ARRL-DX-SSB");
+    ui->listaZawody->addItem("ARRL-EME");
+    ui->listaZawody->addItem("ARRL-RR-PH");
+    ui->listaZawody->addItem("ARRL-RR-DIG");
+    ui->listaZawody->addItem("ARRL-RR-CW");
+    ui->listaZawody->addItem("ARRL-SCR");
+    ui->listaZawody->addItem("ARRL-SS-CW");
+    ui->listaZawody->addItem("ARRL-SS-SSB");
+    ui->listaZawody->addItem("ARRL-UHF-AUG");
+    ui->listaZawody->addItem("ARRL-VHF-JAN");
+    ui->listaZawody->addItem("ARRL-VHF-JUN");
+    ui->listaZawody->addItem("ARRL-VHF-SEP");
+    ui->listaZawody->addItem("ARRL-RTTY");
+    ui->listaZawody->addItem("BARTG-RTTY");
+    ui->listaZawody->addItem("CQ-160-CW");
+    ui->listaZawody->addItem("CQ-160-SSB");
+    ui->listaZawody->addItem("CQ-WPX-CW");
+    ui->listaZawody->addItem("CQ-WPX-RTTY");
+    ui->listaZawody->addItem("CQ-WPX-SSB");
+    ui->listaZawody->addItem("CQ-VHF");
+    ui->listaZawody->addItem("CQ-WW-CW");
+    ui->listaZawody->addItem("CQ-WW-RTTY");
+    ui->listaZawody->addItem("CQ-WW-SSB");
+    ui->listaZawody->addItem("DARC-WAEDC-CW");
+    ui->listaZawody->addItem("DARC-WAEDC-RTTY");
+    ui->listaZawody->addItem("DARC-WAEDC-SSB");
+    ui->listaZawody->addItem("DL-DX-RTTY");
+    ui->listaZawody->addItem("DRCG-WW-RTTY");
+    ui->listaZawody->addItem("FCG-FQP");
+    ui->listaZawody->addItem("IARU-HF");
+    ui->listaZawody->addItem("JIDX-CW");
+    ui->listaZawody->addItem("JIDX-SSB");
+    ui->listaZawody->addItem("MN-QSO-PARTY");
+    ui->listaZawody->addItem("NAQP-CW");
+    ui->listaZawody->addItem("NAQP-SSB");
+    ui->listaZawody->addItem("NAQP-RTTY");
+    ui->listaZawody->addItem("NA-SPRINT-CW");
+    ui->listaZawody->addItem("NA-SPRINT-SSB");
+    ui->listaZawody->addItem("NA-SPRINT-RTTY");
+    ui->listaZawody->addItem("NCCC-CQP");
+    ui->listaZawody->addItem("NEQP");
+    ui->listaZawody->addItem("OCEANIA-DX-CW");
+    ui->listaZawody->addItem("OCEANIA-DX-SSB");
+    ui->listaZawody->addItem("RDXC");
+    ui->listaZawody->addItem("RSGB-IOTA");
+    ui->listaZawody->addItem("SAC-CW");
+    ui->listaZawody->addItem("SAC-SSB");
+    ui->listaZawody->addItem("SPDXC");
+    ui->listaZawody->addItem("SPDXC-RTTY");
+    ui->listaZawody->addItem("STEW-PERRY");
+    ui->listaZawody->addItem("TARA-RTTY");
+    ui->listaZawody->addItem("WAG");
+    ui->listaZawody->addItem("WW-DIGI");
+}
+//category assisted
+QString konfiguracja::on_assisted_stateChanged(int arg1)
+{
+    return arg1 ? assisted = "ASSISTED" : assisted = "NON_ASSISTED";
+}
+//category band
+void konfiguracja::ustaw_pasmo(Ui::konfiguracja* ui)
+{
+    ui->listaPasmo->addItem("ALL");
+    ui->listaPasmo->addItem("160M");
+    ui->listaPasmo->addItem("80M");
+    ui->listaPasmo->addItem("40M");
+    ui->listaPasmo->addItem("20M");
+    ui->listaPasmo->addItem("15M");
+    ui->listaPasmo->addItem("10M");
+    ui->listaPasmo->addItem("6M");
+    ui->listaPasmo->addItem("4M");
+    ui->listaPasmo->addItem("2M");
+    ui->listaPasmo->addItem("222");
+    ui->listaPasmo->addItem("432");
+    ui->listaPasmo->addItem("902");
+    ui->listaPasmo->addItem("1.2G");
+    ui->listaPasmo->addItem("2.3G");
+    ui->listaPasmo->addItem("3.4G");
+    ui->listaPasmo->addItem("5.7G");
+    ui->listaPasmo->addItem("10G");
+    ui->listaPasmo->addItem("24G");
+    ui->listaPasmo->addItem("47G");
+    ui->listaPasmo->addItem("75G");
+    ui->listaPasmo->addItem("123G");
+    ui->listaPasmo->addItem("134G");
+    ui->listaPasmo->addItem("241G");
+    ui->listaPasmo->addItem("Light");
+    ui->listaPasmo->addItem("VHF-3-BAND and VHF-FM-ONLY");
+}
+//category power
+void konfiguracja::ustaw_operator(Ui::konfiguracja *ui)
+{
+    ui->listaOperator->addItem("SINGLE_OP");
+    ui->listaOperator->addItem("MULTI_OP");
+    ui->listaOperator->addItem("CHECKLOG");
+}
+//category station
+void konfiguracja::ustaw_stacja(Ui::konfiguracja* ui)
+{
+    ui->listaStacja->addItem("FIXED");
+    ui->listaStacja->addItem("MOBILE");
+    ui->listaStacja->addItem("PORTABLE");
+    ui->listaStacja->addItem("ROVER");
+    ui->listaStacja->addItem("ROVER-LIMITED");
+    ui->listaStacja->addItem("ROVER-UNLIMITED");
+    ui->listaStacja->addItem("EXPEDITION");
+    ui->listaStacja->addItem("HQ");
+    ui->listaStacja->addItem("SCHOOL");
 
+}
+//category time
+void konfiguracja::ustaw_czas(Ui::konfiguracja* ui)
+{
+    ui->listaCzas->addItem("6-HOURS");
+    ui->listaCzas->addItem("12-HOURS");
+    ui->listaCzas->addItem("24-HOURS");
+}
+
+//category transmitter
+void konfiguracja::ustaw_nadajnik(Ui::konfiguracja* ui)
+{
+    ui->listaSygnal->addItem("ONE");
+    ui->listaSygnal->addItem("TWO");
+    ui->listaSygnal->addItem("LIMITED");
+    ui->listaSygnal->addItem("UNLIMITED");
+    ui->listaSygnal->addItem("SWL");
+}
+//cateogry overlay
+void konfiguracja::ustaw_overlay(Ui::konfiguracja* ui)
+{
+    ui->listaOverlay->addItem("CLASSIC");
+    ui->listaOverlay->addItem("ROOKIE");
+    ui->listaOverlay->addItem("TB_WIRES");
+    ui->listaOverlay->addItem("NOVICE-TECH");
+    ui->listaOverlay->addItem("OVER-50");
+}
+
+void konfiguracja::on_wymianaBOx_stateChanged(int arg1)
+{
+    if (arg1)
+    {
+        stala_wymiana = true;
+    }
+    else
+    {
+        stala_wymiana = false;
+    }
+}
+//zwraca prawde jesli wymiana jest stala, bez inkrementacji
+bool konfiguracja::wymiana(bool stala)
+{
+    return stala;
+}

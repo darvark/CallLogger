@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QListWidget>
 #include <QFileDialog>
+#include <QCheckBox>
+#include <QComboBox>
 #include <QFile>
 #include <QDebug>
 #include "config.h"
@@ -20,18 +22,35 @@ public:
     explicit konfiguracja(QWidget *parent = nullptr);
     ~konfiguracja();
     int radio(QString radio);
-    void dodaj_radia_do_listy(Ui::konfiguracja* ui);
+    bool wymiana(bool stala);
 
 private slots:
-    void on_wyborRadia_itemSelectionChanged();
 
     void on_zapisz_clicked();
 
     void on_kasuj_clicked();
 
+    QString on_assisted_stateChanged(int arg1);
+
+    void on_wymianaBOx_stateChanged(int arg1);
+
 private:
     Ui::konfiguracja *ui;
+
     config cfg;
+    QString assisted;
+    bool stala_wymiana = true;
+
+    void dodaj_radia_do_listy(Ui::konfiguracja* ui);
+    void ustaw_moc(Ui::konfiguracja* ui);
+    void ustaw_mode(Ui::konfiguracja* ui);
+    void ustaw_zawody(Ui::konfiguracja* ui);
+    void ustaw_pasmo(Ui::konfiguracja* ui);
+    void ustaw_operator(Ui::konfiguracja* ui);
+    void ustaw_stacja(Ui::konfiguracja* ui);
+    void ustaw_czas(Ui::konfiguracja* ui);
+    void ustaw_nadajnik(Ui::konfiguracja* ui);
+    void ustaw_overlay(Ui::konfiguracja* ui);
 
     std::map<QString, int> mapowanieradia{
         {"Hamlib Dummy", 1},

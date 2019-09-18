@@ -91,6 +91,7 @@ private:
     config cfg;
     params cfg_params;
     int rig_model;
+    int moja_wymiana = 1;
 
     dbmanager *db;
 
@@ -100,6 +101,8 @@ private:
     bool sandp_mode = false; // default mode is run
     bool polaczenie = false;
     QString configFile = "contest_logger.conf";
+
+    void oblicz_moja_wymiane(bool wymiana, QString wymiana_wzor);
 };
 
 #endif // MAINWINDOW_H

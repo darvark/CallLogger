@@ -32,7 +32,8 @@ SOURCES += \
         rig.cpp \
         config.cpp \
     dbmanager.cpp \
-    konfiguracja.cpp
+    konfiguracja.cpp \
+    cbr.cpp
 
 HEADERS += \
         logwindow.h \
@@ -40,7 +41,8 @@ HEADERS += \
         rig.h \
         config.h \
     dbmanager.h \
-    konfiguracja.h
+    konfiguracja.h \
+    cbr.h
 
 FORMS += \
         logwindow.ui \

@@ -49,13 +49,14 @@ bool dbmanager::createTable()
 }
 
 bool dbmanager::addrecord(QString& callsign, double freq, QString& mode,
-                          QString& date, QString& time, int rst_s, int rst_r, QString& exchange)
+                          QString& date, QString& time, int rst_s, int rst_r,
+                          QString& exchange, QString &moja_exchange)
 {
    bool success = false;
    // you should check if args are ok first...
    QSqlQuery query(m_db);
    query.prepare("INSERT INTO qso (callsign, freq, mode, date, time, rst_s, rst_r, exchange) " \
-                 "VALUES (:callsign, :freq, :mode, :date, :time, :rst_s, :rst_r, :exchange);");
+                 "VALUES (:callsign, :freq, :mode, :date, :time, :rst_s, :rst_r, :exchange, :moja_exchange);");
    query.bindValue(":callsign", callsign);
    query.bindValue(":freq", freq);
    query.bindValue(":mode", mode);
@@ -64,6 +65,7 @@ bool dbmanager::addrecord(QString& callsign, double freq, QString& mode,
    query.bindValue(":rst_s", rst_s);
    query.bindValue(":rst_r", rst_r);
    query.bindValue(":exchange", exchange);
+   query.bindValue(":moja_exchange", moja_exchange);
 
    if(query.exec())
    {
@@ -85,7 +87,6 @@ void dbmanager::selectall()
     while (query.next())
     {
        QString callsign = query.value(idcallsign).toString();
-       qDebug() << callsign;
     }
 }
 
@@ -95,10 +96,8 @@ QString dbmanager::printAllRecords() const
                      "<td>FREQ</td><td>MODE</td><td>DATE</td><td>TIME</td>"
                      "<td>RST_S</td><td>RST_R</td><td>EXCHANGE</td></tr>";
     QSqlQuery query("SELECT * FROM qso", m_db);
-    //query.prepare("SELECT * FROM qso");
 
     query.exec();
-//    callsign, freq, mode, date, time, rst_s, rst_r, exchange
     while (query.next())
     {
         int idcall = query.record().indexOf("callsign");
@@ -109,6 +108,7 @@ QString dbmanager::printAllRecords() const
         int idrst_s = query.record().indexOf("rst_s");
         int idrst_r = query.record().indexOf("rst_r");
         int idech = query.record().indexOf("exchange");
+
         QString qso = query.value(idcall).toString();
         double freq = query.value(idfreq).toDouble();
         QString mode = query.value(idmode).toString();
@@ -117,15 +117,47 @@ QString dbmanager::printAllRecords() const
         QString rst_s = query.value(idrst_s).toString();
         QString rst_r = query.value(idrst_r).toString();
         QString exch = query.value(idech).toString();
+
         result += "<tr><td>" + qso + "</td><td>" + QString::number(freq) +
                 "</td><td>" + mode + "</td><td>" + date + "</td><td>" +
                 time + "</td><td>" + rst_s + "</td><td>" + rst_r + "</td><td>" + exch + "</td></tr>";
-        qDebug() << "===" << result;
     }
     return result + "</tbody><table>";
-//    return "";
 }
 
+QString dbmanager::printToADIF() const
+{
+    QString result;
+    QSqlQuery query("SELECT * FROM qso", m_db);
+
+    query.exec();
+    while (query.next())
+    {
+        int idcall = query.record().indexOf("callsign");
+        int idfreq = query.record().indexOf("freq");
+        int idmode = query.record().indexOf("mode");
+        int iddate = query.record().indexOf("date");
+        int idtime = query.record().indexOf("time");
+        int idrst_s = query.record().indexOf("rst_s");
+        int idrst_r = query.record().indexOf("rst_r");
+        int idech = query.record().indexOf("exchange");
+        int idmyech = query.record().indexOf("moja_exchange");
+
+        QString qso = query.value(idcall).toString();
+        double freq = query.value(idfreq).toDouble();
+        QString mode = query.value(idmode).toString();
+        QString date = query.value(iddate).toString();
+        QString time = query.value(idtime).toString();
+        QString rst_s = query.value(idrst_s).toString();
+        QString rst_r = query.value(idrst_r).toString();
+        QString exch = query.value(idech).toString();
+        QString myexch = query.value(idmyech).toString();
+
+        result += qso + QString::number(freq) +
+                mode + date + time + rst_s + rst_r + exch + myexch;
+    }
+    return result;
+}
 bool dbmanager::callsignExists(const QString& callsign) const
 {
     bool exists = false;
