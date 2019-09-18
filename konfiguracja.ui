@@ -23,16 +23,6 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLineEdit" name="portpolaczenia">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>90</y>
-     <width>141</width>
-     <height>24</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
@@ -479,6 +469,56 @@
     <string>Stała</string>
    </property>
   </widget>
+  <widget class="QComboBox" name="serialPorts">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>90</y>
+     <width>200</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <zorder>listaCzas</zorder>
+  <zorder>znak</zorder>
+  <zorder>label</zorder>
+  <zorder>label_2</zorder>
+  <zorder>plikbazy</zorder>
+  <zorder>label_3</zorder>
+  <zorder>label_5</zorder>
+  <zorder>zapisz</zorder>
+  <zorder>kasuj</zorder>
+  <zorder>label_6</zorder>
+  <zorder>label_7</zorder>
+  <zorder>poleAdresu</zorder>
+  <zorder>label_8</zorder>
+  <zorder>assisted</zorder>
+  <zorder>label_10</zorder>
+  <zorder>label_11</zorder>
+  <zorder>label_12</zorder>
+  <zorder>label_13</zorder>
+  <zorder>label_14</zorder>
+  <zorder>label_15</zorder>
+  <zorder>label_16</zorder>
+  <zorder>label_17</zorder>
+  <zorder>klub</zorder>
+  <zorder>label_18</zorder>
+  <zorder>email</zorder>
+  <zorder>label_19</zorder>
+  <zorder>listaStacja</zorder>
+  <zorder>listaMoc</zorder>
+  <zorder>listaMode</zorder>
+  <zorder>listaPasmo</zorder>
+  <zorder>listaZawody</zorder>
+  <zorder>listaOperator</zorder>
+  <zorder>listaSygnal</zorder>
+  <zorder>listaOverlay</zorder>
+  <zorder>wyborRadia</zorder>
+  <zorder>soapbox</zorder>
+  <zorder>label_4</zorder>
+  <zorder>wzorWymiany</zorder>
+  <zorder>wymianaBOx</zorder>
+  <zorder>serialPorts</zorder>
  </widget>
  <resources/>
  <connections/>

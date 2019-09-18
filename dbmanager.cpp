@@ -153,11 +153,18 @@ QString dbmanager::printToADIF() const
         QString exch = query.value(idech).toString();
         QString myexch = query.value(idmyech).toString();
 
-        result += qso + QString::number(freq) +
-                mode + date + time + rst_s + rst_r + exch + myexch;
+        config cfg;
+        params par;
+        QString f = "contest_logger.conf";
+        cfg.load_settings(&par, f);
+
+//QSO:  3799 PH 2000-10-26 0711 AA1ZZZ          59  05     K9QZO         59  04     0
+        result += "QSO: " + QString::number(freq) + mode + date + time + par.callsign + rst_s + myexch
+                + qso + rst_r + exch + "0";
     }
     return result;
 }
+
 bool dbmanager::callsignExists(const QString& callsign) const
 {
     bool exists = false;

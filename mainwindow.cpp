@@ -41,16 +41,16 @@ MainWindow::MainWindow(QWidget *parent) :
     log_dbname = cfg_params.dbfile;
     serial_port = cfg_params.serial;
 
-        qDebug() << log_dbname;
  //   tworzy obiekt bazy danych
     static const QString path = log_dbname;
-
     db = new dbmanager(path);
+
     if (db->isOpen())
     {
         db->createTable();
     }
 
+    cabrillo = new cbr(db);
 //    domyslna wartosc raportu zaleznie od modulacji
     set_default_rst();
 
@@ -141,6 +141,7 @@ void MainWindow::on_clearbutton_clicked()
 void MainWindow::on_savebutton_clicked()
 {
     //save to logfile, not to db
+    cabrillo->saveFile(cfg_params.callsign + ".cbr");
 }
 
 // pokazuje okno z logiem z bazy danych

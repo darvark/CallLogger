@@ -18,6 +18,7 @@
 #include "konfiguracja.h"
 #include "rig.h"
 #include "config.h"
+#include "cbr.h"
 
 namespace Ui {
 class MainWindow;
@@ -94,6 +95,7 @@ private:
     int moja_wymiana = 1;
 
     dbmanager *db;
+    cbr *cabrillo;
 
     rig_params rig;
     RIG* r;

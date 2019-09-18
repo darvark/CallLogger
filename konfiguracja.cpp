@@ -41,7 +41,7 @@ void konfiguracja::on_zapisz_clicked()
 
     cfg.save_settings(ui->znak->text(), ui->plikbazy->text(),
                       radio(ui->wyborRadia->currentText()),
-                      ui->portpolaczenia->text(),
+                      ui->serialPorts->currentText(),
                       ui->listaStacja->currentText(), ui->listaMoc->currentText(),
                       ui->listaMode->currentText(), ui->listaZawody->currentText(),
                       assisted, ui->listaPasmo->currentText(), ui->listaOperator->currentText(),
@@ -57,8 +57,15 @@ void konfiguracja::on_kasuj_clicked()
     //wyczysc selekcje
     ui->znak->clear();
     ui->plikbazy->clear();
-    ui->portpolaczenia->clear();
+//    ui->portpolaczenia->clear();
     this->close();
+}
+
+void konfiguracja::dodaj_porty(Ui::konfiguracja* ui)
+{
+    Q_FOREACH(QSerialPortInfo port, QSerialPortInfo::availablePorts()) {
+            ui->serialPorts->addItem(port.portName());
+        }
 }
 
 void konfiguracja::dodaj_radia_do_listy(Ui::konfiguracja* ui)

@@ -8,6 +8,7 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlRecord>
 #include <QtSql/QSqlField>
+#include "config.h"
 
 class dbmanager
 {

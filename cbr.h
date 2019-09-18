@@ -2,6 +2,9 @@
 #define ADIF_H
 
 #include <QString>
+#include <QFile>
+#include "config.h"
+#include "dbmanager.h"
 
 //zapis logu do pliku adif
 
@@ -41,9 +44,18 @@ class cbr
 {
 private:
     QString prepareHeader();
+    QString log_start();
+    QString create_log();
 public:
-    cbr();
-    void saveFile(QString cbrFile, QString log);
+    cbr(dbmanager *db);
+    ~cbr();
+    void saveFile(QString cbrFile);
+
+private:
+    config *cfg;
+    params *p;
+    dbmanager *db;
+    QString conf_file = "contest_logger.conf";
 };
 
 #endif // ADIF_H
