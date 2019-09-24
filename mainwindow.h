@@ -98,7 +98,7 @@ private:
 
     int rig_model;
 
-    int moja_wymiana = 1;
+    int moja_wymiana;
     bool run_mode = true; // default mode is run
     bool sandp_mode = false; // default mode is run
     bool polaczenie = false;

@@ -93,3 +93,8 @@ int config::save_settings(QString callsign, QString dbfile, int rig,
 
     return EXIT_SUCCESS;
 }
+
+void config::reset(params *s)
+{
+    s = new params();
+}

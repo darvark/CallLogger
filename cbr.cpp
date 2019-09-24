@@ -1,77 +1,96 @@
 #include "cbr.h"
 
-cbr::cbr() { }
+cbr::cbr(dbmanager *db, config *cfg):
+    baza(db),
+    konfiguracja(cfg)
+{ }
 
 cbr::~cbr()
 {
-    delete p;
 }
 
 QString cbr::prepareHeader()
 {
+    QString configfile = "contest_logger.conf";
+    if (QFileInfo::exists(configfile))
+    {
+        konfiguracja->load_settings(&cfg_params, configfile);
+    }
+
     QString h1 = "START-OF-LOG: 3.0\n"
-    "CALLSIGN: " + p->callsign + "\n"
-    "CONTEST: " + p->contest + "\n"
-    "CATEGORY-OPERATOR: " + p->cat_operators + "\n"
-    "CATEGORY-ASSISTED: " + p->cat_assisted + "\n"
-    "CATEGORY-BAND: " + p->cat_band + "\n"
-    "CATEGORY-POWER: " + p->cat_power + "\n"
-    "CATEGORY-MODE: " + p->cat_mode + "\n"
-    "CATEGORY-TRANSMITTER: " + p->cat_signal + "\n"
-    "CATEGORY-OVERLAY: " + p->cat_overlay + "\n"
+    "CALLSIGN: " + cfg_params.callsign + "\n"
+    "CONTEST: " + cfg_params.contest + "\n"
+    "CATEGORY-OPERATOR: " + cfg_params.cat_operators + "\n"
+    "CATEGORY-ASSISTED: " + cfg_params.cat_assisted + "\n"
+    "CATEGORY-BAND: " + cfg_params.cat_band + "\n"
+    "CATEGORY-POWER: " + cfg_params.cat_power + "\n"
+    "CATEGORY-MODE: " + cfg_params.cat_mode + "\n"
+    "CATEGORY-TRANSMITTER: " + cfg_params.cat_signal + "\n"
+    "CATEGORY-OVERLAY: " + cfg_params.cat_overlay + "\n"
     "CLAIMED-SCORE: \n"
     "CERTIFICATE: \n"
-    "CLUB: " + p->klub + "\n"
+    "CLUB: " + cfg_params.klub + "\n"
     "LOCATION: \n"
     "CREATED-BY: Contest Logger \n"
     "NAME: \n"
-    "ADDRESS: " + p->adress + "\n"
+    "ADDRESS: " + cfg_params.adress + "\n"
     "ADDRESS-CITY: \n"
     "ADDRESS-STATE-PROVINCE: \n"
     "ADDRESS-POSTALCODE: \n"
     "ADDRESS-COUNTRY: \n"
     "OPERATORS: \n"
-    "SOAPBOX: " + p->cat_soapbox + "\n"
+    "SOAPBOX: " + cfg_params.cat_soapbox + "\n"
     "SOAPBOX: \n";
 
+    qDebug() << "stworzono header";
     return h1;
 }
 
 QString cbr::log_start()
 {
-    QString start = "    --------info sent------- -------info rcvd--------"
-                    "QSO:  freq mo date       time call          rst exch   call          rst exch   t"
-                    "QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n";
-
+    QString start = "    --------info sent------- -------info rcvd--------\n"
+                    "QSO:\tfreq\tmo\tdate\ttime call\t\trst\texch\tcall\trst\texcht\n"
+                    "QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n\n";
+    qDebug() << "stworzono start logu";
     return start;
 }
 
-QString cbr::create_log(dbmanager *database)
+QString cbr::create_log()
 {
     QString log;
-    log + prepareHeader();
-    log + log_start();
+    log += prepareHeader();
+    log += log_start();
 
-    if(database->isOpen())
-         log = database->printToADIF();
+    qDebug() << "w createlog";
+    if(baza->isOpen())
+    {
+        qDebug() << "w createlog";
+         log += baza->printToADIF();
+    }
+    else
+    {
+        qDebug() << "Baza nie otwarta";
+    }
+    log += "END-OF-LOG:";
 
-    log + "END-OF-LOG:";
-
+    qDebug() << "stworzono log" << log;
     return log;
 }
 
-void cbr::saveFile(dbmanager *db, QString conf_file, QString cbrFile)
+void cbr::saveFile(QString cbrFile)
 {
-    cfg.load_settings(p, conf_file);
+//    cfg.load_settings(p, conf_file);
 
+    qDebug() << "w save file";
     QFile file(cbrFile);
-          if(file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
-          {// We're going to streaming text to the file
-              QTextStream stream(&file);
+    if(file.open(QIODevice::ReadWrite))
+    {
+        qDebug() << "otwarto plik";
+        QTextStream stream(&file);
 
-              stream << create_log(db);
+        stream << create_log();
 
-              file.close();
-              qDebug() << "Writing finished";
-          }
+        file.close();
+        qDebug() << "Writing finished";
+    }
 }

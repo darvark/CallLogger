@@ -1,25 +1,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-void MainWindow::set_default_rst()
-{
-    if(QString().compare(cfg_params.cat_mode, QString("SSB"), Qt::CaseInsensitive) != 1)
-    {
-        // ustawienie domyslnej wartosci raportu
-        ui->rstrecv->setText("59");
-        ui->rstsend->setText("59");
-    }
-    else {
-        // ustawienie domyslnej wartosci raportu
-        ui->rstrecv->setText("599");
-        ui->rstsend->setText("599");
-    }
-}
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    moja_wymiana = 1;
     ui->setupUi(this);
 
 //    pobranie konfiguracji z menu konfiguracja jesli nie istnieje w pliku
@@ -50,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
         db->createTable();
     }
 
-    cabrillo = new cbr();
+    cabrillo = new cbr(db, &cfg);
 //    domyslna wartosc raportu zaleznie od modulacji
     set_default_rst();
 
@@ -66,7 +52,24 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //  upewnienie sie ze znak i wymiana bedzie zawsze duzymi literami
     connect(ui->callsign, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
-    connect(ui->exchange, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
+    connect(ui->wymiana, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
+
+    ui->callsign->setFocus();
+}
+
+void MainWindow::set_default_rst()
+{
+    if(QString().compare(cfg_params.cat_mode, QString("SSB"), Qt::CaseInsensitive) != 1)
+    {
+        // ustawienie domyslnej wartosci raportu
+        ui->rstrecv->setText("59");
+        ui->rstsend->setText("59");
+    }
+    else {
+        // ustawienie domyslnej wartosci raportu
+        ui->rstrecv->setText("599");
+        ui->rstsend->setText("599");
+    }
 }
 
 MainWindow::~MainWindow()
@@ -94,12 +97,11 @@ void MainWindow::oblicz_moja_wymiane(bool wymiana, int wymiana_wzor)
     if (wymiana)
     {
         //stala wymiana
-        ui->exchange->setText(QString::number(wymiana_wzor));
+        moja_wymiana = wymiana_wzor;
     }
     else
     {
         moja_wymiana++;
-        ui->exchange->setText(QString::number(moja_wymiana));
     }
 }
 
@@ -107,6 +109,7 @@ void MainWindow::oblicz_moja_wymiane(bool wymiana, int wymiana_wzor)
 // jesli nie ma podanego znaku nie wykona dodania do bazy
 void MainWindow::on_addbutton_clicked()
 {
+    ui->callsign->setFocus();
     QString tryb;
     double czestotliwosc;
     oblicz_moja_wymiane(cfg_params.wymiana, cfg_params.wzor.toInt());
@@ -114,7 +117,7 @@ void MainWindow::on_addbutton_clicked()
     QString call = ui->callsign->text();
     int rst_s = ui->rstsend->text().toInt();
     int rst_r = ui->rstrecv->text().toInt();
-    QString exch = ui->exchange->text();
+    QString exch = ui->wymiana->text();
     QString myech = QString::number(moja_wymiana);
 
     QString godz = QDateTime::currentDateTime().toUTC().toString("h:mm:ss ");
@@ -132,6 +135,7 @@ void MainWindow::on_addbutton_clicked()
         tryb = "SSB";
     }
 
+    qDebug() << ui->wymiana->text();
     if (call.length() != 0)
         db->addrecord(call, czestotliwosc, tryb, dzis, godz,
                       rst_s, rst_r, exch, myech);
@@ -139,7 +143,8 @@ void MainWindow::on_addbutton_clicked()
 //    czyszczenie okien po dodaniu
     ui->callsign->clear();
     set_default_rst();
-    ui->exchange->clear();
+    ui->wymiana->clear();
+
 }
 
 void MainWindow::on_clearbutton_clicked()
@@ -148,13 +153,15 @@ void MainWindow::on_clearbutton_clicked()
     ui->callsign->clear();
     ui->rstrecv->clear();
     ui->rstsend->clear();
-    ui->exchange->clear();
+    ui->wymiana->clear();
 }
 
 void MainWindow::on_savebutton_clicked()
 {
     //save to logfile, not to db
-    cabrillo->saveFile(db, configFile, cfg_params.callsign + ".cbr");
+    QString cbrfile = cfg_params.callsign + ".cbr";
+    qDebug() << cbrfile;
+    cabrillo->saveFile(cbrfile);
 }
 
 // pokazuje okno z logiem z bazy danych
@@ -167,6 +174,21 @@ void MainWindow::on_logbutton_clicked()
 
 void MainWindow::on_quitbutton_clicked()
 {
+    if(polaczenie)
+        close_rig(r); //zamykanie polaczenia z radiem
+    delete logw;
+    delete konf;
+    delete data;
+    delete godzina;
+    delete czestotliwosc;
+    delete tryb;
+    delete datetime;
+    delete file_pointer;
+
+    delete db;
+    delete cabrillo;
+    delete r;
+    delete ui;
     QWidget::close();
 }
 
@@ -235,13 +257,48 @@ void MainWindow::on_actionZako_cz_triggered()
     QWidget::close();
 }
 
+//przetestowac !!
 void MainWindow::on_actionNowy_2_triggered()
 {
-//   zaimplementowac
-//    f = new QFile();
-//    //create new log and new database
-//    f->setFileName(*log_dbname);
-//    f->open(QIODevice::ReadWrite);
+    if(polaczenie)
+        close_rig(r);
+
+    cfg.reset(&cfg_params);
+
+    konf = new konfiguracja();
+    konf->show();
+
+//    pobranie konfiguracji z menu konfiguracja jesli nie istnieje w pliku
+    if (QFileInfo::exists(configFile))
+    {
+//    wczytanie pliku
+        cfg.load_settings(&cfg_params, configFile);
+    }
+    else
+    {
+//    pokazuje okno konfiguracji
+        konf = new konfiguracja();
+        konf->exec();
+
+        cfg.load_settings(&cfg_params, configFile);
+    }
+
+//    konfiguracja.(&cfg_params);
+    log_dbname = cfg_params.dbfile;
+    serial_port = cfg_params.serial;
+
+ //   tworzy obiekt bazy danych
+    static const QString path = log_dbname;
+    db = new dbmanager(path);
+
+    if (db->isOpen())
+    {
+        db->createTable();
+    }
+
+    cabrillo = new cbr(db, &cfg);
+//    domyslna wartosc raportu zaleznie od modulacji
+    set_default_rst();
 }
 
 void MainWindow::on_actionZapisz_triggered()
@@ -325,21 +382,21 @@ void MainWindow::on_actionInformacja_triggered()
     QMessageBox::about(this, "O programie", program);
 }
 
-bool MainWindow::check_serial_port()
-{
-    QString currentPortName;
-    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts())
-    {
-        currentPortName = info.systemLocation();
-    }
+//bool MainWindow::check_serial_port()
+//{
+//    QString currentPortName;
+//    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts())
+//    {
+//        currentPortName = info.systemLocation();
+//    }
 
-    return true;
-}
+//    return true;
+//}
 
-QString MainWindow::find_serial_port()
-{
-    return "";
-}
+//QString MainWindow::find_serial_port()
+//{
+//    return "";
+//}
 
 void MainWindow::on_actionRoz_cz_triggered()
 {

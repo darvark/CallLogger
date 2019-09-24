@@ -28,6 +28,7 @@ public:
 
 private:
     QSqlDatabase m_db;
+    QString mapModulation(QString *mode) const;
     QString table = "CREATE TABLE IF NOT EXISTS qso(" \
             "callsign TEXT NOT NULL, " \
             "freq INTEGER NOT NULL, " \

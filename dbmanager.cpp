@@ -124,6 +124,31 @@ QString dbmanager::printAllRecords() const
     return result + "</tbody><table>";
 }
 
+QString dbmanager::mapModulation(QString *mode) const
+{
+    if (QString().compare(*mode, QString("SSB"), Qt::CaseInsensitive) != 1)
+    {
+        return "PH";
+    }
+    else if (QString().compare(*mode, QString("CW"), Qt::CaseInsensitive) != 1)
+    {
+        return "CW";
+    }
+    else if (QString().compare(*mode, QString("RTTY"), Qt::CaseInsensitive) != 1)
+    {
+        return "RY";
+    }
+    else if (QString().compare(*mode, QString("FM"), Qt::CaseInsensitive) != 1)
+    {
+        return "FM";
+    }
+    else if (QString().compare(*mode, QString("DIGI"), Qt::CaseInsensitive) != 1)
+    {
+        return "DG";
+    }
+    return "MIXED";
+}
+
 QString dbmanager::printToADIF() const
 {
     QString result;
@@ -157,9 +182,8 @@ QString dbmanager::printToADIF() const
         QString f = "contest_logger.conf";
         cfg.load_settings(&par, f);
 
-//QSO:  3799 PH 2000-10-26 0711 AA1ZZZ          59  05     K9QZO         59  04     0
-        result += "QSO: " + QString::number(freq) + mode + date + time + par.callsign + rst_s + myexch
-                + qso + rst_r + exch + "0";
+        result += "QSO: \t" + QString::number(freq) + "\t" + mapModulation(&mode) + "\t" + date + "\t" + time + "\t" + par.callsign + "\t" + rst_s + "\t" + myexch
+                + "\t" + qso + "\t" + rst_r + "\t" + exch + "\t" + "0" + "\n";
     }
     return result;
 }

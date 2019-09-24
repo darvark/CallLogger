@@ -42,6 +42,7 @@ public:
                       QString cat_soapbox, QString cat_time, QString cat_overlay,
                       QString adress, QString email, QString klub, bool wymiana,
                       QString wzor);
+    void reset(params *s);
 private:
     libconfig::Config cfg;
 };

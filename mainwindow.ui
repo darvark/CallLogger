@@ -47,6 +47,9 @@
     <property name="shortcut">
      <string>F2</string>
     </property>
+    <property name="default">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QPushButton" name="clearbutton">
     <property name="geometry">
@@ -159,32 +162,6 @@
     </property>
     <property name="placeholderText">
      <string>599</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="exchange">
-    <property name="geometry">
-     <rect>
-      <x>440</x>
-      <y>100</y>
-      <width>113</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="maxLength">
-     <number>10</number>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-    <property name="placeholderText">
-     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -475,6 +452,16 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
+   <widget class="QLineEdit" name="wymiana">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>100</y>
+      <width>113</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -482,7 +469,7 @@
      <x>0</x>
      <y>0</y>
      <width>572</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPlik">
@@ -492,8 +479,8 @@
     <addaction name="actionNowy_2"/>
     <addaction name="actionOtw_rz"/>
     <addaction name="actionZapisz"/>
-    <addaction name="actionZako_cz"/>
     <addaction name="actionUstawienia"/>
+    <addaction name="actionZako_cz"/>
    </widget>
    <widget class="QMenu" name="menuPo_cz">
     <property name="title">
@@ -564,12 +551,12 @@
   </action>
   <action name="actionInformacja">
    <property name="text">
-    <string>Informacja</string>
+    <string>&amp;Informacja</string>
    </property>
   </action>
   <action name="actionAutor">
    <property name="text">
-    <string>Autor</string>
+    <string>&amp;Autor</string>
    </property>
   </action>
  </widget>
