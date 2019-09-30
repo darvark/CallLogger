@@ -10,14 +10,25 @@
 #include <QtSql/QSqlField>
 #include "config.h"
 
+typedef struct
+{
+    QString callsign;
+    double freq;
+    QString mode;
+    QString date;
+    QString time;
+    int rst_s;
+    int rst_r;
+    QString exchange;
+    QString moja_exchange;
+} record_params;
+
 class dbmanager
 {
 public:
     dbmanager(const QString& path);
     ~dbmanager();
-    bool addrecord(QString& callsign, double freq, QString& mode,
-                   QString& date, QString& time, int rst_s, int rst_r,
-                   QString& exchange, QString &moja_exchange);
+    bool addrecord(record_params* p);
 
     void selectall();
     bool createTable();

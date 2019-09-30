@@ -46,24 +46,22 @@ bool dbmanager::createTable()
     return success;
 }
 
-bool dbmanager::addrecord(QString& callsign, double freq, QString& mode,
-                          QString& date, QString& time, int rst_s, int rst_r,
-                          QString& exchange, QString &moja_exchange)
+bool dbmanager::addrecord(record_params* p)
 {
    bool success = false;
    // you should check if args are ok first...
    QSqlQuery query(m_db);
    query.prepare("INSERT INTO qso (callsign, freq, mode, date, time, rst_s, rst_r, exchange, moja_exchange) " \
                  "VALUES (:callsign, :freq, :mode, :date, :time, :rst_s, :rst_r, :exchange, :moja_exchange);");
-   query.bindValue(":callsign", callsign);
-   query.bindValue(":freq", freq);
-   query.bindValue(":mode", mode);
-   query.bindValue(":date", date);
-   query.bindValue(":time", time);
-   query.bindValue(":rst_s", rst_s);
-   query.bindValue(":rst_r", rst_r);
-   query.bindValue(":exchange", exchange);
-   query.bindValue(":moja_exchange", moja_exchange);
+   query.bindValue(":callsign", p->callsign);
+   query.bindValue(":freq", p->freq);
+   query.bindValue(":mode", p->mode);
+   query.bindValue(":date", p->date);
+   query.bindValue(":time", p->time);
+   query.bindValue(":rst_s", p->rst_s);
+   query.bindValue(":rst_r", p->rst_r);
+   query.bindValue(":exchange", p->exchange);
+   query.bindValue(":moja_exchange", p->moja_exchange);
 
    if(query.exec())
    {

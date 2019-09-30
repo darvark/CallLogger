@@ -42,7 +42,6 @@ QString cbr::prepareHeader()
     "SOAPBOX: " + cfg_params.cat_soapbox + "\n"
     "SOAPBOX: \n";
 
-    qDebug() << "stworzono header";
     return h1;
 }
 
@@ -51,7 +50,6 @@ QString cbr::log_start()
     QString start = "    --------info sent------- -------info rcvd--------\n"
                     "QSO:\tfreq\tmo\tdate\ttime call\t\trst\texch\tcall\trst\texcht\n"
                     "QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n\n";
-    qDebug() << "stworzono start logu";
     return start;
 }
 
@@ -61,36 +59,25 @@ QString cbr::create_log()
     log += prepareHeader();
     log += log_start();
 
-    qDebug() << "w createlog";
     if(baza->isOpen())
     {
-        qDebug() << "w createlog";
          log += baza->printToADIF();
     }
-    else
-    {
-        qDebug() << "Baza nie otwarta";
-    }
+
     log += "END-OF-LOG:";
 
-    qDebug() << "stworzono log" << log;
     return log;
 }
 
 void cbr::saveFile(QString cbrFile)
 {
-//    cfg.load_settings(p, conf_file);
-
-    qDebug() << "w save file";
     QFile file(cbrFile);
     if(file.open(QIODevice::ReadWrite))
     {
-        qDebug() << "otwarto plik";
         QTextStream stream(&file);
 
         stream << create_log();
 
         file.close();
-        qDebug() << "Writing finished";
     }
 }

@@ -469,7 +469,7 @@
      <x>0</x>
      <y>0</y>
      <width>572</width>
-     <height>20</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPlik">
@@ -477,17 +477,17 @@
      <string>Pl&amp;ik</string>
     </property>
     <addaction name="actionNowy_2"/>
-    <addaction name="actionOtw_rz"/>
+    <addaction name="actionOtworz"/>
     <addaction name="actionZapisz"/>
     <addaction name="actionUstawienia"/>
-    <addaction name="actionZako_cz"/>
+    <addaction name="actionZakoncz"/>
    </widget>
    <widget class="QMenu" name="menuPo_cz">
     <property name="title">
      <string>&amp;Radio</string>
     </property>
-    <addaction name="actionPo_cz"/>
-    <addaction name="actionRoz_cz"/>
+    <addaction name="actionPolacz"/>
+    <addaction name="actionRozlacz"/>
    </widget>
    <widget class="QMenu" name="menuO_prgramie">
     <property name="title">
@@ -514,7 +514,7 @@
     <string>&amp;Nowy</string>
    </property>
   </action>
-  <action name="actionOtw_rz">
+  <action name="actionOtworz">
    <property name="text">
     <string>&amp;Otwórz</string>
    </property>
@@ -524,7 +524,7 @@
     <string>&amp;Zapisz</string>
    </property>
   </action>
-  <action name="actionZako_cz">
+  <action name="actionZakoncz">
    <property name="text">
     <string>Z&amp;akończ</string>
    </property>
@@ -539,12 +539,12 @@
     <string>&amp;Ustawienia</string>
    </property>
   </action>
-  <action name="actionPo_cz">
+  <action name="actionPolacz">
    <property name="text">
     <string>&amp;Połącz</string>
    </property>
   </action>
-  <action name="actionRoz_cz">
+  <action name="actionRozlacz">
    <property name="text">
     <string>&amp;Rozłącz</string>
    </property>

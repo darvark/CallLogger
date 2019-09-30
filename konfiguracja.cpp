@@ -5,7 +5,9 @@ void konfiguracja::toUpper(const QString &text)
 {
     QLineEdit *le = qobject_cast<QLineEdit *>(sender());
     if (!le)
+    {
         return;
+    }
     le->setText(text.toUpper());
 }
 
@@ -47,16 +49,30 @@ void konfiguracja::on_zapisz_clicked()
     bool exch = ui->wymianaBOx->checkState() == Qt::Checked ? true : false;
     QString assisted = ui->assisted->checkState() == Qt::Checked ? "ASSISTED" : "NON-ASSISTED";
 
-    cfg.save_settings(ui->znak->text(), ui->plikbazy->text(),
-                      radio(ui->wyborRadia->currentText()),
-                      ui->serialPorts->currentText(),
-                      ui->listaStacja->currentText(), ui->listaMoc->currentText(),
-                      ui->listaMode->currentText(), ui->listaZawody->currentText(),
-                      assisted, ui->listaPasmo->currentText(), ui->listaOperator->currentText(),
-                      ui->listaSygnal->currentText(),
-                      ui->soapbox->text(), ui->listaCzas->currentText(), ui->listaOverlay->currentText(),
-                      ui->poleAdresu->text(), ui->email->text(), ui->klub->text(), exch,
-                      ui->wzorWymiany->text());
+    params p;
+    p.rig = radio(ui->wyborRadia->currentText());
+    p.klub = ui->klub->text();
+    p.wzor = ui->wzorWymiany->text();
+    p.email = ui->email->text();
+    p.adress = ui->poleAdresu->text();
+    p.dbfile = ui->plikbazy->text();
+    p.serial = ui->serialPorts->currentText();
+    p.contest = ui->listaZawody->currentText();
+    p.wymiana = exch;
+    p.callsign = ui->znak->text();
+    p.cat_band = ui->listaPasmo->currentText();
+    p.cat_mode = ui->listaMode->currentText();
+    p.cat_time = ui->listaCzas->currentText();
+    p.cat_power = ui->listaMoc->currentText();
+    p.cat_signal = ui->listaSygnal->currentText();
+    p.cat_overlay = ui->listaOverlay->currentText();
+    p.cat_soapbox =  ui->soapbox->text();
+    p.cat_station = ui->listaStacja->currentText();
+    p.cat_assisted = assisted;
+    p.cat_operators = ui->listaOperator->currentText();
+
+    cfg.save_settings(&p);
+
     this->close();
 }
 
@@ -70,9 +86,10 @@ void konfiguracja::on_kasuj_clicked()
 
 void konfiguracja::dodaj_porty(Ui::konfiguracja* ui)
 {
-    Q_FOREACH(QSerialPortInfo port, QSerialPortInfo::availablePorts()) {
-            ui->serialPorts->addItem(port.portName());
-        }
+    Q_FOREACH(QSerialPortInfo port, QSerialPortInfo::availablePorts())
+    {
+        ui->serialPorts->addItem(port.portName());
+    }
 }
 
 void konfiguracja::dodaj_radia_do_listy(Ui::konfiguracja* ui)
@@ -466,6 +483,7 @@ void konfiguracja::on_wymianaBOx_stateChanged(int arg1)
         stala_wymiana = false;
     }
 }
+
 //zwraca prawde jesli wymiana jest stala, bez inkrementacji
 bool konfiguracja::wymiana(bool stala)
 {

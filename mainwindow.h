@@ -58,53 +58,51 @@ private slots:
 
     void toUpper(const QString &text);
 
-    void on_actionZako_cz_triggered();
+    void on_actionZakoncz_triggered();
 
     void on_actionNowy_2_triggered();
 
     void on_actionZapisz_triggered();
 
-    void on_actionOtw_rz_triggered();
+    void on_actionOtworz_triggered();
 
     void on_actionUstawienia_triggered();
 
-    void on_actionPo_cz_triggered();
+    void on_actionPolacz_triggered();
 
     void on_actionAutor_triggered();
 
     void on_actionInformacja_triggered();
 
-    void on_actionRoz_cz_triggered();
+    void on_actionRozlacz_triggered();
 
 private:
-    Ui::MainWindow *ui;
-    logwindow * logw;
-    konfiguracja *konf;
-    QLabel *data;
-    QLabel *godzina;
     QLabel *czestotliwosc;
-    QLabel *tryb;
     QDateTime *datetime;
     QFile *file_pointer;
+    QString serial_port;
+    Ui::MainWindow *ui;
+    konfiguracja *konf;
+    QString log_dbname;
+    params cfg_params;
+    logwindow * logw;
+    int moja_wymiana;
+    QLabel *godzina;
+    rig_params rig;
     dbmanager *db;
     cbr *cabrillo;
+    int rig_model;
+    QLabel *data;
+    QLabel *tryb;
+    config cfg;
     RIG* r;
 
-    QString log_dbname;
-    QString serial_port;
-    config cfg;
-    params cfg_params;
-    rig_params rig;
-
-    int rig_model;
-
-    int moja_wymiana;
     bool run_mode = true; // default mode is run
     bool sandp_mode = false; // default mode is run
     bool polaczenie = false;
     QString configFile = "contest_logger.conf";
 
-    void oblicz_moja_wymiane(bool wymiana, int wymiana_wzor);
+    int oblicz_moja_wymiane(bool wymiana, int wymiana_wzor);
 };
 
 #endif // MAINWINDOW_H

@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent) :
 //    pobranie konfiguracji z menu konfiguracja jesli nie istnieje w pliku
     if (QFileInfo::exists(configFile))
     {
-//    wczytanie pliku
         cfg.load_settings(&cfg_params, configFile);
     }
     else
@@ -23,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent) :
         cfg.load_settings(&cfg_params, configFile);
     }
 
-//    konfiguracja.(&cfg_params);
     log_dbname = cfg_params.dbfile;
     serial_port = cfg_params.serial;
 
@@ -40,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    domyslna wartosc raportu zaleznie od modulacji
     set_default_rst();
 
+/**************************************************************************************************/
 //    odczekanie 0.1s od uruchomienia palikacji do pokazania aktualnej daty, oswiezanie na biezaco
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
@@ -55,18 +54,18 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->wymiana, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
 
     ui->callsign->setFocus();
+/**************************************************************************************************/
 }
 
 void MainWindow::set_default_rst()
 {
-    if(QString().compare(cfg_params.cat_mode, QString("SSB"), Qt::CaseInsensitive) != 1)
+//  tylko dla ssb domyslny raport to 59
+    if (QString().compare(cfg_params.cat_mode, QString("SSB"), Qt::CaseInsensitive) != 1)
     {
-        // ustawienie domyslnej wartosci raportu
         ui->rstrecv->setText("59");
         ui->rstsend->setText("59");
     }
     else {
-        // ustawienie domyslnej wartosci raportu
         ui->rstrecv->setText("599");
         ui->rstsend->setText("599");
     }
@@ -74,8 +73,10 @@ void MainWindow::set_default_rst()
 
 MainWindow::~MainWindow()
 {
-    if(polaczenie)
+    if (polaczenie)
+    {
         close_rig(r); //zamykanie polaczenia z radiem
+    }
     delete logw;
     delete konf;
     delete data;
@@ -92,16 +93,16 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::oblicz_moja_wymiane(bool wymiana, int wymiana_wzor)
+int MainWindow::oblicz_moja_wymiane(bool wymiana, int wymiana_wzor)
 {
-    if (wymiana)
+//    TODO: upewnic sie ze dziala to poprawnie. pomyslec nad dowolnym stylem wymiany np 15D
+    if (!wymiana)
     {
-        //stala wymiana
-        moja_wymiana = wymiana_wzor;
+        return wymiana_wzor++;
     }
     else
     {
-        moja_wymiana++;
+        return wymiana_wzor;
     }
 }
 
@@ -110,17 +111,18 @@ void MainWindow::oblicz_moja_wymiane(bool wymiana, int wymiana_wzor)
 void MainWindow::on_addbutton_clicked()
 {
     ui->callsign->setFocus();
-    QString tryb;
     double czestotliwosc;
-    oblicz_moja_wymiane(cfg_params.wymiana, cfg_params.wzor.toInt());
+    QString tryb;
+
+    int myech = oblicz_moja_wymiane(cfg_params.wymiana, cfg_params.wzor.toInt());
+    QString myexchange = QString::number(myech);
 
     QString call = ui->callsign->text();
     int rst_s = ui->rstsend->text().toInt();
     int rst_r = ui->rstrecv->text().toInt();
     QString exch = ui->wymiana->text();
-    QString myech = QString::number(moja_wymiana);
 
-    QString godz = QDateTime::currentDateTime().toUTC().toString("h:mm:ss ");
+    QString godz = QDateTime::currentDateTime().toUTC().toString("h:mm:ss");
     QString dzis = QDate::currentDate().toString("yyyy/MM/dd");
 
 
@@ -135,12 +137,23 @@ void MainWindow::on_addbutton_clicked()
         tryb = "SSB";
     }
 
-    qDebug() << ui->wymiana->text();
-    if (call.length() != 0)
-        db->addrecord(call, czestotliwosc, tryb, dzis, godz,
-                      rst_s, rst_r, exch, myech);
+    record_params p;
+    p.callsign = call;
+    p.date = dzis;
+    p.freq = czestotliwosc;
+    p.mode = tryb;
+    p.time = godz;
+    p.rst_r = rst_r;
+    p.rst_s = rst_s;
+    p.exchange = exch;
+    p.moja_exchange = myexchange;
 
-//    czyszczenie okien po dodaniu
+    if (call.length() != 0)
+    {
+        db->addrecord(&p);
+    }
+
+//  czyszczenie okien po dodaniu
     ui->callsign->clear();
     set_default_rst();
     ui->wymiana->clear();
@@ -149,7 +162,7 @@ void MainWindow::on_addbutton_clicked()
 
 void MainWindow::on_clearbutton_clicked()
 {
-    //clear entry before save/add
+//  opcje czyszczenia pol jesli nie chcemy ich zapisywac
     ui->callsign->clear();
     ui->rstrecv->clear();
     ui->rstsend->clear();
@@ -160,22 +173,22 @@ void MainWindow::on_savebutton_clicked()
 {
     //save to logfile, not to db
     QString cbrfile = cfg_params.callsign + ".cbr";
-    qDebug() << cbrfile;
     cabrillo->saveFile(cbrfile);
 }
 
 // pokazuje okno z logiem z bazy danych
 void MainWindow::on_logbutton_clicked()
 {
-    //show log
     logw = new logwindow(db);
     logw->show();
 }
 
 void MainWindow::on_quitbutton_clicked()
 {
-    if(polaczenie)
+    if (polaczenie)
+    {
         close_rig(r); //zamykanie polaczenia z radiem
+    }
     delete logw;
     delete konf;
     delete data;
@@ -236,7 +249,7 @@ void MainWindow::on_searchandwork_stateChanged(int arg1)
 
 void MainWindow::showTime()
 {
-    ui->godzina->setText(QDateTime::currentDateTime().toUTC().toString("h:mm:ss "));
+    ui->godzina->setText(QDateTime::currentDateTime().toUTC().toString("h:mm:ss"));
 }
 
 void MainWindow::showDate()
@@ -248,16 +261,19 @@ void MainWindow::toUpper(const QString &text)
 {
     QLineEdit *le = qobject_cast<QLineEdit *>(sender());
     if (!le)
+    {
         return;
+    }
     le->setText(text.toUpper());
 }
 
-void MainWindow::on_actionZako_cz_triggered()
+void MainWindow::on_actionZakoncz_triggered()
 {
     QWidget::close();
 }
 
 //przetestowac !!
+//  zakladamy nowa baze danych i nowy log
 void MainWindow::on_actionNowy_2_triggered()
 {
     if(polaczenie)
@@ -297,19 +313,16 @@ void MainWindow::on_actionNowy_2_triggered()
     }
 
     cabrillo = new cbr(db, &cfg);
-//    domyslna wartosc raportu zaleznie od modulacji
     set_default_rst();
 }
 
 void MainWindow::on_actionZapisz_triggered()
 {
-    //zapisz log do pliku
     QFileDialog::getSaveFileName(this, tr("Zapisz plik"), QDir::currentPath(), tr("DB files (*.db, *.*)"));
 }
 
-void MainWindow::on_actionOtw_rz_triggered()
+void MainWindow::on_actionOtworz_triggered()
 {
-    //optworz baze danych
     QString dbfile = QFileDialog::getOpenFileName(this, tr("Otwórz plik bazy"), QDir::currentPath(), tr("DB files (*.db, *.*)"));
     //przekazac dbfile do handlera bazy danych
 }
@@ -341,10 +354,8 @@ void MainWindow::on_actionUstawienia_triggered()
     konf->show();
 }
 
-void MainWindow::on_actionPo_cz_triggered()
+void MainWindow::on_actionPolacz_triggered()
 {
-    //polacz z radiem wykonaj rig_init
-//    sutaw flage
     qDebug() << "poczatek funkcji";
     qDebug() << cfg_params.serial.isEmpty() << " " << cfg_params.rig;
     if (!cfg_params.serial.isEmpty() && cfg_params.rig != 0)
@@ -398,7 +409,7 @@ void MainWindow::on_actionInformacja_triggered()
 //    return "";
 //}
 
-void MainWindow::on_actionRoz_cz_triggered()
+void MainWindow::on_actionRozlacz_triggered()
 {
     if (polaczenie)
     {
