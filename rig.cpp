@@ -57,7 +57,7 @@ const char* map_enum_to_str(rmode_t rmode)
       case (RIG_MODE_SAH): return "SAH";
       case (RIG_MODE_DSB): return "DSB";
       case (RIG_MODE_FMN): return "FMN";
-      case (RIG_MODE_PKTAM): return "PKTAM";
+//      case (RIG_MODE_PKTAM): return "PKTAM";
       case (RIG_MODE_TESTS_MAX): return "TESTS_MAX";
     }
     return "";

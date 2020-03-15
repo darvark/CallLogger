@@ -52,20 +52,20 @@ MainWindow::MainWindow(QWidget *parent) :
 //  upewnienie sie ze znak i wymiana bedzie zawsze duzymi literami
     connect(ui->callsign, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
     connect(ui->wymiana, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
-
-    ui->callsign->setFocus();
+    connect(ui->wymiana, SIGNAL(returnPressed()), this, SLOT(on_addbutton_clicked()));
 /**************************************************************************************************/
 }
 
 void MainWindow::set_default_rst()
 {
 //  tylko dla ssb domyslny raport to 59
-    if (QString().compare(cfg_params.cat_mode, QString("SSB"), Qt::CaseInsensitive) != 1)
+    if (QString().compare(cfg_params.cat_mode, QString("SSB"), Qt::CaseInsensitive))
     {
         ui->rstrecv->setText("59");
         ui->rstsend->setText("59");
     }
-    else {
+    else
+    {
         ui->rstrecv->setText("599");
         ui->rstsend->setText("599");
     }
@@ -98,7 +98,7 @@ int MainWindow::oblicz_moja_wymiane(bool wymiana, int wymiana_wzor)
 //    TODO: upewnic sie ze dziala to poprawnie. pomyslec nad dowolnym stylem wymiany np 15D
     if (!wymiana)
     {
-        return wymiana_wzor++;
+        return wymiana_wzor += 1;
     }
     else
     {
@@ -133,8 +133,8 @@ void MainWindow::on_addbutton_clicked()
     }
     else
     {
-        czestotliwosc = 14200.00;
-        tryb = "SSB";
+        czestotliwosc = 14.000;
+        tryb = cfg_params.cat_mode;
     }
 
     record_params p;
@@ -197,7 +197,6 @@ void MainWindow::on_quitbutton_clicked()
     delete tryb;
     delete datetime;
     delete file_pointer;
-
     delete db;
     delete cabrillo;
     delete r;
@@ -333,7 +332,7 @@ void MainWindow::showFreq()
     {
         fetch_rig_params(r, serial_port.toStdString().c_str(), &rig);
         QString cz = QString().setNum(int(rig.freq));
-        QString cz2 = cz.chopped(3) + "." + cz.right(3);
+        QString cz2 = cz.left(3) + "." + cz.right(3);
         ui->czestotliwosc->setText(cz2);
         ui->tryb->setText(rig.mode);
         ui->vfo_show->setText(rig.vfo);
@@ -381,15 +380,22 @@ void MainWindow::on_actionPolacz_triggered()
 
 void MainWindow::on_actionAutor_triggered()
 {
-    QString mnie = "Marcin SP6MI Iwaniuk\n"
-                   "sp6mi@protonmail.com";
+    QString mnie = "Marcin Iwaniuk SP6MI\n"
+                   "   sp6mi@yahoo.com  \n";
     QMessageBox::about(this, "O mnie", mnie);
 }
 
 void MainWindow::on_actionInformacja_triggered()
 {
     QString program = "Prosty program do logowania łączności w zawodach.\n"
-                        "Komunikacja z TRX oparta na bibliotece hamlib.";
+                      "Komunikacja z TRX oparta na bibliotece hamlib.\n"
+                      "Całość napisana z wykorzystaniem bibliotek:\n"
+                      "QT5, hamlib, libconfig++, sqlite3\n"
+                      "\n"
+                      "Autor programu nie ponosi żadnej odpowiedzialności\n"
+                      "za uszkodzenia i problemy wynikające z niewłaściwego\n"
+                      "użycia niniejszego oprogramowania, lub nieumiejętnego\n"
+                      "podłączenia/korzystania z TRX.";
     QMessageBox::about(this, "O programie", program);
 }
 

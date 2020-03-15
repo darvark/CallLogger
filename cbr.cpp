@@ -17,31 +17,32 @@ QString cbr::prepareHeader()
         konfiguracja->load_settings(&cfg_params, configfile);
     }
 
-    QString h1 = "START-OF-LOG: 3.0\n"
-    "CALLSIGN: " + cfg_params.callsign + "\n"
-    "CONTEST: " + cfg_params.contest + "\n"
-    "CATEGORY-OPERATOR: " + cfg_params.cat_operators + "\n"
-    "CATEGORY-ASSISTED: " + cfg_params.cat_assisted + "\n"
-    "CATEGORY-BAND: " + cfg_params.cat_band + "\n"
-    "CATEGORY-POWER: " + cfg_params.cat_power + "\n"
-    "CATEGORY-MODE: " + cfg_params.cat_mode + "\n"
-    "CATEGORY-TRANSMITTER: " + cfg_params.cat_signal + "\n"
-    "CATEGORY-OVERLAY: " + cfg_params.cat_overlay + "\n"
-    "CLAIMED-SCORE: \n"
-    "CERTIFICATE: \n"
-    "CLUB: " + cfg_params.klub + "\n"
-    "LOCATION: \n"
-    "CREATED-BY: Contest Logger \n"
-    "NAME: \n"
-    "ADDRESS: " + cfg_params.adress + "\n"
-    "ADDRESS-CITY: \n"
-    "ADDRESS-STATE-PROVINCE: \n"
-    "ADDRESS-POSTALCODE: \n"
-    "ADDRESS-COUNTRY: \n"
-    "OPERATORS: \n"
-    "SOAPBOX: " + cfg_params.cat_soapbox + "\n"
-    "SOAPBOX: \n";
+    QString h1 = QString::fromStdString("START-OF-LOG: 3.0\n") +
+    QString::fromStdString("\nCALLSIGN: ") + cfg_params.callsign +
+    QString::fromStdString("\nCONTEST: ") + cfg_params.contest +
+    QString::fromStdString("\nCATEGORY-OPERATOR: ") + cfg_params.cat_operators +
+    QString::fromStdString("\nCATEGORY-ASSISTED: ") + cfg_params.cat_assisted +
+    QString::fromStdString("\nCATEGORY-BAND: ") + cfg_params.cat_band +
+    QString::fromStdString("\nCATEGORY-POWER: ") + cfg_params.cat_power +
+    QString::fromStdString("\nCATEGORY-MODE: ") + cfg_params.cat_mode +
+    QString::fromStdString("\nCATEGORY-TRANSMITTER: ") + cfg_params.cat_signal +
+    QString::fromStdString("\nCATEGORY-OVERLAY: ") + cfg_params.cat_overlay +
+    QString::fromStdString("\nCLAIMED-SCORE: ") +
+    QString::fromStdString("\nCERTIFICATE: \n") +
+    QString::fromStdString("CLUB: ") + cfg_params.klub +
+    QString::fromStdString("\nLOCATION: \n") +
+    QString::fromStdString("CREATED-BY: Contest Logger \n") +
+    QString::fromStdString("NAME: \n") +
+    QString::fromStdString("ADDRESS: ") + cfg_params.adress +
+    QString::fromStdString("\nADDRESS-CITY: \n") +
+    QString::fromStdString("ADDRESS-STATE-PROVINCE: \n") +
+    QString::fromStdString("ADDRESS-POSTALCODE: \n") +
+    QString::fromStdString("ADDRESS-COUNTRY: \n") +
+    QString::fromStdString("OPERATORS: \n") +
+    QString::fromStdString("SOAPBOX: ") + cfg_params.cat_soapbox +
+    QString::fromStdString("\nSOAPBOX: \n");
 
+    std::cout << h1.toStdString() << std::endl;
     return h1;
 }
 

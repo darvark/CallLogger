@@ -6,6 +6,7 @@
 #include <QFileInfo>
 #include "config.h"
 #include "dbmanager.h"
+#include <iostream>
 
 class cbr
 {

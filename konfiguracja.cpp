@@ -52,14 +52,17 @@ void konfiguracja::on_zapisz_clicked()
     params p;
     p.rig = radio(ui->wyborRadia->currentText());
     p.klub = ui->klub->text();
-    p.wzor = ui->wzorWymiany->text();
+    if (exch)
+        p.wzor = ui->wzorWymiany->text();
+    else
+        p.wzor = "0";
     p.email = ui->email->text();
     p.adress = ui->poleAdresu->text();
     p.dbfile = ui->plikbazy->text();
     p.serial = ui->serialPorts->currentText();
     p.contest = ui->listaZawody->currentText();
     p.wymiana = exch;
-    p.callsign = ui->znak->text();
+    p.callsign = ui->znak->text().toUpper();
     p.cat_band = ui->listaPasmo->currentText();
     p.cat_mode = ui->listaMode->currentText();
     p.cat_time = ui->listaCzas->currentText();
@@ -451,6 +454,8 @@ void konfiguracja::ustaw_czas(Ui::konfiguracja* ui)
     ui->listaCzas->addItem("6-HOURS");
     ui->listaCzas->addItem("12-HOURS");
     ui->listaCzas->addItem("24-HOURS");
+    ui->listaCzas->addItem("36-HOURS");
+    ui->listaCzas->addItem("48-HOURS");
 }
 
 //category transmitter

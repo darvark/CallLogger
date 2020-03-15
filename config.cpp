@@ -25,7 +25,9 @@ void config::load_settings(params *s, QString& plik_konf)
 
     const libconfig::Setting &params = root["logger"];
 
-    std::string call, file, serial, mode;
+    std::string call, file, serial, mode, station, power,
+            contest, assisted, band, operators, signal,
+            soaxp, time, overlay, addres, email, klub;
     int rig;
 
     params.lookupValue("callsign", call);
@@ -33,21 +35,40 @@ void config::load_settings(params *s, QString& plik_konf)
     params.lookupValue("category-mode", mode);
     params.lookupValue("rig", rig);
     params.lookupValue("serial", serial);
+    params.lookupValue("category-station", station);
+    params.lookupValue("category-power", power);
+    params.lookupValue("contest", contest);
+    params.lookupValue("category-assisted", assisted);
+    params.lookupValue("category-band", band);
+    params.lookupValue("category-operators", operators);
+    params.lookupValue("category-signal", signal);
+    params.lookupValue("category-soapbox", soaxp);
+    params.lookupValue("category-time", time);
+    params.lookupValue("category-overlay", overlay);
+    params.lookupValue("address", addres);
+    params.lookupValue("email", email);
+    params.lookupValue("klub", klub);
 
     s->callsign = QString::fromUtf8(call.c_str());
     s->dbfile = QString::fromUtf8(file.c_str());
     s->cat_mode = QString::fromUtf8(mode.c_str());
     s->rig = rig;
     s->serial = QString::fromUtf8(serial.c_str());
+    s->cat_station = QString::fromUtf8(station.c_str());
+    s->cat_power = QString::fromUtf8(power.c_str());
+    s->contest = QString::fromUtf8(contest.c_str());
+    s->cat_assisted = QString::fromUtf8(assisted.c_str());
+    s->cat_band = QString::fromUtf8(band.c_str());
+    s->cat_operators = QString::fromUtf8(operators.c_str());
+    s->cat_signal = QString::fromUtf8(signal.c_str());
+    s->cat_soapbox = QString::fromUtf8(soaxp.c_str());
+    s->cat_time = QString::fromUtf8(time.c_str());
+    s->cat_overlay = QString::fromUtf8(overlay.c_str());
+    s->adress = QString::fromUtf8(addres.c_str());
+    s->email = QString::fromUtf8(email.c_str());
+    s->klub = QString::fromUtf8(klub.c_str());
 }
 
-//int config::save_settings(QString callsign, QString dbfile, int rig,
-//                          QString serial, QString cat_station, QString cat_power,
-//                          QString cat_mode, QString contest, QString cat_assisted,
-//                          QString cat_band, QString cat_operators, QString cat_signal,
-//                          QString cat_soapbox, QString cat_time, QString cat_overlay,
-//                          QString adress, QString email, QString klub, bool wymiana,
-//                          QString wzor)
 int config::save_settings(params* p)
 {
     static const char *output_file = "contest_logger.conf";
@@ -58,7 +79,7 @@ int config::save_settings(params* p)
     // Add some settings to the configuration.
     libconfig::Setting &name = root.add("logger", libconfig::Setting::TypeGroup);
 
-    name.add("callsign", libconfig::Setting::TypeString) = p->callsign.toStdString().c_str();
+    name.add("callsign", libconfig::Setting::TypeString) = p->callsign.toUpper().toStdString().c_str();
     name.add("dbfile", libconfig::Setting::TypeString) = p->dbfile.toStdString().c_str();
     name.add("rig", libconfig::Setting::TypeInt) = p->rig;
     name.add("serial", libconfig::Setting::TypeString) = p->serial.toStdString().c_str();

@@ -29,9 +29,100 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>SP6MI</string>
   </property>
   <widget class="QWidget" name="centralWidget">
+    <widget class="QLineEdit" name="callsign">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>100</y>
+       <width>113</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="inputMethodHints">
+      <set>Qt::ImhPreferUppercase|Qt::ImhUppercaseOnly</set>
+     </property>
+     <property name="inputMask">
+      <string/>
+     </property>
+     <property name="maxLength">
+      <number>20</number>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="rstsend">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>100</y>
+       <width>113</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="maxLength">
+      <number>3</number>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="placeholderText">
+      <string>599</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="rstrecv">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>100</y>
+       <width>113</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="maxLength">
+      <number>3</number>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="placeholderText">
+      <string>599</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="wymiana">
+     <property name="geometry">
+      <rect>
+       <x>440</x>
+       <y>100</y>
+       <width>113</width>
+       <height>24</height>
+      </rect>
+     </property>
+    </widget>
    <widget class="QPushButton" name="addbutton">
     <property name="geometry">
      <rect>
@@ -83,87 +174,7 @@
      <string>Ctrl+S</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="callsign">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>100</y>
-      <width>113</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="inputMethodHints">
-     <set>Qt::ImhPreferUppercase|Qt::ImhUppercaseOnly</set>
-    </property>
-    <property name="inputMask">
-     <string/>
-    </property>
-    <property name="maxLength">
-     <number>20</number>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="rstsend">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>100</y>
-      <width>113</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="maxLength">
-     <number>3</number>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-    <property name="placeholderText">
-     <string>599</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="rstrecv">
-    <property name="geometry">
-     <rect>
-      <x>300</x>
-      <y>100</y>
-      <width>113</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="maxLength">
-     <number>3</number>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-    <property name="placeholderText">
-     <string>599</string>
-    </property>
-   </widget>
+
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
@@ -452,16 +463,35 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QLineEdit" name="wymiana">
-    <property name="geometry">
-     <rect>
-      <x>440</x>
-      <y>100</y>
-      <width>113</width>
-      <height>24</height>
-     </rect>
-    </property>
-   </widget>
+
+   <zorder>addbutton</zorder>
+   <zorder>clearbutton</zorder>
+   <zorder>savebutton</zorder>
+   <zorder>rstsend</zorder>
+   <zorder>rstrecv</zorder>
+   <zorder>label</zorder>
+   <zorder>label_2</zorder>
+   <zorder>label_3</zorder>
+   <zorder>label_4</zorder>
+   <zorder>label_5</zorder>
+   <zorder>label_6</zorder>
+   <zorder>logbutton</zorder>
+   <zorder>run</zorder>
+   <zorder>searchandwork</zorder>
+   <zorder>quitbutton</zorder>
+   <zorder>godzina</zorder>
+   <zorder>data</zorder>
+   <zorder>line</zorder>
+   <zorder>line_2</zorder>
+   <zorder>label_7</zorder>
+   <zorder>label_8</zorder>
+   <zorder>tryb</zorder>
+   <zorder>czestotliwosc</zorder>
+   <zorder>label_9</zorder>
+   <zorder>vfo_show</zorder>
+   <zorder>line_3</zorder>
+   <zorder>wymiana</zorder>
+   <zorder>callsign</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -469,7 +499,7 @@
      <x>0</x>
      <y>0</y>
      <width>572</width>
-     <height>23</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPlik">
