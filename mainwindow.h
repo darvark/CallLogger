@@ -77,32 +77,34 @@ private slots:
     void on_actionRozlacz_triggered();
 
 private:
-    QLabel *czestotliwosc;
-    QDateTime *datetime;
-    QFile *file_pointer;
-    QString serial_port;
     Ui::MainWindow *ui;
-    konfiguracja *konf;
+    QLabel* vfo_frequency;
+    QDateTime* datetime;
+    QTimer* timer;
+    QFile* file_pointer;
+    QString serial_port;
+    configuration* konf;
     QString log_dbname;
     params cfg_params;
-    logwindow * logw;
+    logwindow* logw;
     int moja_wymiana;
-    QLabel *godzina;
+    QLabel* godzina;
     rig_params rig;
-    dbmanager *db;
-    cbr *cabrillo;
+    dbmanager* db;
+    cbr* cabrillo;
     int rig_model;
-    QLabel *data;
-    QLabel *tryb;
+    QLabel* data;
+    QLabel* mode;
     config cfg;
     RIG* r;
+    int wzor; // wartosc wymiany
 
     bool run_mode = true; // default mode is run
     bool sandp_mode = false; // default mode is run
-    bool polaczenie = false;
+    bool rig_connection = false;
     QString configFile = "contest_logger.conf";
 
-    int oblicz_moja_wymiane(bool wymiana, int wymiana_wzor);
+    void oblicz_moja_wymiane(bool wymiana, int* wymiana_wzor);
 };
 
 #endif // MAINWINDOW_H

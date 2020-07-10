@@ -99,7 +99,7 @@ int config::save_settings(params* p)
     name.add("email", libconfig::Setting::TypeString) = p->email.toStdString().c_str();
     name.add("klub", libconfig::Setting::TypeString) = p->klub.toStdString().c_str();
     name.add("wymiana", libconfig::Setting::TypeBoolean) = p->wymiana;
-    name.add("wzor", libconfig::Setting::TypeString) = p->wzor.toStdString().c_str();
+    name.add("wzor", libconfig::Setting::TypeString) = p->pattern.toStdString().c_str();
 
     // Write new configuration.
     try
@@ -109,7 +109,7 @@ int config::save_settings(params* p)
     }
     catch(const libconfig::FileIOException &fioex)
     {
-        qDebug() << "I/O error while writing file: " << output_file << endl;
+//         qDebug() << "I/O error while writing file: " << output_file << endl;
         return EXIT_FAILURE;
     }
 
@@ -119,4 +119,5 @@ int config::save_settings(params* p)
 void config::reset(params *s)
 {
     s = new params();
+    (void)s;
 }

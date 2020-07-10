@@ -85,7 +85,7 @@ bool open_rig(RIG* my_rig, const char* serial_port)
     return true;
 }
 
-void fetch_rig_params (RIG* my_rig, const char* serial_port, rig_params* r)
+void fetch_rig_params (RIG* my_rig,/* const char* serial_port,*/ rig_params* r)
 {
     freq_t freq; /* frequency */
     rmode_t rmode; /* radio mode of operation */

@@ -208,3 +208,31 @@ bool dbmanager::callsignExists(const QString& callsign) const
 
     return exists;
 }
+
+int dbmanager::getlastRcvExhcange() const
+{
+    QSqlQuery query("SELECT exchange FROM qso ORDER BY column DESC LIMIT 1", m_db);
+
+    query.exec();
+    int rcv_exch = 0;
+    
+    while (query.next())
+    {
+        rcv_exch = query.record().indexOf("exchange");
+    }
+    return rcv_exch;
+}
+
+int dbmanager::getlastSentExchange() const
+{
+    QSqlQuery query("SELECT moja_exchange FROM qso ORDER BY column DESC LIMIT 1", m_db);
+
+    query.exec();
+    int sent_wym = 0;
+    
+    while (query.next())
+    {
+        sent_wym = query.record().indexOf("moja_exchange");
+    }
+    return sent_wym;
+}

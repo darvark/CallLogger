@@ -5,28 +5,23 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    moja_wymiana = 1;
     ui->setupUi(this);
 
-//    pobranie konfiguracji z menu konfiguracja jesli nie istnieje w pliku
     if (QFileInfo::exists(configFile))
     {
         cfg.load_settings(&cfg_params, configFile);
     }
     else
     {
-//    pokazuje okno konfiguracji
-        konf = new konfiguracja();
+        konf = new configuration();
         konf->exec();
 
         cfg.load_settings(&cfg_params, configFile);
     }
 
-    log_dbname = cfg_params.dbfile;
     serial_port = cfg_params.serial;
-
- //   tworzy obiekt bazy danych
-    static const QString path = log_dbname;
+    
+    static const QString path = cfg_params.dbfile;
     db = new dbmanager(path);
 
     if (db->isOpen())
@@ -34,22 +29,30 @@ MainWindow::MainWindow(QWidget *parent) :
         db->createTable();
     }
 
+    if (db->isOpen())
+    {
+        if (db->getlastRcvExhcange())
+            wzor = db->getlastRcvExhcange();
+        else
+            wzor = cfg_params.pattern.toInt();
+    }
+    
     cabrillo = new cbr(db, &cfg);
-//    domyslna wartosc raportu zaleznie od modulacji
+
     set_default_rst();
 
 /**************************************************************************************************/
-//    odczekanie 0.1s od uruchomienia palikacji do pokazania aktualnej daty, oswiezanie na biezaco
-    QTimer *timer = new QTimer(this);
+
+    timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
     connect(timer, SIGNAL(timeout()), this, SLOT(showDate()));
 
     timer->start(100);
 
-//  pokazywanie aktualnej czestotliwosci, modulacji i VFO
+//  pass vfo freq
     connect(timer, SIGNAL(timeout()), this, SLOT(showFreq()));
 
-//  upewnienie sie ze znak i wymiana bedzie zawsze duzymi literami
+//  capitalics
     connect(ui->callsign, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
     connect(ui->wymiana, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
     connect(ui->wymiana, SIGNAL(returnPressed()), this, SLOT(on_addbutton_clicked()));
@@ -58,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::set_default_rst()
 {
-//  tylko dla ssb domyslny raport to 59
+//  default report for SSB 59
     if (QString().compare(cfg_params.cat_mode, QString("SSB"), Qt::CaseInsensitive))
     {
         ui->rstrecv->setText("59");
@@ -73,49 +76,44 @@ void MainWindow::set_default_rst()
 
 MainWindow::~MainWindow()
 {
-    if (polaczenie)
+    delete ui;
+    if (rig_connection)
     {
-        close_rig(r); //zamykanie polaczenia z radiem
+        close_rig(r);
     }
-    delete logw;
+// generuja segfault
+//    delete logw;
+//    delete mode;
+//    delete data;
+//    delete godzina;
+//////////////////////
     delete konf;
-    delete data;
-    delete godzina;
-    delete czestotliwosc;
-    delete tryb;
+    delete vfo_frequency;
     delete datetime;
     delete file_pointer;
-
     delete db;
     delete cabrillo;
     delete r;
-    delete ui;
 }
 
 
-int MainWindow::oblicz_moja_wymiane(bool wymiana, int wymiana_wzor)
+void MainWindow::oblicz_moja_wymiane(bool czy_stala_wymiana, int* wymiana_wartosc)
 {
-//    TODO: upewnic sie ze dziala to poprawnie. pomyslec nad dowolnym stylem wymiany np 15D
-    if (!wymiana)
+//    TODO: pomyslec nad dowolnym stylem wymiany np 15D
+    if (!czy_stala_wymiana)
     {
-        return wymiana_wzor += 1;
-    }
-    else
-    {
-        return wymiana_wzor;
+        *wymiana_wartosc += 1;
     }
 }
 
-// implementacja nacisniecia przycisku dodaj wpis
-// jesli nie ma podanego znaku nie wykona dodania do bazy
 void MainWindow::on_addbutton_clicked()
 {
     ui->callsign->setFocus();
     double czestotliwosc;
     QString tryb;
-
-    int myech = oblicz_moja_wymiane(cfg_params.wymiana, cfg_params.wzor.toInt());
-    QString myexchange = QString::number(myech);
+    oblicz_moja_wymiane(cfg_params.wymiana, &wzor);
+    QString myexchange = QString::number(wzor);
+    qDebug() << "z addbutton: " << myexchange;
 
     QString call = ui->callsign->text();
     int rst_s = ui->rstsend->text().toInt();
@@ -126,7 +124,7 @@ void MainWindow::on_addbutton_clicked()
     QString dzis = QDate::currentDate().toString("yyyy/MM/dd");
 
 
-    if (polaczenie)
+    if (rig_connection)
     {
         czestotliwosc = rig.freq;
         tryb = rig.mode;
@@ -153,16 +151,13 @@ void MainWindow::on_addbutton_clicked()
         db->addrecord(&p);
     }
 
-//  czyszczenie okien po dodaniu
     ui->callsign->clear();
     set_default_rst();
     ui->wymiana->clear();
-
 }
 
 void MainWindow::on_clearbutton_clicked()
 {
-//  opcje czyszczenia pol jesli nie chcemy ich zapisywac
     ui->callsign->clear();
     ui->rstrecv->clear();
     ui->rstsend->clear();
@@ -185,22 +180,6 @@ void MainWindow::on_logbutton_clicked()
 
 void MainWindow::on_quitbutton_clicked()
 {
-    if (polaczenie)
-    {
-        close_rig(r); //zamykanie polaczenia z radiem
-    }
-    delete logw;
-    delete konf;
-    delete data;
-    delete godzina;
-    delete czestotliwosc;
-    delete tryb;
-    delete datetime;
-    delete file_pointer;
-    delete db;
-    delete cabrillo;
-    delete r;
-    delete ui;
     QWidget::close();
 }
 
@@ -275,12 +254,12 @@ void MainWindow::on_actionZakoncz_triggered()
 //  zakladamy nowa baze danych i nowy log
 void MainWindow::on_actionNowy_2_triggered()
 {
-    if(polaczenie)
+    if(rig_connection)
         close_rig(r);
 
     cfg.reset(&cfg_params);
 
-    konf = new konfiguracja();
+    konf = new configuration();
     konf->show();
 
 //    pobranie konfiguracji z menu konfiguracja jesli nie istnieje w pliku
@@ -292,7 +271,7 @@ void MainWindow::on_actionNowy_2_triggered()
     else
     {
 //    pokazuje okno konfiguracji
-        konf = new konfiguracja();
+        konf = new configuration();
         konf->exec();
 
         cfg.load_settings(&cfg_params, configFile);
@@ -323,14 +302,14 @@ void MainWindow::on_actionZapisz_triggered()
 void MainWindow::on_actionOtworz_triggered()
 {
     QString dbfile = QFileDialog::getOpenFileName(this, tr("Otwórz plik bazy"), QDir::currentPath(), tr("DB files (*.db, *.*)"));
-    //przekazac dbfile do handlera bazy danych
+    //TODO: przekazac dbfile do handlera bazy danych
 }
 
 void MainWindow::showFreq()
 {
-    if (polaczenie)
+    if (rig_connection)
     {
-        fetch_rig_params(r, serial_port.toStdString().c_str(), &rig);
+        fetch_rig_params(r, /*serial_port.toStdString().c_str(),*/ &rig);
         QString cz = QString().setNum(int(rig.freq));
         QString cz2 = cz.left(3) + "." + cz.right(3);
         ui->czestotliwosc->setText(cz2);
@@ -340,7 +319,7 @@ void MainWindow::showFreq()
     else
     {
         {
-            ui->czestotliwosc->setText("14000.00");
+            ui->czestotliwosc->setText("14100.00");
             ui->tryb->setText("SSB");
             ui->vfo_show->setText("A");
         }
@@ -349,14 +328,14 @@ void MainWindow::showFreq()
 
 void MainWindow::on_actionUstawienia_triggered()
 {
-    konf = new konfiguracja();
+    konf = new configuration();
     konf->show();
 }
 
 void MainWindow::on_actionPolacz_triggered()
 {
-    qDebug() << "poczatek funkcji";
-    qDebug() << cfg_params.serial.isEmpty() << " " << cfg_params.rig;
+//     qDebug() << "poczatek funkcji";
+//     qDebug() << cfg_params.serial.isEmpty() << " " << cfg_params.rig;
     if (!cfg_params.serial.isEmpty() && cfg_params.rig != 0)
     {
         qDebug() << "init rig" << cfg_params.rig << " " << cfg_params.serial;
@@ -367,13 +346,13 @@ void MainWindow::on_actionPolacz_triggered()
     //    bedzie zapisywac domyslne wartosci
         if (open_rig(r, cfg_params.serial.toStdString().c_str()))
         {
-            polaczenie = true;
+            rig_connection = true;
         }
         else
         {
             QMessageBox::warning(this, "Błąd komunikacji z radiem","Nie udało się ustanowić połączenia z radiem."
                                                                    "Sprawdz port oraz typ radia w pliku konfiguracyjnym");
-            polaczenie = false;
+            rig_connection = false;
         }
     }
 }
@@ -417,7 +396,7 @@ void MainWindow::on_actionInformacja_triggered()
 
 void MainWindow::on_actionRozlacz_triggered()
 {
-    if (polaczenie)
+    if (rig_connection)
     {
         rig_close(r);
     }

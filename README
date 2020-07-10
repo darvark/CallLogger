@@ -1,5 +1,7 @@
 TODO:
-naprawic dodawanie wymiany do wpisu w bazie danych oraz inkrementacje exch wyslanego przeze mnie
+1: okno konfiguracji znak powinien byc z duzej
+2: podczas uruchamiania exchange wczytuje z bazy danych. 
+3: poprawic seqfault podczas zamukania aplikacji
 
 export logu do pliku cbr
 

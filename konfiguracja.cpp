@@ -1,7 +1,7 @@
 #include "konfiguracja.h"
 #include "ui_konfiguracja.h"
 
-void konfiguracja::toUpper(const QString &text)
+void configuration::toUpper(const QString &text)
 {
     QLineEdit *le = qobject_cast<QLineEdit *>(sender());
     if (!le)
@@ -11,7 +11,7 @@ void konfiguracja::toUpper(const QString &text)
     le->setText(text.toUpper());
 }
 
-konfiguracja::konfiguracja(QWidget *parent) :
+configuration::configuration(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::konfiguracja)
 {
@@ -33,35 +33,37 @@ konfiguracja::konfiguracja(QWidget *parent) :
     connect(ui->znak, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
 }
 
-konfiguracja::~konfiguracja()
+configuration::~configuration()
 {
     delete ui;
 }
 
-int konfiguracja::radio(QString radio)
+int configuration::radio(QString radio)
 {
     return mapowanieradia[radio];
 }
 
-void konfiguracja::on_zapisz_clicked()
+void configuration::on_zapisz_clicked()
 {
     //mapowanie Qt::Checked status na bool'a
-    bool exch = ui->wymianaBOx->checkState() == Qt::Checked ? true : false;
+    bool czy_stala_wymiana = ui->wymianaBOx->checkState() == Qt::Checked ? true : false;
     QString assisted = ui->assisted->checkState() == Qt::Checked ? "ASSISTED" : "NON-ASSISTED";
 
     params p;
     p.rig = radio(ui->wyborRadia->currentText());
     p.klub = ui->klub->text();
-    if (exch)
-        p.wzor = ui->wzorWymiany->text();
+    
+    if (czy_stala_wymiana)
+        p.pattern = ui->wzorWymiany->text();
     else
-        p.wzor = "0";
+        p.pattern = "0";
+
     p.email = ui->email->text();
     p.adress = ui->poleAdresu->text();
     p.dbfile = ui->plikbazy->text();
     p.serial = ui->serialPorts->currentText();
     p.contest = ui->listaZawody->currentText();
-    p.wymiana = exch;
+    p.wymiana = czy_stala_wymiana;
     p.callsign = ui->znak->text().toUpper();
     p.cat_band = ui->listaPasmo->currentText();
     p.cat_mode = ui->listaMode->currentText();
@@ -79,7 +81,7 @@ void konfiguracja::on_zapisz_clicked()
     this->close();
 }
 
-void konfiguracja::on_kasuj_clicked()
+void configuration::on_kasuj_clicked()
 {
     //wyczysc selekcje
     ui->znak->clear();
@@ -87,7 +89,7 @@ void konfiguracja::on_kasuj_clicked()
     this->close();
 }
 
-void konfiguracja::dodaj_porty(Ui::konfiguracja* ui)
+void configuration::dodaj_porty(Ui::konfiguracja* ui)
 {
     Q_FOREACH(QSerialPortInfo port, QSerialPortInfo::availablePorts())
     {
@@ -95,7 +97,7 @@ void konfiguracja::dodaj_porty(Ui::konfiguracja* ui)
     }
 }
 
-void konfiguracja::dodaj_radia_do_listy(Ui::konfiguracja* ui)
+void configuration::dodaj_radia_do_listy(Ui::konfiguracja* ui)
 {
     ui->wyborRadia->addItem("Hamlib Dummy");
     ui->wyborRadia->addItem("Hamlib rigctl");
@@ -313,14 +315,14 @@ void konfiguracja::dodaj_radia_do_listy(Ui::konfiguracja* ui)
     ui->wyborRadia->addItem("Icom IC-M710");
 }
 //cateogry power
-void konfiguracja::ustaw_moc(Ui::konfiguracja* ui)
+void configuration::ustaw_moc(Ui::konfiguracja* ui)
 {
     ui->listaMoc->addItem("HIGH");
     ui->listaMoc->addItem("LOW");
     ui->listaMoc->addItem("QRP");
 }
 //category mode
-void konfiguracja::ustaw_mode(Ui::konfiguracja* ui)
+void configuration::ustaw_mode(Ui::konfiguracja* ui)
 {
     ui->listaMode->addItem("CW");
     ui->listaMode->addItem("DIGI");
@@ -330,7 +332,7 @@ void konfiguracja::ustaw_mode(Ui::konfiguracja* ui)
     ui->listaMode->addItem("MIXED");
 }
 //category contest
-void konfiguracja::ustaw_zawody(Ui::konfiguracja* ui)
+void configuration::ustaw_zawody(Ui::konfiguracja* ui)
 {
     ui->listaZawody->addItem("AP-SPRINT");
     ui->listaZawody->addItem("ARRL-10");
@@ -393,12 +395,12 @@ void konfiguracja::ustaw_zawody(Ui::konfiguracja* ui)
     ui->listaZawody->addItem("WW-DIGI");
 }
 //category assisted
-QString konfiguracja::on_assisted_stateChanged(int arg1)
+QString configuration::on_assisted_stateChanged(int arg1)
 {
     return arg1 ? assisted = "ASSISTED" : assisted = "NON_ASSISTED";
 }
 //category band
-void konfiguracja::ustaw_pasmo(Ui::konfiguracja* ui)
+void configuration::ustaw_pasmo(Ui::konfiguracja* ui)
 {
     ui->listaPasmo->addItem("ALL");
     ui->listaPasmo->addItem("160M");
@@ -428,14 +430,14 @@ void konfiguracja::ustaw_pasmo(Ui::konfiguracja* ui)
     ui->listaPasmo->addItem("VHF-3-BAND and VHF-FM-ONLY");
 }
 //category power
-void konfiguracja::ustaw_operator(Ui::konfiguracja *ui)
+void configuration::ustaw_operator(Ui::konfiguracja *ui)
 {
     ui->listaOperator->addItem("SINGLE_OP");
     ui->listaOperator->addItem("MULTI_OP");
     ui->listaOperator->addItem("CHECKLOG");
 }
 //category station
-void konfiguracja::ustaw_stacja(Ui::konfiguracja* ui)
+void configuration::ustaw_stacja(Ui::konfiguracja* ui)
 {
     ui->listaStacja->addItem("FIXED");
     ui->listaStacja->addItem("MOBILE");
@@ -449,7 +451,7 @@ void konfiguracja::ustaw_stacja(Ui::konfiguracja* ui)
 
 }
 //category time
-void konfiguracja::ustaw_czas(Ui::konfiguracja* ui)
+void configuration::ustaw_czas(Ui::konfiguracja* ui)
 {
     ui->listaCzas->addItem("6-HOURS");
     ui->listaCzas->addItem("12-HOURS");
@@ -459,7 +461,7 @@ void konfiguracja::ustaw_czas(Ui::konfiguracja* ui)
 }
 
 //category transmitter
-void konfiguracja::ustaw_nadajnik(Ui::konfiguracja* ui)
+void configuration::ustaw_nadajnik(Ui::konfiguracja* ui)
 {
     ui->listaSygnal->addItem("ONE");
     ui->listaSygnal->addItem("TWO");
@@ -468,7 +470,7 @@ void konfiguracja::ustaw_nadajnik(Ui::konfiguracja* ui)
     ui->listaSygnal->addItem("SWL");
 }
 //cateogry overlay
-void konfiguracja::ustaw_overlay(Ui::konfiguracja* ui)
+void configuration::ustaw_overlay(Ui::konfiguracja* ui)
 {
     ui->listaOverlay->addItem("CLASSIC");
     ui->listaOverlay->addItem("ROOKIE");
@@ -477,20 +479,3 @@ void konfiguracja::ustaw_overlay(Ui::konfiguracja* ui)
     ui->listaOverlay->addItem("OVER-50");
 }
 
-void konfiguracja::on_wymianaBOx_stateChanged(int arg1)
-{
-    if (arg1)
-    {
-        stala_wymiana = true;
-    }
-    else
-    {
-        stala_wymiana = false;
-    }
-}
-
-//zwraca prawde jesli wymiana jest stala, bez inkrementacji
-bool konfiguracja::wymiana(bool stala)
-{
-    return stala;
-}

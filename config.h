@@ -26,7 +26,7 @@ typedef struct {
    QString email;
    QString klub;
    bool wymiana;
-   QString wzor;
+   QString pattern;
 } params;
 
 class config

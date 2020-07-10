@@ -15,26 +15,25 @@ namespace Ui {
 class konfiguracja;
 }
 
-class konfiguracja : public QDialog
+class configuration : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit konfiguracja(QWidget *parent = nullptr);
-    ~konfiguracja();
+    explicit configuration(QWidget *parent = nullptr);
+    ~configuration();
 
     int radio(QString radio);
-    bool wymiana(bool stala);
 
 private slots:
 
     void on_zapisz_clicked();
 
     void on_kasuj_clicked();
+    
+    void toUpper(const QString &text);
 
     QString on_assisted_stateChanged(int arg1);
-
-    void on_wymianaBOx_stateChanged(int arg1);
 
 private:
     Ui::konfiguracja *ui;
@@ -54,7 +53,6 @@ private:
     void ustaw_nadajnik(Ui::konfiguracja* ui);
     void ustaw_overlay(Ui::konfiguracja* ui);
     void dodaj_porty(Ui::konfiguracja* ui);
-    void toUpper(const QString &text);
 
     std::map<QString, int> mapowanieradia{
         {"Hamlib Dummy", 1},

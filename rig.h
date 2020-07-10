@@ -12,7 +12,7 @@ struct rig_params{
 };
 
 RIG* init_rig(int rigType, const char* serial_port);
-void fetch_rig_params(RIG* my_rig, const char* serial_port, rig_params* r);
+void fetch_rig_params(RIG* my_rig, /*const char* serial_port,*/ rig_params* r);
 const char* map_enum_to_str(rmode_t rmode);
 void close_rig(RIG* my_rig);
 bool open_rig(RIG* my_rig, const char* serial_port);

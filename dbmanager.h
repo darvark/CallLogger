@@ -36,6 +36,8 @@ public:
     QString printAllRecords() const;
     QString printToADIF() const;
     bool callsignExists(const QString& callsign) const;
+    int getlastRcvExhcange() const;
+    int getlastSentExchange() const;
 
 private:
     QSqlDatabase m_db;
