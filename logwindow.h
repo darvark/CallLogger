@@ -19,6 +19,7 @@ class logwindow : public QWidget
 public:
     explicit logwindow(dbmanager *db, QWidget *parent = nullptr);
     ~logwindow();
+    void close();
 
 private slots:
     void show_records();

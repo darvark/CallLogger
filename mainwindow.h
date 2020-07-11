@@ -78,25 +78,26 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QLabel* vfo_frequency;
-    QDateTime* datetime;
-    QTimer* timer;
-    QFile* file_pointer;
+    QLabel* vfo_frequency = nullptr;
+    QDateTime* datetime = nullptr;
+    QTimer* timer = nullptr;
+    QFile* file_pointer = nullptr;
+    configuration* konf = nullptr;
+    logwindow* logw = nullptr;
+    QLabel* godzina = nullptr;
+    dbmanager* db = nullptr;
+    QLabel* data = nullptr;
+    QLabel* mode = nullptr;
+    cbr* cabrillo = nullptr;
+    RIG* r = nullptr;
+    
     QString serial_port;
-    configuration* konf;
     QString log_dbname;
     params cfg_params;
-    logwindow* logw;
     int moja_wymiana;
-    QLabel* godzina;
     rig_params rig;
-    dbmanager* db;
-    cbr* cabrillo;
     int rig_model;
-    QLabel* data;
-    QLabel* mode;
     config cfg;
-    RIG* r;
     int wzor; // wartosc wymiany
 
     bool run_mode = true; // default mode is run

@@ -32,97 +32,174 @@
    <string>SP6MI</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-    <widget class="QLineEdit" name="callsign">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>100</y>
-       <width>113</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="inputMethodHints">
-      <set>Qt::ImhPreferUppercase|Qt::ImhUppercaseOnly</set>
-     </property>
-     <property name="inputMask">
-      <string/>
-     </property>
-     <property name="maxLength">
-      <number>20</number>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="rstsend">
-     <property name="geometry">
-      <rect>
-       <x>160</x>
-       <y>100</y>
-       <width>113</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="maxLength">
-      <number>3</number>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="placeholderText">
-      <string>599</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="rstrecv">
-     <property name="geometry">
-      <rect>
-       <x>300</x>
-       <y>100</y>
-       <width>113</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="maxLength">
-      <number>3</number>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="placeholderText">
-      <string>599</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="wymiana">
-     <property name="geometry">
-      <rect>
-       <x>440</x>
-       <y>100</y>
-       <width>113</width>
-       <height>24</height>
-      </rect>
-     </property>
-    </widget>
+   <widget class="QLineEdit" name="callsign">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>100</y>
+      <width>113</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhPreferUppercase|Qt::ImhUppercaseOnly</set>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+    <property name="maxLength">
+     <number>20</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="wymiana">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>100</y>
+      <width>113</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="rstsend">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>100</y>
+      <width>113</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>207</red>
+          <green>207</green>
+          <blue>207</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>207</red>
+          <green>207</green>
+          <blue>207</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>250</red>
+          <green>250</green>
+          <blue>250</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="maxLength">
+     <number>3</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="placeholderText">
+     <string>599</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="rstrecv">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>100</y>
+      <width>113</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>207</red>
+          <green>207</green>
+          <blue>207</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>207</red>
+          <green>207</green>
+          <blue>207</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>250</red>
+          <green>250</green>
+          <blue>250</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="maxLength">
+     <number>3</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="placeholderText">
+     <string>599</string>
+    </property>
+   </widget>
    <widget class="QPushButton" name="addbutton">
     <property name="geometry">
      <rect>
@@ -174,7 +251,6 @@
      <string>Ctrl+S</string>
     </property>
    </widget>
-
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
@@ -463,7 +539,6 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-
    <zorder>addbutton</zorder>
    <zorder>clearbutton</zorder>
    <zorder>savebutton</zorder>
@@ -499,7 +574,7 @@
      <x>0</x>
      <y>0</y>
      <width>572</width>
-     <height>25</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPlik">

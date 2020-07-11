@@ -20,6 +20,11 @@ logwindow::~logwindow()
     delete baza;
 }
 
+void logwindow::close()
+{
+    QWidget::close();
+}
+
 void logwindow::show_records()
 {
     if(baza->isOpen())

@@ -29,15 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
         db->createTable();
     }
 
-    if (db->isOpen())
-    {
-        if (db->getlastRcvExhcange())
-            wzor = db->getlastRcvExhcange();
-        else
-            wzor = cfg_params.pattern.toInt();
-    }
-    
-    cabrillo = new cbr(db, &cfg);
+    wzor = cfg_params.pattern.toInt();
 
     set_default_rst();
 
@@ -81,12 +73,10 @@ MainWindow::~MainWindow()
     {
         close_rig(r);
     }
-// generuja segfault
-//    delete logw;
-//    delete mode;
-//    delete data;
-//    delete godzina;
-//////////////////////
+    delete logw;
+    delete mode;
+    delete data;
+    delete godzina;
     delete konf;
     delete vfo_frequency;
     delete datetime;
@@ -96,10 +86,8 @@ MainWindow::~MainWindow()
     delete r;
 }
 
-
 void MainWindow::oblicz_moja_wymiane(bool czy_stala_wymiana, int* wymiana_wartosc)
 {
-//    TODO: pomyslec nad dowolnym stylem wymiany np 15D
     if (!czy_stala_wymiana)
     {
         *wymiana_wartosc += 1;
@@ -112,8 +100,7 @@ void MainWindow::on_addbutton_clicked()
     double czestotliwosc;
     QString tryb;
     oblicz_moja_wymiane(cfg_params.wymiana, &wzor);
-    QString myexchange = QString::number(wzor);
-    qDebug() << "z addbutton: " << myexchange;
+    qDebug() << "z addbutton: " << QString::number(wzor);
 
     QString call = ui->callsign->text();
     int rst_s = ui->rstsend->text().toInt();
@@ -144,7 +131,7 @@ void MainWindow::on_addbutton_clicked()
     p.rst_r = rst_r;
     p.rst_s = rst_s;
     p.exchange = exch;
-    p.moja_exchange = myexchange;
+    p.moja_exchange = QString::number(wzor);
 
     if (call.length() != 0)
     {
@@ -166,12 +153,12 @@ void MainWindow::on_clearbutton_clicked()
 
 void MainWindow::on_savebutton_clicked()
 {
-    //save to logfile, not to db
+        
+    cabrillo = new cbr(db, &cfg);
     QString cbrfile = cfg_params.callsign + ".cbr";
     cabrillo->saveFile(cbrfile);
 }
 
-// pokazuje okno z logiem z bazy danych
 void MainWindow::on_logbutton_clicked()
 {
     logw = new logwindow(db);
@@ -180,7 +167,15 @@ void MainWindow::on_logbutton_clicked()
 
 void MainWindow::on_quitbutton_clicked()
 {
+    if (logw != nullptr)
+        logw->close();
+    
     QWidget::close();
+}
+
+void MainWindow::on_actionZakoncz_triggered()
+{
+    this->on_quitbutton_clicked();
 }
 
 void MainWindow::on_run_stateChanged(int arg1)
@@ -243,11 +238,6 @@ void MainWindow::toUpper(const QString &text)
         return;
     }
     le->setText(text.toUpper());
-}
-
-void MainWindow::on_actionZakoncz_triggered()
-{
-    QWidget::close();
 }
 
 //przetestowac !!

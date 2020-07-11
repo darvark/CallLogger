@@ -1,9 +1,6 @@
 TODO:
-1: okno konfiguracji znak powinien byc z duzej
-2: podczas uruchamiania exchange wczytuje z bazy danych. 
-3: poprawic seqfault podczas zamukania aplikacji
-
-export logu do pliku cbr
+1: podczas uruchamiania exchange wczytuje z bazy danych. 
+2: zamykajac aplikacje powinno zamknac wszystkie okna
 
 ------
 pomyslec nad podpowiedziami, ze dany znak byl juz zrobiony na pasmie
