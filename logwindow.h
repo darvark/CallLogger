@@ -26,7 +26,7 @@ private slots:
 
 private:
     Ui::logwindow *ui;
-    dbmanager *baza;
+    dbmanager *baza = nullptr;
 };
 
 #endif // LOGWINDOW_H

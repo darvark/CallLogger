@@ -17,7 +17,6 @@ logwindow::logwindow(dbmanager *db, QWidget *parent) :
 logwindow::~logwindow()
 {
     delete ui;
-    delete baza;
 }
 
 void logwindow::close()
@@ -29,4 +28,6 @@ void logwindow::show_records()
 {
     if(baza->isOpen())
         ui->logbrowser->setHtml(baza->printAllRecords());
+    else
+        ui->logbrowser->setHtml(QString(""));
 }
