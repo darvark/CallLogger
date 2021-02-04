@@ -478,13 +478,13 @@
     <string>Stała</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="serialPorts">
+  <widget class="QLineEdit" name="serial_port">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>90</y>
-     <width>200</width>
-     <height>24</height>
+     <width>141</width>
+     <height>27</height>
     </rect>
    </property>
   </widget>
@@ -527,7 +527,7 @@
   <zorder>label_4</zorder>
   <zorder>wzorWymiany</zorder>
   <zorder>wymianaBOx</zorder>
-  <zorder>serialPorts</zorder>
+  <zorder>serial_port</zorder>
  </widget>
  <resources/>
  <connections/>

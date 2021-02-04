@@ -52,7 +52,7 @@ private:
     void ustaw_czas(Ui::konfiguracja* ui);
     void ustaw_nadajnik(Ui::konfiguracja* ui);
     void ustaw_overlay(Ui::konfiguracja* ui);
-    void dodaj_porty(Ui::konfiguracja* ui);
+//    void dodaj_porty(Ui::konfiguracja* ui);
 
     std::map<QString, int> mapowanieradia{
         {"Hamlib Dummy", 1},

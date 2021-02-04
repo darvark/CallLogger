@@ -1,5 +1,6 @@
 #include "konfiguracja.h"
 #include "ui_konfiguracja.h"
+#include <iostream>
 
 void configuration::toUpper(const QString &text)
 {
@@ -61,7 +62,7 @@ void configuration::on_zapisz_clicked()
     p.email = ui->email->text();
     p.adress = ui->poleAdresu->text();
     p.dbfile = ui->plikbazy->text();
-    p.serial = ui->serialPorts->currentText();
+    p.serial = ui->serial_port->text();
     p.contest = ui->listaZawody->currentText();
     p.wymiana = czy_stala_wymiana;
     p.callsign = ui->znak->text().toUpper();
@@ -89,13 +90,17 @@ void configuration::on_kasuj_clicked()
     this->close();
 }
 
-void configuration::dodaj_porty(Ui::konfiguracja* ui)
-{
-    Q_FOREACH(QSerialPortInfo port, QSerialPortInfo::availablePorts())
-    {
-        ui->serialPorts->addItem(port.portName());
-    }
-}
+//void configuration::dodaj_porty(Ui::konfiguracja* ui)
+//{
+
+//    const auto infos = QSerialPortInfo::availablePorts();
+//    for (const QSerialPortInfo &info : infos)
+//    {
+//        qDebug() << info.portName();
+//        std::cout << "PORT: " << info.portName().toStdString() << std::endl;
+//        ui->serialPorts->addItem(info.portName());
+//    }
+//}
 
 void configuration::dodaj_radia_do_listy(Ui::konfiguracja* ui)
 {

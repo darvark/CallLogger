@@ -56,13 +56,13 @@ void MainWindow::set_default_rst()
 //  default report for SSB 59
     if (QString().compare(cfg_params.cat_mode, QString("SSB"), Qt::CaseInsensitive))
     {
-        ui->rstrecv->setText("59");
-        ui->rstsend->setText("59");
+        ui->rstrecv->setText("599");
+        ui->rstsend->setText("599");
     }
     else
     {
-        ui->rstrecv->setText("599");
-        ui->rstsend->setText("599");
+        ui->rstrecv->setText("59");
+        ui->rstsend->setText("59");
     }
 }
 
@@ -301,7 +301,7 @@ void MainWindow::showFreq()
     {
         fetch_rig_params(r, /*serial_port.toStdString().c_str(),*/ &rig);
         QString cz = QString().setNum(int(rig.freq));
-        QString cz2 = cz.left(3) + "." + cz.right(3);
+        QString cz2 = cz.left(2) + "." + cz.mid(2);
         ui->czestotliwosc->setText(cz2);
         ui->tryb->setText(rig.mode);
         ui->vfo_show->setText(rig.vfo);
