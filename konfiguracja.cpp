@@ -484,3 +484,10 @@ void configuration::ustaw_overlay(Ui::konfiguracja* ui)
     ui->listaOverlay->addItem("OVER-50");
 }
 
+
+void configuration::on_comm_config_clicked()
+{
+    //pokaz com cfg
+    trxcfg = new trx_cfg();
+    trxcfg->show();
+}

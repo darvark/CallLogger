@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QDebug>
 #include "config.h"
+#include "trx_cfg.h"
 
 namespace Ui {
 class konfiguracja;
@@ -35,9 +36,11 @@ private slots:
 
     QString on_assisted_stateChanged(int arg1);
 
+    void on_comm_config_clicked();
+
 private:
     Ui::konfiguracja *ui;
-
+    trx_cfg* trxcfg = nullptr;
     config cfg;
     QString assisted;
     bool stala_wymiana = true;
