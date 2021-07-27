@@ -33,8 +33,7 @@ SOURCES += \
         config.cpp \
         dbmanager.cpp \
         konfiguracja.cpp \
-        cbr.cpp \
-    trx_cfg.cpp
+        cbr.cpp
 
 HEADERS += \
         logwindow.h \
@@ -43,14 +42,12 @@ HEADERS += \
         config.h \
         dbmanager.h \
         konfiguracja.h \
-        cbr.h \
-    trx_cfg.h
+        cbr.h
 
 FORMS += \
         logwindow.ui \
         mainwindow.ui \
-        konfiguracja.ui \
-    trx_cfg.ui
+        konfiguracja.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

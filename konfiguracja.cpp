@@ -77,6 +77,8 @@ void configuration::on_zapisz_clicked()
     p.cat_assisted = assisted;
     p.cat_operators = ui->listaOperator->currentText();
 
+
+
     cfg.save_settings(&p);
 
     this->close();
@@ -484,10 +486,51 @@ void configuration::ustaw_overlay(Ui::konfiguracja* ui)
     ui->listaOverlay->addItem("OVER-50");
 }
 
-
-void configuration::on_comm_config_clicked()
+void configuration::add_baudrate(Ui::konfiguracja *ui)
 {
-    //pokaz com cfg
-    trxcfg = new trx_cfg();
-    trxcfg->show();
+    ui->baudrate_choose->addItem("2400");
+    ui->baudrate_choose->addItem("4800");
+    ui->baudrate_choose->addItem("9600");
+    ui->baudrate_choose->addItem("14400");
+    ui->baudrate_choose->addItem("19200");
+    ui->baudrate_choose->addItem("28800");
+    ui->baudrate_choose->addItem("38400");
+    ui->baudrate_choose->addItem("57600");
+    ui->baudrate_choose->addItem("115200");
+    ui->baudrate_choose->addItem("230400");
+}
+
+void configuration::add_databits(Ui::konfiguracja *ui)
+{
+    ui->databits_choose->addItem("6");
+    ui->databits_choose->addItem("7");
+    ui->databits_choose->addItem("8");
+}
+
+void configuration::add_dtr(Ui::konfiguracja *ui)
+{
+    ui->dtr_choose->addItem("None");
+    ui->dtr_choose->addItem("Low");
+    ui->dtr_choose->addItem("High");
+    ui->dtr_choose->addItem("Handshake");
+}
+
+void configuration::add_rts(Ui::konfiguracja *ui)
+{
+    ui->rts_choose->addItem("None");
+    ui->rts_choose->addItem("High");
+    ui->rts_choose->addItem("Low");
+    ui->rts_choose->addItem("Handshake");
+}
+
+void configuration::add_parity(Ui::konfiguracja *ui)
+{
+    ui->parity_choose->addItem("Yes");
+    ui->parity_choose->addItem("No");
+}
+
+void configuration::add_stopbits(Ui::konfiguracja *ui)
+{
+    ui->stopbits_choose->addItem("1");
+    ui->stopbits_choose->addItem("2");
 }
