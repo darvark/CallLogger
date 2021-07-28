@@ -24,11 +24,12 @@ void config::load_settings(params *s, comcfg *cc, QString& plik_konf)
     const libconfig::Setting& root = cfg.getRoot();
 
     const libconfig::Setting &params = root["logger"];
+    const libconfig::Setting &conn = root["com"];
 
     std::string call, file, serial, mode, station, power,
             contest, assisted, band, operators, signal,
             soaxp, time, overlay, addres, email, klub,
-            baudrate_speed, databits_val, stopbit_val, parity_val, dtr_val, rts_val;
+            baudrate_speed, databits_val, stopbit_val, parity_val, handshake_val;
     int rig;
 
     params.lookupValue("callsign", call);
@@ -50,12 +51,11 @@ void config::load_settings(params *s, comcfg *cc, QString& plik_konf)
     params.lookupValue("email", email);
     params.lookupValue("klub", klub);
 
-    params.lookupValue("baudrate", baudrate_speed);
-    params.lookupValue("databits", databits_val);
-    params.lookupValue("stopbit", stopbit_val);
-    params.lookupValue("parity", parity_val);
-    params.lookupValue("dtr", dtr_val);
-    params.lookupValue("rts", rts_val);
+    conn.lookupValue("baudrate", baudrate_speed);
+    conn.lookupValue("databits", databits_val);
+    conn.lookupValue("stopbit", stopbit_val);
+    conn.lookupValue("parity", parity_val);
+    conn.lookupValue("handshake", handshake_val);
 
     s->callsign = QString::fromUtf8(call.c_str());
     s->dbfile = QString::fromUtf8(file.c_str());
@@ -80,8 +80,7 @@ void config::load_settings(params *s, comcfg *cc, QString& plik_konf)
     cc->databits = QString::fromUtf8(databits_val.c_str());
     cc->stopbit = QString::fromUtf8(stopbit_val.c_str());
     cc->parity = QString::fromUtf8(parity_val.c_str());
-    cc->dtr = QString::fromUtf8(dtr_val.c_str());
-    cc->rts = QString::fromUtf8(rts_val.c_str());
+    cc->handshake = QString::fromUtf8(handshake_val.c_str());
 }
 
 int config::save_settings(params* p, comcfg *cc)
@@ -122,9 +121,7 @@ int config::save_settings(params* p, comcfg *cc)
     com.add("databits", libconfig::Setting::TypeString) = cc->databits.toStdString().c_str();
     com.add("stopbit", libconfig::Setting::TypeString) = cc->stopbit.toStdString().c_str();
     com.add("parity", libconfig::Setting::TypeString) = cc->parity.toStdString().c_str();
-    com.add("dtr", libconfig::Setting::TypeString) = cc->dtr.toStdString().c_str();
-    com.add("rts", libconfig::Setting::TypeString) = cc->rts.toStdString().c_str();
-
+    com.add("handshake", libconfig::Setting::TypeString) = cc->handshake.toStdString().c_str();
     // Write new configuration.
     try
     {

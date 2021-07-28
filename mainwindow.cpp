@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     serial_port = cfg_params.serial;
-    
+//    set_comm_param(configFile);
     static const QString path = cfg_params.dbfile;
     db = new dbmanager(path);
 

@@ -34,8 +34,7 @@ typedef struct {
     QString databits;
     QString stopbit;
     QString parity;
-    QString dtr;
-    QString rts;
+    QString handshake;
 } comcfg;
 
 

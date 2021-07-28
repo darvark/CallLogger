@@ -34,8 +34,7 @@ configuration::configuration(QWidget *parent) :
         add_databits(ui);
         add_stopbits(ui);
         add_parity(ui);
-        add_dtr(ui);
-        add_rts(ui);
+        add_handshake(ui);
     }
     connect(ui->znak, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
 }
@@ -89,8 +88,7 @@ void configuration::on_zapisz_clicked()
     cc.databits = ui->databits_choose->currentText();
     cc.stopbit = ui->stopbits_choose->currentText();
     cc.parity = ui->parity_choose->currentText();
-    cc.dtr = ui->dtr_choose->currentText();
-    cc.rts = ui->rts_choose->currentText();
+    cc.handshake = ui->handshake_choose->currentText();
 
     cfg.save_settings(&p, &cc);
 
@@ -520,20 +518,11 @@ void configuration::add_databits(Ui::konfiguracja *ui)
     ui->databits_choose->addItem("8");
 }
 
-void configuration::add_dtr(Ui::konfiguracja *ui)
+void configuration::add_handshake(Ui::konfiguracja *ui)
 {
-    ui->dtr_choose->addItem("None");
-    ui->dtr_choose->addItem("Low");
-    ui->dtr_choose->addItem("High");
-    ui->dtr_choose->addItem("Handshake");
-}
-
-void configuration::add_rts(Ui::konfiguracja *ui)
-{
-    ui->rts_choose->addItem("None");
-    ui->rts_choose->addItem("High");
-    ui->rts_choose->addItem("Low");
-    ui->rts_choose->addItem("Handshake");
+    ui->handshake_choose->addItem("None");
+    ui->handshake_choose->addItem("XonXoff");
+    ui->handshake_choose->addItem("Hardware");
 }
 
 void configuration::add_parity(Ui::konfiguracja *ui)
@@ -541,6 +530,8 @@ void configuration::add_parity(Ui::konfiguracja *ui)
     ui->parity_choose->addItem("Odd");
     ui->parity_choose->addItem("Even");
     ui->parity_choose->addItem("None");
+    ui->parity_choose->addItem("Mark");
+    ui->parity_choose->addItem("Space");
 }
 
 void configuration::add_stopbits(Ui::konfiguracja *ui)

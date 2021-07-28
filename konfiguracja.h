@@ -56,8 +56,7 @@ private:
     void add_databits(Ui::konfiguracja* ui);
     void add_stopbits(Ui::konfiguracja* ui);
     void add_baudrate(Ui::konfiguracja* ui);
-    void add_dtr(Ui::konfiguracja* ui);
-    void add_rts(Ui::konfiguracja* ui);
+    void add_handshake(Ui::konfiguracja* ui);
 //    void dodaj_porty(Ui::konfiguracja* ui);
 
     std::map<QString, int> mapowanieradia{

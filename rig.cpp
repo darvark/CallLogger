@@ -1,5 +1,41 @@
 #include "rig.h"
 
+//void set_comm_param(QString &plik_konf)
+//{
+//    try
+//    {
+//        libcfg.readFile(plik_konf.toStdString().c_str());
+//        qDebug() << "Wczytano";
+//    }
+//    catch(const libconfig::FileIOException &fioex)
+//    {
+//        qDebug() << "Nie mogę znaleźć pliku konfiguracji";
+//    }
+//    catch(const libconfig::ParseException &pex)
+//    {
+//        qDebug() << "Parse error at " << pex.getFile() << ":" << pex.getLine()
+//              << " - " << pex.getError();
+//    }
+
+//    const libconfig::Setting& root = libcfg.getRoot();
+//    const libconfig::Setting &conn = root["com"];
+
+//    std::string baudrate_speed, databits_val, stopbit_val, parity_val, handshake_val;
+
+//    conn.lookupValue("baudrate", baudrate_speed);
+//    conn.lookupValue("databits", databits_val);
+//    conn.lookupValue("stopbit", stopbit_val);
+//    conn.lookupValue("parity", parity_val);
+//    conn.lookupValue("handshake", handshake_val);
+
+
+//    cp->baudrate = QString::fromUtf8(baudrate_speed.c_str());
+//    cp->databits = QString::fromUtf8(databits_val.c_str());
+//    cp->stopbit = QString::fromUtf8(stopbit_val.c_str());
+//    cp->parity = QString::fromUtf8(parity_val.c_str());
+//    cp->handshake = QString::fromUtf8(handshake_val.c_str());
+//}
+
 RIG* init_rig(int rigType, const char* serial_port)
 {
     RIG *my_rig; /* handle to rig (nstance) */
@@ -8,13 +44,14 @@ RIG* init_rig(int rigType, const char* serial_port)
     /* Turn off backend debugging ouput */
     rig_set_debug_level(RIG_DEBUG_NONE);
 
+    //dodac ladowanie paramsow z configa
     hamlib_port_t myport;
     /* wyciagnac dane z konfiga */
     myport.type.rig = RIG_PORT_SERIAL;
     myport.parm.serial.rate = 115200;
     myport.parm.serial.data_bits = 8;
     myport.parm.serial.stop_bits = 1;
-    myport.parm.serial.parity = RIG_PARITY_NONE;
+    myport.parm.serial.parity = RIG_PARITY_ODD;
     myport.parm.serial.handshake = RIG_HANDSHAKE_HARDWARE;
     strncpy(myport.pathname, serial_port, FILPATHLEN - 1);
     rig_load_all_backends();
