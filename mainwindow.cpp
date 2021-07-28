@@ -329,7 +329,7 @@ void MainWindow::on_actionPolacz_triggered()
     if (!cfg_params.serial.isEmpty() && cfg_params.rig != 0)
     {
         qDebug() << "init rig" << cfg_params.rig << " " << cfg_params.serial;
-        r = init_rig(cfg_params.rig, cfg_params.serial.toStdString().c_str());
+        r = init_rig(cfg_params.rig, cfg_params.serial.toStdString().c_str(), com_params);
 
     //    ustanowienie polaczenia z radiem
     //    jak sie  nie uda to okno infomacji i flaga ustawiona na false

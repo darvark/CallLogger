@@ -1,42 +1,30 @@
 #include "rig.h"
 
-//void set_comm_param(QString &plik_konf)
-//{
-//    try
-//    {
-//        libcfg.readFile(plik_konf.toStdString().c_str());
-//        qDebug() << "Wczytano";
-//    }
-//    catch(const libconfig::FileIOException &fioex)
-//    {
-//        qDebug() << "Nie mogę znaleźć pliku konfiguracji";
-//    }
-//    catch(const libconfig::ParseException &pex)
-//    {
-//        qDebug() << "Parse error at " << pex.getFile() << ":" << pex.getLine()
-//              << " - " << pex.getError();
-//    }
+enum serial_parity_e map_parity(QString parity)
+{
+    if (parity.compare("None"))
+        return RIG_PARITY_NONE;		/*!< No parity */
+    else if (parity.compare("Odd"))
+        return RIG_PARITY_ODD;		/*!< Odd */
+    else if (parity.compare("Even"))
+        return RIG_PARITY_EVEN;		/*!< Even */
+    else if (parity.compare("Mark"))
+        return RIG_PARITY_MARK;		/*!< Mark */
+    else if (parity.compare("Space"))
+        return RIG_PARITY_SPACE;
+}
 
-//    const libconfig::Setting& root = libcfg.getRoot();
-//    const libconfig::Setting &conn = root["com"];
+enum serial_handshake_e map_handshake(QString hand)
+{
+    if (hand.compare("None"))
+        return RIG_HANDSHAKE_NONE;/*!< No handshake */
+    else if (hand.compare("XonXoff"))
+        return RIG_HANDSHAKE_XONXOFF; /*!< Software XON/XOFF */
+    else if (hand.compare("Hardware"))
+        return RIG_HANDSHAKE_HARDWARE;	/*!< Hardware CTS/RTS */
+}
 
-//    std::string baudrate_speed, databits_val, stopbit_val, parity_val, handshake_val;
-
-//    conn.lookupValue("baudrate", baudrate_speed);
-//    conn.lookupValue("databits", databits_val);
-//    conn.lookupValue("stopbit", stopbit_val);
-//    conn.lookupValue("parity", parity_val);
-//    conn.lookupValue("handshake", handshake_val);
-
-
-//    cp->baudrate = QString::fromUtf8(baudrate_speed.c_str());
-//    cp->databits = QString::fromUtf8(databits_val.c_str());
-//    cp->stopbit = QString::fromUtf8(stopbit_val.c_str());
-//    cp->parity = QString::fromUtf8(parity_val.c_str());
-//    cp->handshake = QString::fromUtf8(handshake_val.c_str());
-//}
-
-RIG* init_rig(int rigType, const char* serial_port)
+RIG* init_rig(int rigType, const char* serial_port, comcfg &com_params)
 {
     RIG *my_rig; /* handle to rig (nstance) */
     rig_model_t myrig_model;
@@ -48,11 +36,11 @@ RIG* init_rig(int rigType, const char* serial_port)
     hamlib_port_t myport;
     /* wyciagnac dane z konfiga */
     myport.type.rig = RIG_PORT_SERIAL;
-    myport.parm.serial.rate = 115200;
-    myport.parm.serial.data_bits = 8;
-    myport.parm.serial.stop_bits = 1;
-    myport.parm.serial.parity = RIG_PARITY_ODD;
-    myport.parm.serial.handshake = RIG_HANDSHAKE_HARDWARE;
+    myport.parm.serial.rate = com_params.baudrate.toInt(); //115200;
+    myport.parm.serial.data_bits = com_params.databits.toInt(); //8;
+    myport.parm.serial.stop_bits = com_params.stopbit.toInt(); //1;
+    myport.parm.serial.parity = map_parity(com_params.parity); //RIG_PARITY_ODD;
+    myport.parm.serial.handshake = map_handshake(com_params.handshake); //RIG_HANDSHAKE_HARDWARE;
     strncpy(myport.pathname, serial_port, FILPATHLEN - 1);
     rig_load_all_backends();
     myrig_model = rigType;
