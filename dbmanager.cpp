@@ -177,8 +177,9 @@ QString dbmanager::printToADIF() const
 
         config cfg;
         params par;
+        comcfg com_par;
         QString f = "contest_logger.conf";
-        cfg.load_settings(&par, f);
+        cfg.load_settings(&par, &com_par, f);
 
         result += "QSO: \t" + QString::number(freq) + "\t" + mapModulation(&mode) + "\t" + date + "\t" + time + "\t" + par.callsign + "\t" + rst_s + "\t" + myexch
                 + "\t" + qso + "\t" + rst_r + "\t" + exch + "\t" + "0" + "\n";

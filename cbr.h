@@ -23,6 +23,7 @@ private:
     dbmanager *baza;
     config *konfiguracja;
     params cfg_params;
+    comcfg com_params;
 };
 
 #endif // ADIF_H

@@ -9,7 +9,7 @@ RIG* init_rig(int rigType, const char* serial_port)
     rig_set_debug_level(RIG_DEBUG_NONE);
 
     hamlib_port_t myport;
-    /* may be overriden by backend probe */
+    /* wyciagnac dane z konfiga */
     myport.type.rig = RIG_PORT_SERIAL;
     myport.parm.serial.rate = 115200;
     myport.parm.serial.data_bits = 8;

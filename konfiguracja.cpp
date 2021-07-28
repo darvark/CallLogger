@@ -30,6 +30,12 @@ configuration::configuration(QWidget *parent) :
         ustaw_czas(ui);
         ustaw_nadajnik(ui);
         ustaw_overlay(ui);
+        add_baudrate(ui);
+        add_databits(ui);
+        add_stopbits(ui);
+        add_parity(ui);
+        add_dtr(ui);
+        add_rts(ui);
     }
     connect(ui->znak, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
 }
@@ -51,6 +57,8 @@ void configuration::on_zapisz_clicked()
     QString assisted = ui->assisted->checkState() == Qt::Checked ? "ASSISTED" : "NON-ASSISTED";
 
     params p;
+    comcfg cc;
+
     p.rig = radio(ui->wyborRadia->currentText());
     p.klub = ui->klub->text();
     
@@ -77,9 +85,14 @@ void configuration::on_zapisz_clicked()
     p.cat_assisted = assisted;
     p.cat_operators = ui->listaOperator->currentText();
 
+    cc.baudrate = ui->baudrate_choose->currentText();
+    cc.databits = ui->databits_choose->currentText();
+    cc.stopbit = ui->stopbits_choose->currentText();
+    cc.parity = ui->parity_choose->currentText();
+    cc.dtr = ui->dtr_choose->currentText();
+    cc.rts = ui->rts_choose->currentText();
 
-
-    cfg.save_settings(&p);
+    cfg.save_settings(&p, &cc);
 
     this->close();
 }
@@ -525,8 +538,9 @@ void configuration::add_rts(Ui::konfiguracja *ui)
 
 void configuration::add_parity(Ui::konfiguracja *ui)
 {
-    ui->parity_choose->addItem("Yes");
-    ui->parity_choose->addItem("No");
+    ui->parity_choose->addItem("Odd");
+    ui->parity_choose->addItem("Even");
+    ui->parity_choose->addItem("None");
 }
 
 void configuration::add_stopbits(Ui::konfiguracja *ui)

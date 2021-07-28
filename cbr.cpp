@@ -14,7 +14,7 @@ QString cbr::prepareHeader()
     QString configfile = "contest_logger.conf";
     if (QFileInfo::exists(configfile))
     {
-        konfiguracja->load_settings(&cfg_params, configfile);
+        konfiguracja->load_settings(&cfg_params, &com_params, configfile);
     }
 
     QString h1 = QString::fromStdString("START-OF-LOG: 3.0\n") +

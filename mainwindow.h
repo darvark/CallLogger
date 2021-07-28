@@ -94,6 +94,7 @@ private:
     QString serial_port;
     QString log_dbname;
     params cfg_params;
+    comcfg com_params;
     int moja_wymiana;
     rig_params rig;
     int rig_model;

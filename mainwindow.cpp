@@ -9,14 +9,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     if (QFileInfo::exists(configFile))
     {
-        cfg.load_settings(&cfg_params, configFile);
+        cfg.load_settings(&cfg_params, &com_params, configFile);
     }
     else
     {
         konf = new configuration();
         konf->exec();
 
-        cfg.load_settings(&cfg_params, configFile);
+        cfg.load_settings(&cfg_params, &com_params, configFile);
     }
 
     serial_port = cfg_params.serial;
@@ -247,7 +247,7 @@ void MainWindow::on_actionNowy_2_triggered()
     if(rig_connection)
         close_rig(r);
 
-    cfg.reset(&cfg_params);
+    cfg.reset(&cfg_params, &com_params);
 
     konf = new configuration();
     konf->show();
@@ -256,7 +256,7 @@ void MainWindow::on_actionNowy_2_triggered()
     if (QFileInfo::exists(configFile))
     {
 //    wczytanie pliku
-        cfg.load_settings(&cfg_params, configFile);
+        cfg.load_settings(&cfg_params, &com_params, configFile);
     }
     else
     {
@@ -264,7 +264,7 @@ void MainWindow::on_actionNowy_2_triggered()
         konf = new configuration();
         konf->exec();
 
-        cfg.load_settings(&cfg_params, configFile);
+        cfg.load_settings(&cfg_params, &com_params,  configFile);
     }
 
 //    konfiguracja.(&cfg_params);

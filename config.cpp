@@ -4,7 +4,7 @@ config::config() {}
 
 config::~config() {}
 
-void config::load_settings(params *s, QString& plik_konf)
+void config::load_settings(params *s, comcfg *cc, QString& plik_konf)
 {
     try
     {
@@ -27,7 +27,8 @@ void config::load_settings(params *s, QString& plik_konf)
 
     std::string call, file, serial, mode, station, power,
             contest, assisted, band, operators, signal,
-            soaxp, time, overlay, addres, email, klub;
+            soaxp, time, overlay, addres, email, klub,
+            baudrate_speed, databits_val, stopbit_val, parity_val, dtr_val, rts_val;
     int rig;
 
     params.lookupValue("callsign", call);
@@ -49,6 +50,13 @@ void config::load_settings(params *s, QString& plik_konf)
     params.lookupValue("email", email);
     params.lookupValue("klub", klub);
 
+    params.lookupValue("baudrate", baudrate_speed);
+    params.lookupValue("databits", databits_val);
+    params.lookupValue("stopbit", stopbit_val);
+    params.lookupValue("parity", parity_val);
+    params.lookupValue("dtr", dtr_val);
+    params.lookupValue("rts", rts_val);
+
     s->callsign = QString::fromUtf8(call.c_str());
     s->dbfile = QString::fromUtf8(file.c_str());
     s->cat_mode = QString::fromUtf8(mode.c_str());
@@ -67,9 +75,16 @@ void config::load_settings(params *s, QString& plik_konf)
     s->adress = QString::fromUtf8(addres.c_str());
     s->email = QString::fromUtf8(email.c_str());
     s->klub = QString::fromUtf8(klub.c_str());
+
+    cc->baudrate = QString::fromUtf8(baudrate_speed.c_str());
+    cc->databits = QString::fromUtf8(databits_val.c_str());
+    cc->stopbit = QString::fromUtf8(stopbit_val.c_str());
+    cc->parity = QString::fromUtf8(parity_val.c_str());
+    cc->dtr = QString::fromUtf8(dtr_val.c_str());
+    cc->rts = QString::fromUtf8(rts_val.c_str());
 }
 
-int config::save_settings(params* p)
+int config::save_settings(params* p, comcfg *cc)
 {
     static const char *output_file = "contest_logger.conf";
     libconfig::Config cfg;
@@ -78,6 +93,7 @@ int config::save_settings(params* p)
 
     // Add some settings to the configuration.
     libconfig::Setting &name = root.add("logger", libconfig::Setting::TypeGroup);
+    libconfig::Setting &com = root.add("com", libconfig::Setting::TypeGroup);
 
     name.add("callsign", libconfig::Setting::TypeString) = p->callsign.toUpper().toStdString().c_str();
     name.add("dbfile", libconfig::Setting::TypeString) = p->dbfile.toStdString().c_str();
@@ -101,6 +117,14 @@ int config::save_settings(params* p)
     name.add("wymiana", libconfig::Setting::TypeBoolean) = p->wymiana;
     name.add("wzor", libconfig::Setting::TypeString) = p->pattern.toStdString().c_str();
 
+
+    com.add("baudate", libconfig::Setting::TypeString) = cc->baudrate.toStdString().c_str();
+    com.add("databits", libconfig::Setting::TypeString) = cc->databits.toStdString().c_str();
+    com.add("stopbit", libconfig::Setting::TypeString) = cc->stopbit.toStdString().c_str();
+    com.add("parity", libconfig::Setting::TypeString) = cc->parity.toStdString().c_str();
+    com.add("dtr", libconfig::Setting::TypeString) = cc->dtr.toStdString().c_str();
+    com.add("rts", libconfig::Setting::TypeString) = cc->rts.toStdString().c_str();
+
     // Write new configuration.
     try
     {
@@ -116,8 +140,10 @@ int config::save_settings(params* p)
     return EXIT_SUCCESS;
 }
 
-void config::reset(params *s)
+void config::reset(params *s, comcfg *cc)
 {
     s = new params();
+    cc = new comcfg();
     (void)s;
+    (void)cc;
 }

@@ -29,14 +29,24 @@ typedef struct {
    QString pattern;
 } params;
 
+typedef struct {
+    QString baudrate;
+    QString databits;
+    QString stopbit;
+    QString parity;
+    QString dtr;
+    QString rts;
+} comcfg;
+
+
 class config
 {
 public:
     config();
     ~config();
-    void load_settings(params *p, QString &confFIle);
-    int save_settings(params *p);
-    void reset(params *s);
+    void load_settings(params *p, comcfg *cc, QString &confFIle);
+    int save_settings(params *p, comcfg *cc);
+    void reset(params *s, comcfg *cc);
 private:
     libconfig::Config cfg;
 };
