@@ -10,8 +10,7 @@ logwindow::logwindow(dbmanager *db, QWidget *parent) :
 
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(show_records()));
-    timer->start(1000);
-
+    timer->start(100);
 }
 
 logwindow::~logwindow()

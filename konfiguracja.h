@@ -57,7 +57,7 @@ private:
     void add_stopbits(Ui::konfiguracja* ui);
     void add_baudrate(Ui::konfiguracja* ui);
     void add_handshake(Ui::konfiguracja* ui);
-//    void dodaj_porty(Ui::konfiguracja* ui);
+    void dodaj_porty(Ui::konfiguracja* ui);
 
     std::map<QString, int> mapowanieradia{
         {"Hamlib Dummy", 1},

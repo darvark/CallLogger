@@ -25,8 +25,7 @@ typedef struct {
    QString adress;
    QString email;
    QString klub;
-   bool wymiana;
-   QString pattern;
+   bool czy_stala_wymiana; // czy stala
 } params;
 
 typedef struct {

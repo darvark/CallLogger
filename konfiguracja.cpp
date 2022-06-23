@@ -37,6 +37,7 @@ configuration::configuration(QWidget *parent) :
         add_handshake(ui);
     }
     connect(ui->znak, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
+    connect(ui->wzorWymiany, SIGNAL(textChanged(const QString &)), this, SLOT(toUpper(const QString &)));
 }
 
 configuration::~configuration()
@@ -61,17 +62,12 @@ void configuration::on_zapisz_clicked()
     p.rig = radio(ui->wyborRadia->currentText());
     p.klub = ui->klub->text();
     
-    if (czy_stala_wymiana)
-        p.pattern = ui->wzorWymiany->text();
-    else
-        p.pattern = "0";
-
     p.email = ui->email->text();
     p.adress = ui->poleAdresu->text();
     p.dbfile = ui->plikbazy->text();
     p.serial = ui->serial_port->text();
     p.contest = ui->listaZawody->currentText();
-    p.wymiana = czy_stala_wymiana;
+    p.czy_stala_wymiana = czy_stala_wymiana;
     p.callsign = ui->znak->text().toUpper();
     p.cat_band = ui->listaPasmo->currentText();
     p.cat_mode = ui->listaMode->currentText();
@@ -111,7 +107,7 @@ void configuration::on_kasuj_clicked()
 //    {
 //        qDebug() << info.portName();
 //        std::cout << "PORT: " << info.portName().toStdString() << std::endl;
-//        ui->serialPorts->addItem(info.portName());
+//        ui->serialPort->addItem(info.portName());
 //    }
 //}
 

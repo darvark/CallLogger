@@ -20,16 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     serial_port = cfg_params.serial;
-//    set_comm_param(configFile);
     static const QString path = cfg_params.dbfile;
+
     db = new dbmanager(path);
 
     if (db->isOpen())
     {
         db->createTable();
     }
-
-    wzor = cfg_params.pattern.toInt();
 
     set_default_rst();
 
@@ -53,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::set_default_rst()
 {
-//  default report for SSB 59
+//  default report for SSB 59, CW 599
     if (QString().compare(cfg_params.cat_mode, QString("SSB"), Qt::CaseInsensitive))
     {
         ui->rstrecv->setText("599");
@@ -86,11 +84,12 @@ MainWindow::~MainWindow()
     delete r;
 }
 
-void MainWindow::oblicz_moja_wymiane(bool czy_stala_wymiana, int* wymiana_wartosc)
+void MainWindow::oblicz_moja_wymiane(bool s, QString &wymiana)
 {
-    if (!czy_stala_wymiana)
-    {
-        *wymiana_wartosc += 1;
+    if (!s) {
+        int tmp = wymiana.toInt();
+        qDebug() << ">>>> " << wymiana;
+        wymiana = QString(tmp + 1);
     }
 }
 
@@ -99,8 +98,9 @@ void MainWindow::on_addbutton_clicked()
     ui->callsign->setFocus();
     double czestotliwosc;
     QString tryb;
-    oblicz_moja_wymiane(cfg_params.wymiana, &wzor);
-    qDebug() << "z addbutton: " << QString::number(wzor);
+    QString rcvExch = db->getlastSentExchange();
+    std::cout << "<<< " << rcvExch.toStdString() << " >>>>" << std::endl;
+    oblicz_moja_wymiane(cfg_params.czy_stala_wymiana, rcvExch);
 
     QString call = ui->callsign->text();
     int rst_s = ui->rstsend->text().toInt();
@@ -131,7 +131,7 @@ void MainWindow::on_addbutton_clicked()
     p.rst_r = rst_r;
     p.rst_s = rst_s;
     p.exchange = exch;
-    p.moja_exchange = QString::number(wzor);
+    p.moja_exchange = rcvExch;
 
     if (call.length() != 0)
     {

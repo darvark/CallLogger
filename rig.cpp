@@ -41,7 +41,7 @@ RIG* init_rig(int rigType, const char* serial_port, comcfg &com_params)
     myport.parm.serial.stop_bits = com_params.stopbit.toInt(); //1;
     myport.parm.serial.parity = map_parity(com_params.parity); //RIG_PARITY_ODD;
     myport.parm.serial.handshake = map_handshake(com_params.handshake); //RIG_HANDSHAKE_HARDWARE;
-    strncpy(myport.pathname, serial_port, FILPATHLEN - 1);
+    strncpy(myport.pathname, serial_port, strlen(serial_port));
     rig_load_all_backends();
     myrig_model = rigType;
 
@@ -100,7 +100,7 @@ void close_rig(RIG* my_rig)
 bool open_rig(RIG* my_rig, const char* serial_port)
 {
     int retcode;
-    strncpy(my_rig->state.rigport.pathname, serial_port, FILPATHLEN - 1);
+    strncpy(my_rig->state.rigport.pathname, serial_port, strlen(serial_port));
     retcode = rig_open(my_rig);
     if (retcode != RIG_OK) {
         printf("rig_open: error = %s\n", rigerror(retcode));

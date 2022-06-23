@@ -95,18 +95,17 @@ private:
     QString log_dbname;
     params cfg_params;
     comcfg com_params;
-    int moja_wymiana;
     rig_params rig;
     int rig_model;
     config cfg;
-    int wzor; // wartosc wymiany
+    bool czy_stala_wymiana;
 
     bool run_mode = true; // default mode is run
     bool sandp_mode = false; // default mode is run
     bool rig_connection = false;
     QString configFile = "contest_logger.conf";
 
-    void oblicz_moja_wymiane(bool wymiana, int* wymiana_wzor);
+    void oblicz_moja_wymiane(bool, QString&);
 };
 
 #endif // MAINWINDOW_H

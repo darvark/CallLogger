@@ -1,4 +1,5 @@
 #include "dbmanager.h"
+#include <iostream>
 
 dbmanager::dbmanager(const QString& path)
 {
@@ -210,26 +211,27 @@ bool dbmanager::callsignExists(const QString& callsign) const
     return exists;
 }
 
-int dbmanager::getlastRcvExhcange() const
+QString dbmanager::getlastRcvExchange() const
 {
     QSqlQuery query("SELECT exchange FROM qso ORDER BY column DESC LIMIT 1", m_db);
 
     query.exec();
-    int rcv_exch = 0;
+    QString rcv_exch = "";
     
     while (query.next())
     {
         rcv_exch = query.record().indexOf("exchange");
     }
+    std::cout << "#### " << rcv_exch.toStdString() << std::endl;
     return rcv_exch;
 }
 
-int dbmanager::getlastSentExchange() const
+QString dbmanager::getlastSentExchange() const
 {
     QSqlQuery query("SELECT moja_exchange FROM qso ORDER BY column DESC LIMIT 1", m_db);
 
     query.exec();
-    int sent_wym = 0;
+    QString sent_wym = "0";
     
     while (query.next())
     {

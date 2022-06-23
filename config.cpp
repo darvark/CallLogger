@@ -113,9 +113,7 @@ int config::save_settings(params* p, comcfg *cc)
     name.add("address", libconfig::Setting::TypeString) = p->adress.toStdString().c_str();
     name.add("email", libconfig::Setting::TypeString) = p->email.toStdString().c_str();
     name.add("klub", libconfig::Setting::TypeString) = p->klub.toStdString().c_str();
-    name.add("wymiana", libconfig::Setting::TypeBoolean) = p->wymiana;
-    name.add("wzor", libconfig::Setting::TypeString) = p->pattern.toStdString().c_str();
-
+    name.add("wymiana", libconfig::Setting::TypeBoolean) = p->czy_stala_wymiana;
 
     com.add("baudate", libconfig::Setting::TypeString) = cc->baudrate.toStdString().c_str();
     com.add("databits", libconfig::Setting::TypeString) = cc->databits.toStdString().c_str();
