@@ -213,7 +213,7 @@ bool dbmanager::callsignExists(const QString& callsign) const
 
 QString dbmanager::getlastRcvExchange() const
 {
-    QSqlQuery query("SELECT exchange FROM qso ORDER BY column DESC LIMIT 1", m_db);
+    QSqlQuery query("SELECT exchange FROM qso DESC LIMIT 1", m_db);
 
     query.exec();
     QString rcv_exch = "";
@@ -228,7 +228,7 @@ QString dbmanager::getlastRcvExchange() const
 
 QString dbmanager::getlastSentExchange() const
 {
-    QSqlQuery query("SELECT moja_exchange FROM qso ORDER BY column DESC LIMIT 1", m_db);
+    QSqlQuery query("SELECT moja_exchange FROM qso DESC LIMIT 1", m_db);
 
     query.exec();
     QString sent_wym = "0";
